@@ -1,4 +1,5 @@
 ﻿using BlogApi.Application.Dtos;
+using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace BlogApi.Application.Common.Interfaces
 {
     public interface ITokenService
     {
-        Task<TokenResponseDto> CreateTokenResponse(User user);
-        Task<User?> ValidateRefreshToken(int UserId, string RefreshToken);
+        Task<Result<TokenResponseDto>> CreateTokenResponse(User user);
+        Task<User?> ValidateRefreshToken(Guid UserId, string RefreshToken);
     }
 }

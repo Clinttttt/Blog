@@ -1,5 +1,6 @@
 ﻿using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
+using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using BlogApi.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
@@ -53,7 +54,7 @@ namespace BlogApi.Infrastructure.Services
             await context.SaveChangesAsync();
             return refreshtoken;
         }
-        public async Task<User?> ValidateRefreshToken(int UserId, string RefreshToken)
+        public async Task<User?> ValidateRefreshToken(Guid UserId, string RefreshToken)
         {
             var user = await context.Users.FindAsync(UserId);
             if (user is null || user.RefreshToken != RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
@@ -62,13 +63,13 @@ namespace BlogApi.Infrastructure.Services
             }
             return user;
         }
-        public async Task<TokenResponseDto> CreateTokenResponse(User user)
+        public async Task<Result<TokenResponseDto>> CreateTokenResponse(User user)
         {
-            return new TokenResponseDto
+            return Result<TokenResponseDto>.Success(new TokenResponseDto
             {
                 AccessToken = CreateToken(user),
                 RefreshToken = await GenerateAndSaveRefreshToken(user)
-            };
+            });
         }
     }
 }

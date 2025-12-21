@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BlogApi.Domain.Enum.EntityEnum;
 
 namespace BlogApi.Application.Dtos
 {
@@ -14,6 +15,12 @@ namespace BlogApi.Application.Dtos
         public string? CategoryName { get; set; }
         public List<CommentDto> Comments { get; set; } = new();
         public List<TagDto>? Tags { get; set; } 
+        public byte[]? Photo { get; set; }
+        public string? PhotoContent { get; set; }
+        public string? Author { get; set; }
+        public ReadingDuration readingDuration { get; set; }
+
+
 
     }
 }

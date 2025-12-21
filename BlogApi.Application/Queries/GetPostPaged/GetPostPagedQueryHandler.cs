@@ -42,6 +42,7 @@ namespace BlogApi.Application.Queries.GetPostPaged
                       Content = s.Content,
                       CreatedAt = s.CreatedAt,
                       CategoryName = s.Category?.Name,
+                      readingDuration = s.readingDuration,
                       tags = s.PostTags.Select(s => new TagDto
                       {
                           Id = s.TagId,

@@ -27,7 +27,11 @@ namespace BlogApi.Application.Commands.Posts.UpdatePost
             var update = new Post
             {
                 Title = request.Title,
-                Content = request.Content
+                Content = request.Content,
+                Photo = request.Photo,
+                PhotoContent = request.PhotoContent,
+                Author = request.Author,
+                readingDuration = request.readingDuration
             };
             _context.Posts.Update(update);
             await _context.SaveChangesAsync();

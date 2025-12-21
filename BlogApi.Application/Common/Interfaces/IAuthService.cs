@@ -15,6 +15,7 @@ namespace BlogApi.Application.Common.Interfaces
         Task<Result<AuthResult>> Register(UserDto request);
         Task<Result<TokenResponseDto>> Login(UserDto request);
         Task<Result<TokenResponseDto>> GoogleLogin(string idToken);
+        Task<Result<TokenResponseDto>> RefreshToken(RefreshTokenDto request);
         Task<Result<bool>> Logout(Guid Id);
     }
 }

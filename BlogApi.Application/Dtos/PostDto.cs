@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static BlogApi.Domain.Enum.EntityEnum;
 
 namespace BlogApi.Application.Dtos
 {
@@ -13,6 +14,7 @@ namespace BlogApi.Application.Dtos
         public string? Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? CategoryName { get; set; }
+        public ReadingDuration readingDuration { get; set; }
         public List<TagDto>? tags { get; set; }  
     }
 }

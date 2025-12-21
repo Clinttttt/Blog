@@ -32,6 +32,10 @@ namespace BlogApi.Application.Queries.GetPostWithComments
                      Content = s.Content,
                      PostCreatedAt = s.CreatedAt,
                      CategoryName = s.Category.Name,
+                     Photo = s.Photo,
+                     PhotoContent = s.PhotoContent,
+                     Author = s.Author,
+                     readingDuration = s.readingDuration,
                      Tags = s.PostTags.Select(s => new TagDto
                      {
                          Id = s.TagId,

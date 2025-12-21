@@ -1,9 +1,11 @@
 ﻿using BlogApi.Api.Shared;
 using BlogApi.Application.Commands.Auth.Login;
+using BlogApi.Application.Commands.Auth.RefreshToken;
 using BlogApi.Application.Commands.Auth.Register;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request;
+using BlogApi.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +36,6 @@ namespace BlogApi.Api.Controllers
         [HttpPost("GoogleLogin")]
         public async Task<ActionResult<TokenResponseDto>> GoogleLogin([FromBody] GoogleLoginCommand command)
         {
-            
             var login = await Sender.Send(command);
             return HandleResponse(login);
         }
@@ -46,6 +47,13 @@ namespace BlogApi.Api.Controllers
             var command = request.LogoutCommand(UserId);
             var login = await Sender.Send(command);
             return HandleResponse(login);
+        }
+       
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenCommand command)
+        {
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
         }
     }
 }

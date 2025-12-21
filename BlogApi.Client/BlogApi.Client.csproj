@@ -10,4 +10,12 @@
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="TinyMCE.Blazor" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlogApi.Infrastructure\BlogApi.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
