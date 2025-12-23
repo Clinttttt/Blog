@@ -22,8 +22,7 @@ namespace BlogApi.Application.Commands.Tags.AddTag
                 UserId = request.UserId,
             };
             context.Tags.Add(tag);
-            await context.SaveChangesAsync();
-            var tagdto = mapper.Map<int>(tag);
+            await context.SaveChangesAsync();         
             return Result<int>.Success(tag.Id);
 
         }

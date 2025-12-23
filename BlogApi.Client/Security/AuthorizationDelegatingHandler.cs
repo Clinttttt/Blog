@@ -21,16 +21,12 @@ namespace BlogApi.Client.Security
             _logger = logger;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             string? token = GetCachedToken() ?? await RetrieveTokenFromStorageAsync();
 
             if (!string.IsNullOrEmpty(token))
-            {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
 
             return await base.SendAsync(request, cancellationToken);
         }
@@ -74,7 +70,8 @@ namespace BlogApi.Client.Security
             lock (_cacheLock)
             {
                 _cachedToken = token;
-                _tokenCacheExpiry = DateTime.UtcNow.AddMinutes(5);
+                _tokenCacheExpiry = DateTime.UtcNow.AddDays(1);
+
             }
         }
 

@@ -13,6 +13,8 @@ builder.Services.Configure<CircuitOptions>(options =>
     options.DetailedErrors = true;
 });
 
+
+
 builder.Services.AddServices(builder.Configuration);
 
 

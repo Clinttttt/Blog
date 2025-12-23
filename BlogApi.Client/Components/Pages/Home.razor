@@ -195,16 +195,16 @@ else
         No tags found.
     </div>
 }
-@inject ProtectedLocalStorage LocalStorage
+@inject IJSRuntime JS
 
-<button @onclick="CheckStorage">Check Storage</button>
+<button @onclick="CheckStorage" class="btn btn-primary">Check Storage</button>
 
 @code {
     private async Task CheckStorage()
     {
-        var token = await LocalStorage.GetAsync<string>("AccessToken");
-        Console.WriteLine($"Token exists: {token.Success}");
-        Console.WriteLine($"Token length: {token.Value?.Length}");
+        var token = await JS.InvokeAsync<string>("localStorage.getItem", "AccessToken");
+        Console.WriteLine($"Token exists: {!string.IsNullOrEmpty(token)}");
+        Console.WriteLine($"Token length: {token?.Length}");
     }
 }
 @code {

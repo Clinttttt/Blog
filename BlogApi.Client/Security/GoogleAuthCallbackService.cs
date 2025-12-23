@@ -1,8 +1,8 @@
 ﻿using BlogApi.Client.Interface;
 using BlogApi.Client.Security;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 namespace BlogApi.Client.Services
 {
@@ -10,21 +10,21 @@ namespace BlogApi.Client.Services
     {
         private readonly IAuthClientService _authService;
         private readonly NavigationManager _navigation;
-        private readonly ProtectedLocalStorage _localStorage;
         private readonly AuthStateProvider _authStateProvider;
+        private readonly IJSRuntime _js;
         private readonly ILogger<GoogleAuthCallbackService> _logger;
 
         public GoogleAuthCallbackService(
             IAuthClientService authService,
             NavigationManager navigation,
-            ProtectedLocalStorage localStorage,
             AuthStateProvider authStateProvider,
+            IJSRuntime js,
             ILogger<GoogleAuthCallbackService> logger)
         {
             _authService = authService;
             _navigation = navigation;
-            _localStorage = localStorage;
             _authStateProvider = authStateProvider;
+            _js = js;
             _logger = logger;
         }
 
@@ -36,11 +36,15 @@ namespace BlogApi.Client.Services
 
                 if (result.IsSuccess && result.Value != null)
                 {
+                
                     AuthorizationDelegatingHandler.CacheToken(result.Value.AccessToken!);
-                    await _localStorage.SetAsync("AccessToken", result.Value.AccessToken!);
-                    await _localStorage.SetAsync("RefreshToken", result.Value.RefreshToken!);
-                    await _authStateProvider.InitializeAsync();
-                    _navigation.NavigateTo("/", forceLoad: true);
+
+             
+                    await _js.InvokeVoidAsync("localStorage.setItem", "AccessToken", result.Value.AccessToken!);
+                    await _js.InvokeVoidAsync("localStorage.setItem", "RefreshToken", result.Value.RefreshToken!);
+                   
+                     _authStateProvider.MarkUserAsAuthenticated();              
+                    _navigation.NavigateTo("/");
                 }
                 else
                 {
@@ -60,7 +64,14 @@ namespace BlogApi.Client.Services
         {
             try
             {
+             
                 AuthorizationDelegatingHandler.ClearCache();
+
+               
+                await _js.InvokeVoidAsync("localStorage.removeItem", "AccessToken");
+                await _js.InvokeVoidAsync("localStorage.removeItem", "RefreshToken");
+
+                
                 await _authStateProvider.MarkUserAsLoggedOut();
                 _navigation.NavigateTo("/login", forceLoad: true);
             }
