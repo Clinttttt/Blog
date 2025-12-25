@@ -13,7 +13,7 @@ namespace BlogApi.Domain.Entities
         public string Provider { get; set; } = string.Empty; 
         public string ProviderId { get; set; } = string.Empty; 
         public DateTime LinkedAt { get; set; }
-
+        public string? ProfilePhotoUrl { get; set; }
         public User User { get; set; } = null!;
     }
 }

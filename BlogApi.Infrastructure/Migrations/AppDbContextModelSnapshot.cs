@@ -68,7 +68,30 @@ namespace BlogApi.Infrastructure.Migrations
 
                     b.HasIndex("PostId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.CommentLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("CommentLikes");
                 });
 
             modelBuilder.Entity("BlogApi.Domain.Entities.ExternalLogin", b =>
@@ -79,6 +102,9 @@ namespace BlogApi.Infrastructure.Migrations
 
                     b.Property<DateTime>("LinkedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ProfilePhotoUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Provider")
                         .IsRequired()
@@ -162,6 +188,8 @@ namespace BlogApi.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PostId");
+
                     b.ToTable("PostLikes");
                 });
 
@@ -236,11 +264,32 @@ namespace BlogApi.Infrastructure.Migrations
 
             modelBuilder.Entity("BlogApi.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("BlogApi.Domain.Entities.Post", null)
+                    b.HasOne("BlogApi.Domain.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BlogApi.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.CommentLike", b =>
+                {
+                    b.HasOne("BlogApi.Domain.Entities.Comment", "Comments")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("BlogApi.Domain.Entities.ExternalLogin", b =>
@@ -262,6 +311,17 @@ namespace BlogApi.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.PostLike", b =>
+                {
+                    b.HasOne("BlogApi.Domain.Entities.Post", "post")
+                        .WithMany("PostLikes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("post");
                 });
 
             modelBuilder.Entity("BlogApi.Domain.Entities.PostTag", b =>
@@ -288,9 +348,16 @@ namespace BlogApi.Infrastructure.Migrations
                     b.Navigation("Posts");
                 });
 
+            modelBuilder.Entity("BlogApi.Domain.Entities.Comment", b =>
+                {
+                    b.Navigation("CommentLikes");
+                });
+
             modelBuilder.Entity("BlogApi.Domain.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("PostLikes");
 
                     b.Navigation("PostTags");
                 });

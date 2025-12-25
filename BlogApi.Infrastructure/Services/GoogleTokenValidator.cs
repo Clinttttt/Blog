@@ -37,7 +37,8 @@ namespace BlogApi.Infrastructure.Services
 
                 json.GetProperty("sub").GetString()!,
                 json.GetProperty("email").GetString()!,
-                json.GetProperty("name").GetString()!
+                json.GetProperty("name").GetString()!,
+                json.GetProperty("picture").GetString()
                     ));
 
             }

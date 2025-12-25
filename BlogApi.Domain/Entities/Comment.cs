@@ -13,5 +13,8 @@ namespace BlogApi.Domain.Entities
         public Guid UserId { get; set; }
         public string? Content { get; set; }
         public DateTime CreatedAt { get; set; }
+        public Post Post { get; set; } = null!;
+        public User User { get; set; } = null!;
+        public ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
     }
 }

@@ -2,24 +2,24 @@
 @rendermode InteractiveServer
 
 <div class="h-screen bg-gray-50 py-8 overflow-auto">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Article Header -->
+   
         <article class="bg-white rounded-2xl shadow-sm overflow-hidden mb-8">
-            <!-- Category Badge -->
+      
             <div class="px-8 pt-8">
                 <span class="inline-block bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-sm font-semibold">
                     @blogPost.Category
                 </span>
             </div>
 
-            <!-- Title -->
+           
             <div class="px-8 pt-4 pb-6">
                 <h1 class="text-4xl font-bold text-gray-900 mb-4 leading-tight">
                     @blogPost.Title
                 </h1>
 
-                <!-- Meta Info -->
+              
                 <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,12 +42,12 @@
                 </div>
             </div>
 
-            <!-- Featured Image -->
+         
             <div class="w-full h-96 overflow-hidden">
                 <img src="/img/cqrs.png" class="w-full h-full object-cover" alt="@blogPost.Title" />
             </div>
 
-            <!-- Action Bar -->
+        
             <div class="px-8 py-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <!-- Article Content -->
+          
             <div class="px-8 py-8">
                 <div class="prose prose-lg max-w-none">
                     <p class="text-lg text-gray-700 leading-relaxed mb-6">
@@ -125,7 +125,7 @@ dotnet add package MediatR.Extensions.Microsoft.DependencyInjection</code></pre>
                     </p>
                 </div>
 
-                <!-- Tags -->
+             
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <div class="flex flex-wrap gap-2">
                         @foreach (var tag in blogPost.Tags)
@@ -139,7 +139,7 @@ dotnet add package MediatR.Extensions.Microsoft.DependencyInjection</code></pre>
             </div>
         </article>
 
-        <!-- Comments Section -->
+    
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,7 +148,7 @@ dotnet add package MediatR.Extensions.Microsoft.DependencyInjection</code></pre>
                 Comments (@comments.Count)
             </h2>
 
-            <!-- Comment Form -->
+      
             <div class="mb-8">
                 <EditForm Model="@commentForm" OnValidSubmit="HandleSubmitComment">
                     <div class="flex gap-4">
@@ -173,7 +173,7 @@ dotnet add package MediatR.Extensions.Microsoft.DependencyInjection</code></pre>
                 </EditForm>
             </div>
 
-            <!-- Comments List -->
+         
             <div class="space-y-6">
                 @foreach (var comment in comments)
                 {

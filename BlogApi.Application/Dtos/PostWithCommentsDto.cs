@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static BlogApi.Domain.Enum.EntityEnum;
+using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace BlogApi.Application.Dtos
 {
     public class PostWithCommentsDto
     {
+      
         public string? Title { get; set; }
         public string? Content { get; set; }
         public DateTime PostCreatedAt { get; set; }  
@@ -19,7 +20,7 @@ namespace BlogApi.Application.Dtos
         public string? PhotoContent { get; set; }
         public string? Author { get; set; }
         public ReadingDuration readingDuration { get; set; }
-
+        public int PostLike { get; set; }
 
 
     }

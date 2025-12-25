@@ -20,7 +20,7 @@ namespace BlogApi.Api.Controllers
 
         [Authorize]
         [HttpPost("CreateCategory")]
-        public async Task<ActionResult<bool>> Create([FromQuery] AddCategoryRequest request)
+        public async Task<ActionResult<bool>> Create([FromBody] AddCategoryRequest request)
         {
             var command = request.AddCategoyCommand(UserId);
             var result = await Sender.Send(command);

@@ -1,6 +1,6 @@
 ﻿using BlogApi.Application.Commands.Posts.CreatePost;
 using BlogApi.Domain.Entities;
-using static BlogApi.Domain.Enum.EntityEnum;
+using static BlogApi.Domain.Enums.EntityEnum;
 
 public class PostRequest
 {

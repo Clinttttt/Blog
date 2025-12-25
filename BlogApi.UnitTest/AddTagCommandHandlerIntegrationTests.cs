@@ -30,7 +30,7 @@ namespace BlogApi.UnitTest.Commands.Tags
         {
             // Arrange
             using var context = new AppDbContext(_options);
-            var handler = new AddTagCommandHandler(context, _mockMapper.Object);
+            var handler = new AddTagCommandHandler(context);
             var command = new AddTagCommand("Technology", Guid.NewGuid());
 
             // Act
@@ -54,7 +54,7 @@ namespace BlogApi.UnitTest.Commands.Tags
             context.Tags.Add(new Tag { Name = "Technology", UserId = Guid.NewGuid() });
             await context.SaveChangesAsync();
 
-            var handler = new AddTagCommandHandler(context, _mockMapper.Object);
+            var handler = new AddTagCommandHandler(context);
             var command = new AddTagCommand("Technology", Guid.NewGuid());
 
             // Act

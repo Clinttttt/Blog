@@ -2,6 +2,7 @@
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace BlogApi.Application.Queries.Posts.GetRecentPost
         {
            var query = await context.Posts
                 .AsNoTracking()
-                .Where(s=> s.Status == Domain.Enum.EntityEnum.Status.Published)
+                .Where(s=> s.Status == EntityEnum.Status.Published)
                 .OrderByDescending(s=> s.CreatedAt)
                 .Take(request.Limit)
                 .ToListAsync();

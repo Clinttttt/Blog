@@ -3,14 +3,14 @@
 @rendermode InteractiveServer
 @using BlogApi.Application.Dtos
 @using BlogApi.Application.Request.Category
-@using BlogApi.Application.Request.Tag
 @using BlogApi.Application.Request.Posts
+@using BlogApi.Application.Request.Tag
 @using BlogApi.Client.Interface
 @using BlogApi.Domain.Common
-@using BlogApi.Domain.Enum
-@using TinyMCE.Blazor
-@using static BlogApi.Domain.Enum.EntityEnum
+@using BlogApi.Domain.Enums
 @using Microsoft.AspNetCore.Authorization
+@using TinyMCE.Blazor
+@using static BlogApi.Domain.Enums.EntityEnum
 @inject IPostClientService postClient
 @inject ITagClientService tagClient
 @inject ICategoryClientService categoryClient
@@ -499,7 +499,6 @@
         }
         return string.Empty;
     }
-
     private async Task HandlePublish()
     {
         isSaving = true;

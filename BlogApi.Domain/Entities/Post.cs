@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static BlogApi.Domain.Enum.EntityEnum;
+using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace BlogApi.Domain.Entities
 {
@@ -25,6 +25,8 @@ namespace BlogApi.Domain.Entities
         public Category Category { get; set; } = null!;
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
+        public ICollection<PostLike> PostLikes { get; set; } = new List<PostLike>();
+       
     }
 
 

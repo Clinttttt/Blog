@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Models
 {
-    public record GoogleUserInfo( string Sub, string Email,string Name);
+    public record GoogleUserInfo( string Sub, string Email,string Name, string? Picture);
     
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static BlogApi.Domain.Enum.EntityEnum;
+using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace BlogApi.Application.Commands.Posts.CreatePost
 {

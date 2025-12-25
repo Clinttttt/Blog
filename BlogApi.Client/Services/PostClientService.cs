@@ -103,6 +103,13 @@ namespace BlogApi.Client.Services
             var result = await request.Content.ReadFromJsonAsync<int>();
             return Result<int>.Success(result);
         }
+        public async Task<Result<bool>> CommentLike(AddCommentLikeRequest dto)
+        {
+            var request = await _httpClient.PostAsJsonAsync("api/Posts/CommentLike", dto);
+            request.EnsureSuccessStatusCode();
+            var result = await request.Content.ReadFromJsonAsync<bool>();
+            return Result<bool>.Success(result);
+        }
 
     }
 }

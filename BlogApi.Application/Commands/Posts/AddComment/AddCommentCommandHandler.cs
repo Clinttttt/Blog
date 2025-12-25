@@ -21,9 +21,11 @@ namespace BlogApi.Application.Commands.Posts.AddComment
         public async Task<Result<int>> Handle(AddCommentCommand request, CancellationToken cancellationToken)
         {
                   
+           
             var post  = await _context.Posts.FindAsync(request.PostId, cancellationToken);
             var comment = new Comment
             {
+                UserId = request.UserId,
                 Content = request.Content,
                 CreatedAt = DateTime.UtcNow.AddHours(8),
                 PostId = request.PostId,

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using IMapper = AutoMapper.IMapper;
 namespace BlogApi.Application.Commands.Tags.AddTag
 {
-    public class AddTagCommandHandler(IAppDbContext context, IMapper mapper) : IRequestHandler<AddTagCommand, Result<int>>
+    public class AddTagCommandHandler(IAppDbContext context) : IRequestHandler<AddTagCommand, Result<int>>
     {
         public async Task<Result<int>> Handle(AddTagCommand request, CancellationToken cancellationToken)
         {

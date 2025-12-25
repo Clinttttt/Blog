@@ -109,8 +109,7 @@ namespace BlogApi.Api.Controllers
             var command = request.ToggleCommand(UserId);
             var result = await Sender.Send(command);
             return HandleResponse(result);
-        }
-     
+        }    
         [AllowAnonymous]
         [HttpPost("GetPostByTag")]
         public async Task<ActionResult<List<PostDto>>> GetPostByTag([FromQuery] GetPostByTagQuery command)
@@ -118,6 +117,13 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
-
+        [Authorize]
+        [HttpPost("CommentLike")]
+        public async Task<ActionResult<bool>> CommentLike([FromBody] AddCommentLikeRequest request)
+        {
+            var command = request.addCommentLikeCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
     }
 }

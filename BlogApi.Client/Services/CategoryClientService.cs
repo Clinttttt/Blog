@@ -13,9 +13,9 @@ namespace BlogApi.Client.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<Result<bool>> Create(AddCategoryRequest CategoryName)
+        public async Task<Result<bool>> Create(AddCategoryRequest dto)
         {
-            var request = await _httpClient.PostAsJsonAsync("api/Category/CreateCategory", new { CategoryName });
+            var request = await _httpClient.PostAsJsonAsync("api/Category/CreateCategory", dto);
             request.EnsureSuccessStatusCode();
             var result = await request.Content.ReadFromJsonAsync<bool>();
             return Result<bool>.Success(result);

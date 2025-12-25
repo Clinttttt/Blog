@@ -20,14 +20,18 @@ namespace BlogApi.Application.Commands.Category
             {
                 return Result<bool>.Conflict();
             }
-            var slughelper = SlugHelper.Generate(request.Name!);
-            var categ = new BlogApi.Domain.Entities.Category
+            if (!string.IsNullOrEmpty(request.Name))
             {
-                Name = request.Name,
-                Slug = slughelper,
-                UserId = request.UserId
-            };
-            context.Categories.Add(categ);
+                var slughelper = SlugHelper.Generate(request.Name);
+                var categ = new BlogApi.Domain.Entities.Category
+                {
+                    Name = request.Name,
+                    Slug = slughelper,
+                    UserId = request.UserId
+                };
+                context.Categories.Add(categ);
+            }
+                 
             await context.SaveChangesAsync();
             return Result<bool>.Success(true);
         }

@@ -18,6 +18,7 @@ namespace BlogApi.Client.Interface
         Task<Result<List<PostDto>>> GetRecentPost(int Id);
         Task<Result<int>> CreateComment(CommentRequest dto);
         Task<Result<int>> UpdateComment(UpdateCommentRequest dto);
+        Task<Result<bool>> CommentLike(AddCommentLikeRequest dto);
 
         }
 }

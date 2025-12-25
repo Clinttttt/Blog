@@ -1,4 +1,5 @@
 ﻿using BlogApi.Domain.Common;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using MapsterMapper;
 using MediatR;
@@ -18,7 +19,7 @@ namespace BlogApi.Application.Commands.Posts.ArchivePost
             var post = await context.Posts.FirstOrDefaultAsync(s => s.Id == request.Id && s.UserId == request.UserId, cancellationToken);
             if (post is null)
                 return Result<bool>.NotFound();
-            post.Status = Domain.Enum.EntityEnum.Status.Draft;
+            post.Status = EntityEnum.Status.Draft;
             await context.SaveChangesAsync(cancellationToken);
             return Result<bool>.Success(true);
         }

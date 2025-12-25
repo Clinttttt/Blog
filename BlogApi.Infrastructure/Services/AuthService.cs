@@ -71,7 +71,8 @@ namespace BlogApi.Infrastructure.Services
                 {
                     UserName = GoogleUser.Value!.Email.Split('@')[0],
                     Email = GoogleUser.Value.Email,
-                    PasswordHash = null!
+                    PasswordHash = null!,
+                    Role = "User"
                 };
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
@@ -85,7 +86,9 @@ namespace BlogApi.Infrastructure.Services
                 {
                     Provider = "Google",
                     ProviderId = GoogleUser.Value!.Sub,
-                    LinkedAt = DateTime.UtcNow.AddHours(8)
+                    LinkedAt = DateTime.UtcNow.AddHours(8),
+                    ProfilePhotoUrl = GoogleUser.Value.Picture,
+                   
                 });
                 await context.SaveChangesAsync();
             }

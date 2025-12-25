@@ -1,4 +1,4 @@
-﻿using static BlogApi.Domain.Enum.EntityEnum;
+﻿using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace BlogApi.Client.Dtos
 {
