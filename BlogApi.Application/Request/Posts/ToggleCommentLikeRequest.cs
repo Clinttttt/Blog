@@ -1,4 +1,4 @@
-﻿using BlogApi.Application.Commands.Posts.AddCommentLike;
+﻿using BlogApi.Application.Commands.Posts.ToggleCommentLike;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Request.Posts
 {
-    public class AddCommentLikeRequest
+    public class ToggleCommentLikeRequest
     {
         public int CommentId { get; set; }
      
-        public AddCommentLikeCommand addCommentLikeCommand(Guid UserId)
+        public ToggleCommentLikeCommand ToggleCommentLikeCommand(Guid UserId)
             => new(CommentId, UserId);
     }
 }

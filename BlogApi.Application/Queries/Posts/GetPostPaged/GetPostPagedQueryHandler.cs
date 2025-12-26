@@ -20,8 +20,7 @@ namespace BlogApi.Application.Queries.Posts.GetPostPaged
         {
             var query = context.Posts
                 .AsNoTracking()
-                .Where(s => s.Status == EntityEnum.Status.Published);
-               
+                .Where(s => s.Status == EntityEnum.Status.Published);              
             var totalcount = await query.CountAsync();
 
             var post = await query

@@ -1,4 +1,5 @@
 ﻿using BlogApi.Application.Dtos;
+using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using MediatR;
 using System;
@@ -7,8 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Queries.Posts.GetPostWithComments
+namespace BlogApi.Application.Queries.Posts.GetAllBookMark
 {
-    public record GetPostWithCommentsQuery(int PostId, Guid? UserId) : IRequest<Result<PostWithCommentsDto>>;
+    public record GetAllBookMarkQuery(Guid UserId) : IRequest<Result<List<PostDto>>>;
     
 }

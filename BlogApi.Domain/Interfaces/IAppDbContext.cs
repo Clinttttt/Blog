@@ -18,6 +18,7 @@ namespace BlogApi.Domain.Interfaces
         DbSet<PostTag> PostTags { get; set; }
         DbSet<Category> Categories { get; set; }
         DbSet<CommentLike> CommentLikes { get; set; }
+        DbSet<BookMark> BookMarks { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

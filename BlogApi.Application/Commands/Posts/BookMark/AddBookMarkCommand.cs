@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Commands.Posts.AddCommentLike
+namespace BlogApi.Application.Commands.Posts.BookMark
 {
-    public record AddCommentLikeCommand(int CommentId,  Guid UserId) :IRequest<Result<bool>>;
-    
+    public record AddBookMarkCommand(int? PostId, Guid UserId) : IRequest<Result<bool>>;
+  
 }

@@ -15,6 +15,8 @@ namespace BlogApi.Application.Dtos
         public string? UserName { get; set; }
         public string? PhotoUrl { get; set; }
         public int LikeCount { get; set; }
-    
+        public bool IsLikedComment { get; set; }
+ 
+
     }
 }

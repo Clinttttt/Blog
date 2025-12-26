@@ -10,11 +10,13 @@ namespace BlogApi.Application.Dtos
 {
     public class PostDto
     {
+        public int? PostId { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? CategoryName { get; set; }
         public ReadingDuration readingDuration { get; set; }
-        public List<TagDto>? tags { get; set; }  
+        public List<TagDto>? tags { get; set; }
+        public bool IsBookMark { get; set; }
     }
 }

@@ -11,10 +11,16 @@
         </div>
         <div class="flex gap-4">
 
-            <input type="text" placeholder="🔍 Search" class="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition-all whitespace-nowrap" />
-            <button class="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-700 hover:-translate-y-0.5 transition-all whitespace-nowrap">
+            <input type="text" placeholder="🔍 Search" class="flex w-[100%] items-center gap-2  px-3 py-1.5 bg-white text-gray-700 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition-all whitespace-nowrap" />
+            <button class="flex items-center gap-2 text-xs px-3 py-1.5 bg-blue-500  text-white rounded-lg font-semibold hover:bg-blue-700 hover:-translate-y-0.5 transition-all whitespace-nowrap">
                 New Post
             </button>
+            <NavLink href="bookmark" class="btn btn-square self-center">
+                <svg class="w-[26px] h-[26px] text-indigo-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z" />
+                </svg>
+
+            </NavLink>
         </div>
     </header>
 
@@ -40,7 +46,7 @@
     </section>
 
 
-    <section class=" pt-5   border-t-1 border-gray-300">
+    <section class=" pt-5  border-t-1 border-gray-300">
         <h2 class="text-lg font-bold mb-6 text-gray-700">Recent Posts</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
 
@@ -115,7 +121,7 @@
                 </p>
                 <div class="flex justify-between items-center pt-4 border-t border-gray-200">
                     <span class="text-sm text-gray-600">⏱️ 9 min</span>
-                    <NavLink href="@($"viewblogconstruct/{10}")" class="text-blue-600 font-semibold text-sm hover:underline">Read more →</NavLink>
+                    <NavLink href="@($"viewblogconstruct/{11}")" class="text-blue-600 font-semibold text-sm hover:underline">Read more →</NavLink>
                 </div>
             </article>
         </div>

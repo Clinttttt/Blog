@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Commands.Posts.AddCommentLike
+namespace BlogApi.Application.Commands.Posts.ToggleCommentLike
 {
-    public class AddCommentLikeCommandHandler(IAppDbContext context) : IRequestHandler<AddCommentLikeCommand, Result<bool>>
+    public class ToggleCommentLikeCommandHandler(IAppDbContext context) : IRequestHandler<ToggleCommentLikeCommand, Result<bool>>
     {
-        public async Task<Result<bool>> Handle(AddCommentLikeCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(ToggleCommentLikeCommand request, CancellationToken cancellationToken)
         {
             var likecomment = await context.CommentLikes
                 .FirstOrDefaultAsync(s => s.CommentId == request.CommentId && s.UserId == request.UserId);

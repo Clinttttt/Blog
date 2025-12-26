@@ -2,6 +2,7 @@
 using BlogApi.Application.Dtos;
 
 using BlogApi.Application.Models;
+using BlogApi.Application.Queries.Posts.GetAllBookMark;
 using BlogApi.Application.Queries.Posts.GetPostByTag;
 using BlogApi.Application.Queries.Posts.GetPostPaged;
 using BlogApi.Application.Queries.Posts.GetPostWithComments;
@@ -33,10 +34,11 @@ namespace BlogApi.Api.Controllers
         }
         [AllowAnonymous]
         [HttpGet("GetPost")]
-        public async Task<ActionResult<PostWithCommentsDto>> Get([FromQuery] GetPostWithCommentsQuery Id)
+        public async Task<ActionResult<PostWithCommentsDto>> Get([FromQuery] GetPostWithCommentsRequest request)
         {
-            var request = await Sender.Send(Id);
-            return HandleResponse(request);
+            var command = request.GetPostWithCommentsQuery(UserIdOrNull);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
 
         }
         [Authorize]
@@ -87,7 +89,6 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
-
         [AllowAnonymous]
         [HttpGet("GetPostPaged")]
         public async Task<ActionResult<PagedResult<PostDto>>> GetPostPaged([FromQuery] GetPostPagedQuery command)
@@ -109,19 +110,35 @@ namespace BlogApi.Api.Controllers
             var command = request.ToggleCommand(UserId);
             var result = await Sender.Send(command);
             return HandleResponse(result);
-        }    
+        }
         [AllowAnonymous]
         [HttpPost("GetPostByTag")]
         public async Task<ActionResult<List<PostDto>>> GetPostByTag([FromQuery] GetPostByTagQuery command)
-        {         
+        {
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
         [Authorize]
         [HttpPost("CommentLike")]
-        public async Task<ActionResult<bool>> CommentLike([FromBody] AddCommentLikeRequest request)
+        public async Task<ActionResult<bool>> CommentLike([FromBody] ToggleCommentLikeRequest request)
         {
-            var command = request.addCommentLikeCommand(UserId);
+            var command = request.ToggleCommentLikeCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+        [Authorize]
+        [HttpPost("AddBookMark")]
+        public async Task<ActionResult<bool>> BookMark(AddBookMarkRequest request)
+        {
+            var command = request.AddBookMarkCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+        [Authorize]
+        [HttpGet("GetBookMark")]
+        public async Task<ActionResult<List<PostDto>>> GetBookMark()
+        {
+            var command = new GetAllBookMarkQuery(UserId);
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }

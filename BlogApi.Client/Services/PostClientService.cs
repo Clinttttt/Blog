@@ -27,12 +27,10 @@ namespace BlogApi.Client.Services
             var result = await request.Content.ReadFromJsonAsync<int>();         
             return Result<int>.Success(result);
         }
-        public async Task<Result<PostWithCommentsDto>> Get(int PostId)
-        {
-            var command = new GetPostWithCommentsQuery(PostId);
-            var request = await _httpClient.GetFromJsonAsync<PostWithCommentsDto>($"api/Posts/GetPost?PostId={command.PostId}");
-            if (request is null)
-                return Result<PostWithCommentsDto>.NotFound();
+        public async Task<Result<PostWithCommentsDto>> Get(GetPostWithCommentsRequest PostId)
+        {       
+            var request = await _httpClient.GetFromJsonAsync<PostWithCommentsDto>($"api/Posts/GetPost?PostId={PostId.PostId}");
+            if (request is null) return Result<PostWithCommentsDto>.NotFound();
             return Result<PostWithCommentsDto>.Success(request);
         }
         public async Task<Result<int>> Update(UpdatePostRequest dto)
@@ -61,8 +59,7 @@ namespace BlogApi.Client.Services
         {
 
             var result = await _httpClient.GetFromJsonAsync<List<PostDto>>($"api/Posts/GetAllPost?=PageNumber{request.PageNumber}&PageSize={request.PageSize}");
-            if (result is null)
-                return Result<List<PostDto>>.NotFound();
+            if (result is null) return Result<List<PostDto>>.NotFound();
             return Result<List<PostDto>>.Success(result);
         }
         public async Task<Result<bool>> PostLike(int Id)
@@ -71,22 +68,19 @@ namespace BlogApi.Client.Services
             request.EnsureSuccessStatusCode();
             var result = await request.Content.ReadFromJsonAsync<bool>();
             return Result<bool>.Success(result);
-        }
-     
+        }   
         public async Task<Result<List<PostDto>>> GetPostByTag(int Id)
         {
             var request = await _httpClient.PostAsync($"api/Posts/GetPostByTag?TagId={Id}",null);
             request.EnsureSuccessStatusCode();
             var result = await request.Content.ReadFromJsonAsync<List<PostDto>>();
-            if (result is null)
-                return Result<List<PostDto>>.NotFound();
+            if (result is null) return Result<List<PostDto>>.NotFound();
             return Result<List<PostDto>>.Success(result);
         }
         public async Task<Result<List<PostDto>>> GetRecentPost(int Id)
         {
             var result = await _httpClient.GetFromJsonAsync<List<PostDto>>($"api/Posts/GetRecentPost?RecentPost={Id}");
-            if (result is null)
-                return Result<List<PostDto>>.NotFound();
+            if (result is null) return Result<List<PostDto>>.NotFound();
             return Result<List<PostDto>>.Success(result);
         }
         public async Task<Result<int>> CreateComment(CommentRequest dto)
@@ -103,12 +97,25 @@ namespace BlogApi.Client.Services
             var result = await request.Content.ReadFromJsonAsync<int>();
             return Result<int>.Success(result);
         }
-        public async Task<Result<bool>> CommentLike(AddCommentLikeRequest dto)
+        public async Task<Result<bool>> CommentLike(ToggleCommentLikeRequest dto)
         {
             var request = await _httpClient.PostAsJsonAsync("api/Posts/CommentLike", dto);
             request.EnsureSuccessStatusCode();
             var result = await request.Content.ReadFromJsonAsync<bool>();
             return Result<bool>.Success(result);
+        }
+        public async Task<Result<bool>> AddBookMark(AddBookMarkRequest dto)
+        {
+            var request = await _httpClient.PostAsJsonAsync("api/Posts/AddBookMark", dto);
+            request.EnsureSuccessStatusCode();
+            var result = await request.Content.ReadFromJsonAsync<bool>();
+            return Result<bool>.Success(result);
+        }
+        public async Task<Result<List<PostDto>>> GetBookMark()
+        {
+            var result = await _httpClient.GetFromJsonAsync<List<PostDto>>("api/Posts/GetBookMark");
+            if (result is null) return Result<List<PostDto>>.NotFound();
+            return Result<List<PostDto>>.Success(result);
         }
 
     }

@@ -20,12 +20,12 @@ namespace BlogApi.Domain.Entities
         public Status Status { get; set; }
         public DateTime CreatedAt { get;  set; }
         public ReadingDuration readingDuration { get; set; }
-
         public int? CategoryId { get; set; }
         public Category Category { get; set; } = null!;
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
         public ICollection<PostLike> PostLikes { get; set; } = new List<PostLike>();
+        public ICollection<BookMark> BookMarks { get; set; } = new List<BookMark>();
        
     }
 

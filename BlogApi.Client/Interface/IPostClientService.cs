@@ -8,7 +8,7 @@ namespace BlogApi.Client.Interface
     public interface IPostClientService
     {
         Task<Result<int>> Create(PostRequest dto);
-        Task<Result<PostWithCommentsDto>> Get(int PostId);
+        Task<Result<PostWithCommentsDto>> Get(GetPostWithCommentsRequest PostId);
         Task<Result<int>> Update(UpdatePostRequest dto);
         Task<Result<bool>> Archived(int Id);
         Task<Result<bool>> Delete(int Id);
@@ -18,7 +18,9 @@ namespace BlogApi.Client.Interface
         Task<Result<List<PostDto>>> GetRecentPost(int Id);
         Task<Result<int>> CreateComment(CommentRequest dto);
         Task<Result<int>> UpdateComment(UpdateCommentRequest dto);
-        Task<Result<bool>> CommentLike(AddCommentLikeRequest dto);
+        Task<Result<bool>> CommentLike(ToggleCommentLikeRequest dto);
+        Task<Result<bool>> AddBookMark(AddBookMarkRequest dto);
+        Task<Result<List<PostDto>>> GetBookMark();
 
         }
 }

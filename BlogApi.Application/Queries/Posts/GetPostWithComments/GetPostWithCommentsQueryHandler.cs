@@ -1,5 +1,6 @@
 ﻿using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
+using BlogApi.Domain.Entities;
 using BlogApi.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,14 +22,12 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
         public async Task<Result<PostWithCommentsDto>> Handle(GetPostWithCommentsQuery request, CancellationToken cancellationToken)
         {
           
-            var likecomment = await _context.CommentLikes
-                .Where(s=> s.CommentId == s.CommentId)
-                .CountAsync(cancellationToken);
-
+         
             var postwithcomment = await _context.Posts
                 .Include(s=> s.Category)
                 .Include(s=> s.PostLikes)
-             
+                .Include(s=> s.Comments)
+                .ThenInclude(s=> s.CommentLikes)
                 .Include(s=> s.PostTags)         
                 .ThenInclude(s=> s.tag)
                 .Include(s=> s.Comments)
@@ -37,9 +36,12 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
                  .Where(s => s.Id == request.PostId)
                  .Select(s => new PostWithCommentsDto
                  {
-                     PostLike = s.PostLikes.Where(s=> s.PostId == request.PostId).Count(),
+                     IsBookMark = s.BookMarks.Any(s=> s.UserId == request.UserId),
+                     PostLike = s.PostLikes.Count(),
                      Title = s.Title,
                      Content = s.Content,
+                     PhotoIsliked = s.PostLikes.Where(s=> s.UserId == request.UserId).Any(),
+                     CommentCount = s.Comments.Count(),
                      PostCreatedAt = s.CreatedAt,
                      CategoryName = s.Category.Name,
                      Photo = s.Photo,
@@ -54,8 +56,9 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
                      }).ToList(),
                      Comments = s.Comments
                      .Select(c => new CommentDto
-                     {
-                         LikeCount = likecomment,
+                     {                 
+                         IsLikedComment = c.CommentLikes.Any(cl => cl.UserId == request.UserId),
+                         LikeCount = c.CommentLikes.Count(),
                          CommentId = c.Id,
                          PostId = c.PostId,
                          Content = c.Content,

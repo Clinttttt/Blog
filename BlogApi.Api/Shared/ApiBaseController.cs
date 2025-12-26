@@ -19,15 +19,36 @@ namespace BlogApi.Api.Shared
         }
         protected ISender Sender => _sender;
 
-        protected Guid UserId
+        /*   protected Guid UserId
+           {
+               get
+               {
+                   var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                  return Guid.TryParse(userId, out var Id)
+                         ? Id : throw new UnauthorizedAccessException("Invalid or missing user ID in token.");
+                   return Guid.TryParse(userId, out var id) ? id : null;
+               }
+   }
+   */
+        protected Guid? UserIdOrNull
         {
             get
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return Guid.TryParse(userId, out var Id)
-                    ? Id : throw new UnauthorizedAccessException("Invalid or missing user ID in token.");
+                return Guid.TryParse(userId, out var id) ? id : null;
             }
         }
+        protected Guid UserId
+        {
+            get
+            {
+                var id = UserIdOrNull;
+                if (id == null)
+                    throw new UnauthorizedAccessException("User is not authenticated.");
+                return id.Value;
+            }
+        }
+
         protected ActionResult<T> HandleResponse<T>(Result<T> result)
         {
             if (result.IsSuccess)
@@ -42,7 +63,5 @@ namespace BlogApi.Api.Shared
                 _ => BadRequest()
             };
         }
-
-
     }
 }
