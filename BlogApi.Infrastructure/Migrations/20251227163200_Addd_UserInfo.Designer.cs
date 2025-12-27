@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251225143224_update-configg")]
-    partial class Updateconfigg
+    [Migration("20251227163200_Addd_UserInfo")]
+    partial class Addd_UserInfo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,27 @@ namespace BlogApi.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.BookMark", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("BookMarks");
+                });
 
             modelBuilder.Entity("BlogApi.Domain.Entities.Category", b =>
                 {
@@ -87,17 +108,12 @@ namespace BlogApi.Infrastructure.Migrations
                     b.Property<int>("CommentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommentId");
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("CommentLikes");
                 });
@@ -130,6 +146,31 @@ namespace BlogApi.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ExternalLogins");
+                });
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.NewsletterSubscriber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SubscribedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UnsubscribeToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsletterSubscribers");
                 });
 
             modelBuilder.Entity("BlogApi.Domain.Entities.Post", b =>
@@ -270,6 +311,38 @@ namespace BlogApi.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BlogApi.Domain.Entities.UserInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInfos");
+                });
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.BookMark", b =>
+                {
+                    b.HasOne("BlogApi.Domain.Entities.Post", "Post")
+                        .WithMany("BookMarks")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("BlogApi.Domain.Entities.Comment", b =>
                 {
                     b.HasOne("BlogApi.Domain.Entities.Post", "Post")
@@ -296,10 +369,6 @@ namespace BlogApi.Infrastructure.Migrations
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BlogApi.Domain.Entities.Post", null)
-                        .WithMany("CommentLikes")
-                        .HasForeignKey("PostId");
 
                     b.Navigation("Comments");
                 });
@@ -367,7 +436,7 @@ namespace BlogApi.Infrastructure.Migrations
 
             modelBuilder.Entity("BlogApi.Domain.Entities.Post", b =>
                 {
-                    b.Navigation("CommentLikes");
+                    b.Navigation("BookMarks");
 
                     b.Navigation("Comments");
 

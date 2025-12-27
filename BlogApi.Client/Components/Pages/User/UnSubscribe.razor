@@ -1,0 +1,19 @@
+﻿@page "/unsubscribe/{token}"
+@using BlogApi.Client.Interface
+@inject HttpClient Http
+@rendermode InteractiveServer
+@inject IUserClientServices UserClientService
+
+<h3>Unsubscribing...</h3>
+
+@code {
+    [Parameter]
+    public string token { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(token))
+            return;
+        await UserClientService.UnSubscribeToNewsletter(token);
+    }
+}

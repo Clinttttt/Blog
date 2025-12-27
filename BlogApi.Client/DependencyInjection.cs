@@ -51,6 +51,12 @@ namespace BlogApi.Client
                 return new TagClientService(httpClient);
             });
 
+            services.AddScoped<IUserClientServices>(sp =>
+            {
+              var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+              var httpClient = httpClientFactory.CreateClient("Api");
+                return new UserClientServices(httpClient);
+            });
             return services;
         }
 

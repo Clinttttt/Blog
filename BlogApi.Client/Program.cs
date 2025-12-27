@@ -13,13 +13,10 @@ builder.Services.Configure<CircuitOptions>(options =>
     options.DetailedErrors = true;
 });
 
-
-
 builder.Services.AddServices(builder.Configuration);
 
 
 var app = builder.Build();
-
 
 if (!app.Environment.IsDevelopment())
 {

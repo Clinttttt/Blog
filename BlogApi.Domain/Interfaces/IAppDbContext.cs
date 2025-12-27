@@ -19,6 +19,9 @@ namespace BlogApi.Domain.Interfaces
         DbSet<Category> Categories { get; set; }
         DbSet<CommentLike> CommentLikes { get; set; }
         DbSet<BookMark> BookMarks { get; set; }
+        DbSet<ExternalLogin> ExternalLogins { get; set; }
+        DbSet<NewsletterSubscriber> NewsletterSubscribers { get; set; }
+        DbSet<UserInfo> UserInfos { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

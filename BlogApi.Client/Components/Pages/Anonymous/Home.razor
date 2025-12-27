@@ -1,6 +1,8 @@
 ﻿@page "/"
-
-
+@using BlogApi.Application.Dtos
+@using BlogApi.Client.Interface
+@inject IUserClientServices ClientService
+@rendermode InteractiveServer
 
 <main class="p-6 lg:p-12 max-w-7xl w-full overflow-auto h-screen">
 
@@ -11,8 +13,19 @@
         </div>
         <div class="flex gap-4">
 
+            <NavLink href="profile" class="flex-shrink-0 cursor-pointer border rounded-full border-gray-400 w-10 aspect-square overflow-hidden">             
+                @if (userProfile?.PhotoUrl is null)
+                {
+                    <img src="/img/icon-proff.png" class="w-full h-full object-contain " />
+                }
+                else
+                {
+                    <img src="@userProfile.PhotoUrl" class="w-full h-full object-contain " />
+                }
+                </NavLink>
+                
             <input type="text" placeholder="🔍 Search" class="flex w-[100%] items-center gap-2  px-3 py-1.5 bg-white text-gray-700 border border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition-all whitespace-nowrap" />
-            <button class="flex items-center gap-2 text-xs px-3 py-1.5 bg-blue-500  text-white rounded-lg font-semibold hover:bg-blue-700 hover:-translate-y-0.5 transition-all whitespace-nowrap">
+            <button class=" cursor-pointer flex items-center gap-2 text-xs px-3 py-1.5 bg-blue-500  text-white rounded-lg font-semibold hover:bg-blue-700 hover:-translate-y-0.5 transition-all whitespace-nowrap">
                 New Post
             </button>
             <NavLink href="bookmark" class="btn btn-square self-center">
@@ -55,10 +68,10 @@
                     <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-md text-xs font-semibold uppercase">CQRS</span>
                     <span class="text-sm text-gray-600">Dec 15, 2025</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-700 leading-snug">
+                <h3 class="text-xl line-clamp-2 font-bold mb-3 text-gray-700 leading-snug">
                     Getting Started with CQRS and MediatR in .NET
                 </h3>
-                <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                <p class="text-gray-600 line-clamp-3 leading-relaxed mb-4 text-sm">
                     Discover how to implement Command Query Responsibility Segregation pattern
                     using MediatR library in your .NET applications.
                 </p>
@@ -74,10 +87,10 @@
                     <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-md text-xs font-semibold uppercase">Blazor</span>
                     <span class="text-sm text-gray-600">Dec 12, 2025</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-700 leading-snug">
+                <h3 class="text-xl  line-clamp-2 font-bold mb-3 text-gray-700 leading-snug">
                     Building Real-time Features with Blazor Server
                 </h3>
-                <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                <p class="text-gray-600 line-clamp-3 leading-relaxed mb-4 text-sm">
                     Explore SignalR integration and real-time capabilities in Blazor Server
                     applications for interactive user experiences.
                 </p>
@@ -93,10 +106,10 @@
                     <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-md text-xs font-semibold uppercase">Web API</span>
                     <span class="text-sm text-gray-600">Dec 10, 2025</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-700 leading-snug">
+                <h3 class="text-xl line-clamp-2 font-bold mb-3 text-gray-700 leading-snug">
                     RESTful API Design Best Practices
                 </h3>
-                <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                <p class="text-gray-600 line-clamp-3 leading-relaxed mb-4 text-sm">
                     Learn essential principles and patterns for designing clean, maintainable,
                     and scalable RESTful APIs with .NET Core.
                 </p>
@@ -112,10 +125,10 @@
                     <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-md text-xs font-semibold uppercase">Authentication</span>
                     <span class="text-sm text-gray-600">Dec 8, 2025</span>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-700 leading-snug">
+                <h3 class="text-xl line-clamp-2 font-bold mb-3 text-gray-700 leading-snug">
                     JWT Authentication in .NET Core Web API
                 </h3>
-                <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                <p class="text-gray-600  line-clamp-3 leading-relaxed mb-4 text-sm">
                     Implement secure JWT-based authentication and authorization in your
                     .NET Core Web API applications.
                 </p>
@@ -130,9 +143,41 @@
 
           
 
-@code {
 
+
+
+
+@code {
+    private UserProfileDto? userProfile { get; set; } = new UserProfileDto();
+    public bool hasrender = false;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!hasrender && firstRender)
+        {
+            hasrender = true;
+            var request = await ClientService.GetCurrentUser();    
+            if(request is not null)
+            userProfile = request.Value;         
+        }
+        StateHasChanged();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

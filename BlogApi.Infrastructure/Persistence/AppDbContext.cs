@@ -25,6 +25,8 @@ namespace BlogApi.Infrastructure.Persistence
         public DbSet<ExternalLogin> ExternalLogins { get; set; }
         public DbSet<CommentLike> CommentLikes { get; set; }
         public DbSet<BookMark> BookMarks { get; set; }
+        public DbSet<NewsletterSubscriber> NewsletterSubscribers { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);

@@ -30,7 +30,7 @@ namespace BlogApi.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -143,6 +143,31 @@ namespace BlogApi.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ExternalLogins");
+                });
+
+            modelBuilder.Entity("BlogApi.Domain.Entities.NewsletterSubscriber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("SubscribedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UnsubscribeToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsletterSubscribers");
                 });
 
             modelBuilder.Entity("BlogApi.Domain.Entities.Post", b =>
@@ -283,13 +308,34 @@ namespace BlogApi.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BlogApi.Domain.Entities.UserInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserInfos");
+                });
+
             modelBuilder.Entity("BlogApi.Domain.Entities.BookMark", b =>
                 {
                     b.HasOne("BlogApi.Domain.Entities.Post", "Post")
                         .WithMany("BookMarks")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Post");
                 });

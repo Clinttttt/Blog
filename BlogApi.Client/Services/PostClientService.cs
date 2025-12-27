@@ -19,7 +19,6 @@ namespace BlogApi.Client.Services
         {
             _httpClient = httpClient;
         }
-
         public async Task<Result<int>> Create(PostRequest dto)
         {
             var request = await _httpClient.PostAsJsonAsync("api/Posts/CreatePosts", dto);

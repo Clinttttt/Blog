@@ -5,7 +5,7 @@
 namespace BlogApi.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class updateconfigg : Migration
+    public partial class Updateconfigg : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
