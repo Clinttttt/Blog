@@ -1,56 +1,38 @@
 window.currentComponent = null;
 
-window.initGoogleAuthWithButton = async (clientId, dotNetRef) => {
-    console.log('initGoogleAuthWithButton called');
-
+window.initGoogleAuth = async (clientId, dotNetRef) => {
     while (typeof google === 'undefined' || !google.accounts) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 
-    console.log('Google API loaded');
     window.currentComponent = dotNetRef;
 
     google.accounts.id.initialize({
         client_id: clientId,
-        callback: handleGoogleResponse
+        callback: handleCredentialResponse
     });
 
-    console.log('Google initialized');
-
-    const buttonDiv = document.getElementById('googleButtonDiv');
-    if (buttonDiv) {
-        console.log('Rendering button');
-        google.accounts.id.renderButton(
-            buttonDiv,
-            {
-                theme: 'outline',
-                size: 'large',
-                width: '100%',
-                text: 'signin_with',
-                shape: 'rectangular'
-            }
-        );
-    } else {
-        console.error('googleButtonDiv not found');
+    const hiddenDiv = document.getElementById('hiddenGoogleButton');
+    if (hiddenDiv) {
+        google.accounts.id.renderButton(hiddenDiv, {
+            theme: 'outline',
+            size: 'large'
+        });
     }
 };
 
-function handleGoogleResponse(response) {
-    console.log('Google response received');
-    if (window.currentComponent) {
-        window.currentComponent.invokeMethodAsync('HandleGoogleLoginCallback', response.credential);
+function handleCredentialResponse(response) {
+    if (window.currentComponent && response.credential) {
+        window.currentComponent.invokeMethodAsync('HandleGoogleCallback', response.credential);
     }
 }
 
-window.triggerGoogleLogin = () => {
-    if (typeof google !== 'undefined' && google.accounts) {
-        google.accounts.id.prompt((notification) => {
-            console.log('Notification:', notification);
-            if (notification.isNotDisplayed()) {
-                console.log('Reason not displayed:', notification.getNotDisplayedReason());
-            }
-        });
-    } else {
-        console.error('Google API not loaded yet');
+window.triggerGoogleSignIn = () => {
+    const hiddenDiv = document.getElementById('hiddenGoogleButton');
+    if (hiddenDiv) {
+        const googleButton = hiddenDiv.querySelector('div[role="button"]');
+        if (googleButton) {
+            googleButton.click();
+        }
     }
 };

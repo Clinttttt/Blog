@@ -6,6 +6,7 @@ using BlogApi.Domain.Entities;
 using BlogApi.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Infrastructure.Services
 {
-    public class AuthService(ITokenService tokenService, AppDbContext context, IGoogleTokenValidator tokenValidator) : IAuthService
+    public class AuthService(ITokenService tokenService, AppDbContext context, IGoogleTokenValidator tokenValidator, IHttpClientFactory _httpClient, ILogger<AuthService> _logger) : IAuthService
     {
         public async Task<Result<AuthResult>> Register(UserDto request)
         {
@@ -62,43 +63,69 @@ namespace BlogApi.Infrastructure.Services
             if (GoogleUser is null)
                 return Result<TokenResponseDto>.Unauthorized();
 
-            var user = await context.Users
-                .Include(s => s.ExternalLogins)
-                .FirstOrDefaultAsync(s => s.Email == GoogleUser.Value!.Email);
-            if (user is null)
-            {
-                user = new User
-                {
-                    UserName = GoogleUser.Value!.Email.Split('@')[0],
-                    Email = GoogleUser.Value.Email,
-                    PasswordHash = null!,
-                    Role = "User"
-                };
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-            }
-            var externalLogin = user.ExternalLogins
-        .FirstOrDefault(el => el.Provider == "Google" && el.ProviderId == GoogleUser.Value!.Sub);
+          using var transaction = await context.Database.BeginTransactionAsync();
 
-            if (externalLogin is null)
+            try
             {
-                user.ExternalLogins.Add(new ExternalLogin
+                var user = await context.Users
+              .Include(s => s.ExternalLogins)
+              .FirstOrDefaultAsync(s => s.Email == GoogleUser.Value!.Email);
+                if (user is null)
                 {
-                    Provider = "Google",
-                    ProviderId = GoogleUser.Value!.Sub,
-                    LinkedAt = DateTime.UtcNow.AddHours(8),
-                    ProfilePhotoUrl = GoogleUser.Value.Picture,
-                   
-                });
-                await context.SaveChangesAsync();
+                    user = new User
+                    {
+                        UserName = GoogleUser.Value!.Email.Split('@')[0],
+                        Email = GoogleUser.Value.Email,
+                        PasswordHash = null!,
+                        Role = "User"
+                    };
+                    context.Users.Add(user);
+                    await context.SaveChangesAsync();
+                }
+                var externalLogin = user.ExternalLogins
+            .FirstOrDefault(el => el.Provider == "Google" && el.ProviderId == GoogleUser.Value!.Sub);
+
+                if (externalLogin is null)
+                {
+                    byte[]? photoBytes = null;
+                    if (!string.IsNullOrEmpty(GoogleUser.Value!.Picture))
+                    {
+                        try
+                        {
+                            using var httpClient = _httpClient.CreateClient();
+                            photoBytes = await httpClient.GetByteArrayAsync(GoogleUser.Value.Picture);
+                        }
+                        catch (Exception ex)
+                        {
+                            photoBytes = null;
+                            _logger.LogWarning(ex, "Failed to download profile photo from {Url}", GoogleUser.Value.Picture);
+                        }
+                    }
+                    user.ExternalLogins.Add(new ExternalLogin
+                    {
+                        Provider = "Google",
+                        ProviderId = GoogleUser.Value!.Sub,
+                        LinkedAt = DateTime.UtcNow.AddHours(8),
+                        ProfilePhotoUrl = GoogleUser.Value.Picture,
+                        ProfilePhotoBytes = photoBytes
+
+                    });
+                    await context.SaveChangesAsync();
+                }
+                var token = await tokenService.CreateTokenResponse(user);
+                await transaction.CommitAsync();
+                return token;
             }
-            var token = await tokenService.CreateTokenResponse(user);
-            return token;
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
         public async Task<Result<TokenResponseDto>> RefreshToken(RefreshTokenDto request)
         {
             var user = await tokenService.ValidateRefreshToken(request.UserId, request.RefreshToken);
-                if(user is null)
+            if (user is null)
                 return Result<TokenResponseDto>.NotFound();
             return await tokenService.CreateTokenResponse(user);
 

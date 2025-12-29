@@ -1,4 +1,4 @@
-﻿using BlogApi.Application.Dtos;
+﻿/*using BlogApi.Application.Dtos;
 using BlogApi.Application.Request.Tag;
 using BlogApi.Client.Interface;
 using BlogApi.Domain.Common;
@@ -39,5 +39,28 @@ namespace BlogApi.Client.Services
             var result = await request.Content.ReadFromJsonAsync<bool>();
             return Result<bool>.Success(result);
         }
+    }
+}
+*/
+
+
+
+
+using BlogApi.Application.Dtos;
+using BlogApi.Application.Request.Tag;
+using BlogApi.Client.Helper;
+using BlogApi.Client.Interface;
+using BlogApi.Domain.Common;
+using System.Net.Http.Json;
+using System.Net.Sockets;
+
+namespace BlogApi.Client.Services
+{
+    public class TagClientService(HttpClient httpClient) : HandleResponse(httpClient), ITagClientService
+    {
+        public async Task<Result<int>> Create(AddTagRequest dto) => await PostAsync<AddTagRequest, int>("api/Tag/AddTag", dto);
+        public async Task<Result<bool>> Delete(int TagId) => await DeleteAsync<bool>($"api/Tag/AddTag/{TagId}");
+        public async Task<Result<List<TagDto>>> GetAllTags() => await GetAsync<List<TagDto>>("api/Tag/GetAllTags");
+        public async Task<Result<bool>> AddTagsToPost(AddTagsToPostRequest dto) => await PostAsync<AddTagsToPostRequest, bool>("api/Tag/AddTagTopost", dto);
     }
 }

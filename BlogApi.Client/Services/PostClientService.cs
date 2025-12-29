@@ -1,10 +1,11 @@
-﻿using BlogApi.Application.Commands.Posts.CreatePost;
+﻿/*using BlogApi.Application.Commands.Posts.CreatePost;
 using BlogApi.Application.Dtos;
 
 using BlogApi.Application.Queries.Posts.GetPostPaged;
 using BlogApi.Application.Queries.Posts.GetPostWithComments;
 using BlogApi.Application.Request.Posts;
 using BlogApi.Client.Dtos;
+using BlogApi.Client.Helper;
 using BlogApi.Client.Interface;
 using BlogApi.Domain.Common;
 using Microsoft.AspNetCore.Server.HttpSys;
@@ -164,5 +165,46 @@ namespace BlogApi.Client.Services
         }
 
 
+    }
+}
+*/
+
+
+using BlogApi.Application.Commands.Posts.CreatePost;
+using BlogApi.Application.Dtos;
+
+using BlogApi.Application.Queries.Posts.GetPostPaged;
+using BlogApi.Application.Queries.Posts.GetPostWithComments;
+using BlogApi.Application.Request.Posts;
+using BlogApi.Client.Dtos;
+using BlogApi.Client.Helper;
+using BlogApi.Client.Interface;
+using BlogApi.Domain.Common;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Identity.Client;
+using System.Net.Http;
+
+namespace BlogApi.Client.Services
+{
+    public class PostClientService(HttpClient httpClient) : HandleResponse(httpClient), IPostClientService
+    {
+        public async Task<Result<int>> Create(PostRequest dto) => await PostAsync<PostRequest, int>("api/Posts/CreatePosts", dto);
+        public async Task<Result<PostWithCommentsDto>> Get(GetPostWithCommentsRequest PostId) => await GetAsync<PostWithCommentsDto>($"api/Posts/GetPost?PostId={PostId.PostId}");
+        public async Task<Result<int>> Update(UpdatePostRequest dto) => await UpdateAsync<UpdatePostRequest, int>("api/Posts/UpdatePost", dto);
+        public async Task<Result<bool>> Archived(int Id) => await UpdateAsync<bool>($"api/Posts/ArchivedPost?Id={Id}");
+        public async Task<Result<bool>> Delete(int Id) => await DeleteAsync<bool>($"api/Posts/DeletePost?PostId={Id}");
+        public async Task<Result<List<PostDto>>> GetPostPage(GetPostPagedQuery request) => await GetAsync<List<PostDto>>($"api/Posts/GetAllPost?=PageNumber{request.PageNumber}&PageSize={request.PageSize}");
+        public async Task<Result<List<PostDto>>> GetPostByTag(int Id) => await GetAsync<List<PostDto>>($"api/Posts/GetPostByTag?TagId={Id}");
+        public async Task<Result<List<PostDto>>> GetRecentPost() => await GetAsync<List<PostDto>>("api/Posts/GetRecentPost");
+        public async Task<Result<int>> CreateComment(CommentRequest dto) => await PostAsync<CommentRequest, int>("api/Posts/CreateComment", dto);
+        public async Task<Result<bool>> PostLike(int Id) => await PostAsync<bool>($"api/Posts/PostLike?PostId={Id}");
+        public async Task<Result<bool>> UpdateComment(UpdateCommentRequest dto) => await UpdateAsync<UpdateCommentRequest, bool>("api/Posts/UpdateComment", dto);
+        public async Task<Result<bool>> CommentLike(ToggleCommentLikeRequest dto) => await PostAsync<ToggleCommentLikeRequest, bool>("api/Posts/CommentLike", dto);
+        public async Task<Result<bool>> AddBookMark(AddBookMarkRequest dto) => await PostAsync<AddBookMarkRequest, bool>("api/Posts/AddBookMark", dto);
+        public async Task<Result<List<PostDto>>> GetBookMark() => await GetAsync<List<PostDto>>("api/Posts/GetBookMark");
+        public async Task<Result<PostDashboardDto>> PostDashboard() => await GetAsync<PostDashboardDto>("api/Posts/PostDashboard");
+        public async Task<Result<bool>> AddFeatured(AddFeaturedRequest dto) => await PostAsync<AddFeaturedRequest, bool>("api/Posts/AddFeatured", dto);
+        public async Task<Result<FeaturedPostDto>> GetFeatured() => await GetAsync<FeaturedPostDto>("api/Posts/GetFeatured");
     }
 }

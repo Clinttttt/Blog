@@ -31,7 +31,8 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
                 .Include(s => s.Comments)
                 .ThenInclude(s => s.User.UserInfo)
                  .Include(s => s.Comments)
-                .ThenInclude(s => s.User.ExternalLogins)
+                .ThenInclude(s => s.User)
+                .ThenInclude(s => s.ExternalLogins)
                  .AsNoTracking()
                  .Where(s => s.Id == request.PostId)
                  .Select(s => new PostWithCommentsDto
@@ -65,9 +66,11 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
                          CreatedAt = c.CreatedAt,
                          UserName = c.User.UserName,
                          PhotoUrl = c.User.UserInfo != null && c.User.UserInfo.Photo != null && c.User.UserInfo.Photo.Length > 0
-                    ? $"data:{c.User.UserInfo.PhotoContentType};base64,{Convert.ToBase64String(c.User.UserInfo.Photo)}"
-                    : c.User.ExternalLogins.Select(x => x.ProfilePhotoUrl).FirstOrDefault(),
-
+                         ? $"data:{c.User.UserInfo.PhotoContentType};base64,{Convert.ToBase64String(c.User.UserInfo.Photo)}"
+                         : c.User.ExternalLogins
+                           .FirstOrDefault(el => el.Provider == "Google" && el.ProfilePhotoBytes != null) != null
+                         ? $"data:image/jpeg;base64,{Convert.ToBase64String(c.User.ExternalLogins.First(el => el.Provider == "Google").ProfilePhotoBytes!)}"
+                         : string.Empty,
                      }).ToList()
                  }).FirstOrDefaultAsync(cancellationToken);
             if (postwithcomment is null)

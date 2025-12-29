@@ -20,12 +20,16 @@ namespace BlogApi.Application.Queries.User.GetCurrentUser
             var photo = await context.Users
                  .AsNoTracking()
                  .Include(s=> s.UserInfo)
+                 .Include(s=> s.ExternalLogins)
                  .Where(s=> s.Id == request.UserId)
-                 .Select(s => new UserProfileDto
+                 .Select(c => new UserProfileDto
                  {
-                     PhotoUrl = s.UserInfo != null && s.UserInfo.Photo != null && s.UserInfo.Photo.Length > 0
-                    ? $"data:{s.UserInfo.PhotoContentType};base64,{Convert.ToBase64String(s.UserInfo.Photo)}"
-                    : s.ExternalLogins.Select(x => x.ProfilePhotoUrl).FirstOrDefault(),
+                     PhotoUrl = c.UserInfo != null && c.UserInfo.Photo != null && c.UserInfo.Photo.Length > 0
+                         ? $"data:{c.UserInfo.PhotoContentType};base64,{Convert.ToBase64String(c.UserInfo.Photo)}"
+                         : c.ExternalLogins
+                           .FirstOrDefault(el => el.Provider == "Google" && el.ProfilePhotoBytes != null) != null
+                         ? $"data:image/jpeg;base64,{Convert.ToBase64String(c.ExternalLogins.First(el => el.Provider == "Google").ProfilePhotoBytes!)}"
+                         : string.Empty,
 
                  }).FirstOrDefaultAsync();
             if (photo is null)

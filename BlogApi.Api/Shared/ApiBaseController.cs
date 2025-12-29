@@ -1,6 +1,7 @@
 ﻿using BlogApi.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -59,7 +60,8 @@ namespace BlogApi.Api.Shared
                 401 => Unauthorized(),
                 403 => Forbid(),
                 409 => Conflict(),
-                204 => NoContent(),
+                204 => NoContent(),     
+                500 => StatusCode(500, "Internal Server Error"),
                 _ => BadRequest()
             };
         }

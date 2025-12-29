@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿
+/*using Azure;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Client.Interface;
@@ -73,5 +74,40 @@ namespace BlogApi.Client.Services
             await _localstorage.SetAsync("RefreshToken", NewToken.Value.RefreshToken!);
             return true;
         }
+    }
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+using Azure;
+using BlogApi.Application.Dtos;
+using BlogApi.Application.Models;
+using BlogApi.Application.Request.Auth;
+using BlogApi.Client.Helper;
+using BlogApi.Client.Interface;
+using BlogApi.Domain.Common;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.Identity.Client;
+using System.Net.Http.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
+namespace BlogApi.Client.Services
+{
+    public class AuthClientService(HttpClient httpClient) : HandleResponse(httpClient), IAuthClientService
+    {
+        public async Task<Result<AuthResult>> Register(UserDto user) => await PostAsync<UserDto, AuthResult>("api/Auth/Register", user);
+        public async Task<Result<TokenResponseDto>> GoogleLogin(string idToken) => await PostAsync<GoogleLoginRequest, TokenResponseDto>("api/Auth/GoogleLogin", new GoogleLoginRequest { IdToken = idToken });
+        public async Task<Result<TokenResponseDto>> Login(UserDto user) => await PostAsync<UserDto, TokenResponseDto>("api/Auth/Login", user);
+        public async Task<Result<TokenResponseDto>> RefreshToken(RefreshTokenDto refreshToken) => await PostAsync<RefreshTokenDto, TokenResponseDto>("api/Auth/RefreshToken", refreshToken);    
     }
 }

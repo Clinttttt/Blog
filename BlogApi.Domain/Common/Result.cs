@@ -8,7 +8,9 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BlogApi.Domain.Common
 {
-    public class Result<T>
+    
+
+    public class Result<T> 
     {
         public bool IsSuccess { get; }
         public T? Value { get; }
@@ -27,6 +29,7 @@ namespace BlogApi.Domain.Common
         public static Result<T> Conflict() => new(false, default, 409);
         public static Result<T> Forbidden() => new(false, default, 403);
         public static Result<T> NoContent() => new(true, default, 204);
+        public static Result<T> InternalServerError() => new(false, default, 500);
 
 
     }

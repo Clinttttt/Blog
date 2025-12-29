@@ -14,47 +14,7 @@
     <component type="typeof(App)" render-mode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/TinyMCE.Blazor/tinymce-blazor.js"></script>
-
-    <!--  Loads synchronously -->
-    <script>
-        window.currentComponent = null;
-
-        window.initGoogleAuthWithButton = async (clientId, dotNetRef) => {
-            while (typeof google === 'undefined' || !google.accounts) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
-            window.currentComponent = dotNetRef;
-
-            google.accounts.id.initialize({
-                client_id: clientId,
-                callback: handleGoogleResponse
-            });
-
-            const buttonDiv = document.getElementById('googleButtonDiv');
-            if (buttonDiv) {
-                google.accounts.id.renderButton(buttonDiv, {
-                    theme: 'outline',
-                    size: 'large',
-                    width: '100%',
-                    text: 'signin_with',
-                    shape: 'rectangular'
-                });
-            }
-        };
-
-        function handleGoogleResponse(response) {
-            if (window.currentComponent) {
-                window.currentComponent.invokeMethodAsync('HandleGoogleLoginCallback', response.credential);
-            }
-        }
-
-        window.triggerGoogleLogin = () => {
-            if (typeof google !== 'undefined' && google.accounts) {
-                google.accounts.id.prompt();
-            }
-        };
-    </script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="/js/google-auth.js"></script>
 </body>
 </html>

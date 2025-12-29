@@ -222,6 +222,7 @@
         var request_comment = await PostClient.CreateComment(commentRequest);
         var result = await PostClient.Get(postId);
         PostDto = result.Value;
+        commentRequest = new CommentRequest();
         StateHasChanged();
     }
     public async Task GetCommentId(int commentId)
