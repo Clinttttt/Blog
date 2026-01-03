@@ -143,9 +143,18 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-        [Authorize(Roles = "Admin,Author")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddFeatured")]
         public async Task<ActionResult<bool>> AddFeatured([FromBody] AddFeaturedRequest request)
+        {
+            var command = request.ToCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteFeatured")]
+        public async Task<ActionResult<bool>> DeleteFeatured([FromBody] DeletePostRequest request)
         {
             var command = request.ToCommand(UserId);
             var result = await Sender.Send(command);

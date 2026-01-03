@@ -60,7 +60,8 @@ namespace BlogApi.Client.Services
     {
         public async Task<Result<int>> Create(AddTagRequest dto) => await PostAsync<AddTagRequest, int>("api/Tag/AddTag", dto);
         public async Task<Result<bool>> Delete(int TagId) => await DeleteAsync<bool>($"api/Tag/AddTag/{TagId}");
-        public async Task<Result<List<TagDto>>> GetAllTags() => await GetAsync<List<TagDto>>("api/Tag/GetAllTags");
+        public async Task<Result<List<TagDto>>> GetListing() => await GetAsync<List<TagDto>>("api/Tag/GetListing");
+        public async Task<Result<List<TagDto>>> GetListingPostTag() => await GetAsync<List<TagDto>>("api/Tag/GetListingPostTag");
         public async Task<Result<bool>> AddTagsToPost(AddTagsToPostRequest dto) => await PostAsync<AddTagsToPostRequest, bool>("api/Tag/AddTagTopost", dto);
     }
 }

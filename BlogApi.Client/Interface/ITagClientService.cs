@@ -8,7 +8,8 @@ namespace BlogApi.Client.Interface
     {
         Task<Result<int>> Create(AddTagRequest dto);
         Task<Result<bool>> Delete(int TagId);
-        Task<Result<List<TagDto>>> GetAllTags();
+        Task<Result<List<TagDto>>> GetListing();
         Task<Result<bool>> AddTagsToPost(AddTagsToPostRequest dto);
+        Task<Result<List<TagDto>>> GetListingPostTag();
     }
 }

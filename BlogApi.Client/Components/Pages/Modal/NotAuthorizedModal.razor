@@ -1,16 +1,14 @@
 ﻿@implements IDisposable
 @inject IJSRuntime JS
 
-<!-- Auto-open modal when not authorized -->
+
 <input type="checkbox" id="auth_modal" class="modal-toggle" checked />
 <div class="modal modal-open" role="dialog">
     <div class="modal-box relative max-w-md">
-     
 
         <label for="auth_modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-
         <div class="text-center">
-        
+
             <div class="flex justify-center mb-4">
                 <div class="bg-indigo-100 p-4 rounded-full">
                     <svg class="w-12 h-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,13 +16,11 @@
                     </svg>
                 </div>
             </div>
-
             <h3 class="text-2xl font-bold mb-2">Sign In Required</h3>
             <p class="text-gray-600 mb-6">
                 Please sign in with your Google account to access this page
             </p>
 
-       
             <button @onclick="SignInWithGoogle"
                     class="cursor-pointer w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 hover:border-blue-500 hover:shadow-lg transition-all font-medium text-base text-gray-700">
                 <svg width="20" height="20" viewBox="0 0 18 18">
@@ -35,7 +31,6 @@
                 </svg>
                 <span>Sign in with Google</span>
             </button>
-
             <p class="text-xs text-gray-500 mt-4">
                 By signing in, you agree to our Terms of Service and Privacy Policy
             </p>
@@ -43,6 +38,7 @@
     </div>
     <label class="modal-backdrop" for="auth_modal"></label>
 </div>
+
 
 <div id="hiddenGoogleButton" style="position: absolute; left: -9999px; width: 0; height: 0; overflow: hidden;"></div>
 
@@ -70,12 +66,8 @@
     [JSInvokable]
     public async Task HandleGoogleCallback(string idToken)
     {
-        
         await GoogleCallback.ProcessLogin(idToken);
-
-       
         await OnAuthenticationSuccess.InvokeAsync();
-
         StateHasChanged();
     }
 

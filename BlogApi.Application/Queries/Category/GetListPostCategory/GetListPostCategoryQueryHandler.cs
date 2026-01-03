@@ -2,24 +2,23 @@
 using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
-using BlogApi.Domain.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Queries.Category.GetAllCategory
+namespace BlogApi.Application.Queries.Category.GetListPostCategory
 {
-    public class GetListQueryHandler(ICategoryRespository respository, IMapper mapper) : IRequestHandler<GetListQuery, Result<List<CategoryDto>>>
+    public class GetListPostCategoryQueryHandler(ICategoryRespository respository, IMapper  mapper) : IRequestHandler<GetListPostCategoryQuery, Result<List<CategoryDto>>>
     {
-        public async Task<Result<List<CategoryDto>>> Handle(GetListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<CategoryDto>>> Handle(GetListPostCategoryQuery request, CancellationToken cancellationToken)
         {
-            var category = await respository.GetListing(filter: null, cancellationToken);
+            var category = await respository.GetListing(
+                filter: c => c.Posts.Any(s => s.CategoryId == c.Id),cancellationToken);
 
-            if (!category.Any())
+            if(!category.Any())
                 return Result<List<CategoryDto>>.NoContent();
 
             var filter = category.Select(c => new CategoryDto
@@ -36,8 +35,6 @@ namespace BlogApi.Application.Queries.Category.GetAllCategory
 
             var categdto = mapper.Map<List<CategoryDto>>(filter);
             return Result<List<CategoryDto>>.Success(categdto);
-
         }
     }
-  
 }

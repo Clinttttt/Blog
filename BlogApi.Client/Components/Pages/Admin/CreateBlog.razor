@@ -322,15 +322,52 @@
     private bool showNewTag = false;
     private string previewImageUrl = string.Empty;
 
-    private Dictionary<string, object> editorConf = new()
-    {
-        { "height", 700 },
-        { "menubar", false },
-        { "statusbar", false },
-        { "plugins", "lists link image code table wordcount" },
-        { "toolbar", "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code" }
-    };
 
+    private Dictionary<string, object> editorConf = new()
+{
+    { "height", 700 },
+    { "menubar", false },
+    { "statusbar", false },
+    { "plugins", "lists link image code table wordcount paste" },
+    { "toolbar", "undo redo | formatselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat | code" },
+
+    // CRITICAL: Set this to false to preserve formatting when pasting
+    { "paste_as_text", false },
+
+    // Enable format merging
+    { "paste_merge_formats", true },
+
+    // Preserve these style properties when pasting
+    { "paste_retain_style_properties", "all" },
+
+    // Don't remove styles in webkit browsers (Chrome, Edge, Safari)
+    { "paste_remove_styles_if_webkit", false },
+
+    // Allow these HTML elements when pasting from Word/web
+    { "paste_word_valid_elements", "b,strong,i,em,u,s,h1,h2,h3,h4,h5,h6,p,ul,ol,li,a[href],span[style],table,tr,td,th,thead,tbody,div[style],br" },
+
+    // Preserve these webkit styles
+    { "paste_webkit_styles", "all" },
+
+    // Enable automatic URL detection
+    { "paste_preprocess", true },
+
+    // Additional paste settings
+    { "paste_enable_default_filters", false },
+    { "paste_data_images", true },
+
+    // Content styling
+    { "content_style", @"
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        strong, b { font-weight: bold; }
+        em, i { font-style: italic; }
+        u { text-decoration: underline; }
+    " }
+};
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !hasrender)
@@ -349,12 +386,11 @@
         try
         {
             PublishedDate = DateTime.UtcNow.AddHours(8);
-
-            // Increase delay to ensure token is saved and retrievable
-            await Task.Delay(200); // Changed from 50ms to 200ms
+         
+            await Task.Delay(200); 
 
             ListCategory = await CategoryClient.GetListing();
-            ListTag = await TagClient.GetAllTags();
+            ListTag = await TagClient.GetListing();
 
             isLoading = false;
             StateHasChanged();
@@ -455,7 +491,7 @@
 
                 if (result?.IsSuccess == true && result.Value > 0)
                 {
-                    ListTag = await TagClient.GetAllTags();
+                    ListTag = await TagClient.GetListing();
                     selectedTags.Add(result.Value);
                     showNewTag = false;
                     newTag = string.Empty;

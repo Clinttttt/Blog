@@ -1,4 +1,5 @@
 ﻿using BlogApi.Application.Commands.Posts.DeletePost;
+using BlogApi.Application.Commands.Posts.Featured.DeleteFeatured;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,8 @@ namespace BlogApi.Application.Request.Posts
 
         public DeletePostCommand ToCommand(Guid userId)
             => new(PostId, userId);
+
+        public DeleteFeaturedCommand DeleteCommand(Guid userId)
+          => new(PostId, userId);
     }
 }

@@ -6,7 +6,113 @@
 
         @if (PostDto is null)
         {
-            <h1>Loading...</h1>
+
+            <article class="bg-white rounded-2xl shadow-sm overflow-hidden mb-8">
+
+
+                <div class="px-8 pt-8">
+                    <div class="skeleton h-6 w-24 rounded-full"></div>
+                </div>
+
+
+                <div class="px-8 pt-4 pb-6">
+                    <div class="skeleton h-10 w-full mb-3"></div>
+                    <div class="skeleton h-10 w-3/4 mb-4"></div>
+
+                    <div class="flex flex-wrap items-center gap-6">
+                        <div class="skeleton h-4 w-32"></div>
+                        <div class="skeleton h-4 w-40"></div>
+                        <div class="skeleton h-4 w-24"></div>
+                    </div>
+                </div>
+
+
+                <div class="w-full h-96">
+                    <div class="skeleton w-full h-full"></div>
+                </div>
+
+
+                <div class="px-8 py-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="skeleton h-10 w-24 rounded-lg"></div>
+                            <div class="skeleton h-10 w-24 rounded-lg"></div>
+                        </div>
+                        <div class="skeleton h-10 w-10 rounded-lg"></div>
+                    </div>
+                </div>
+
+
+                <div class="px-8 py-8">
+                    <div class="space-y-3 mb-6">
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-5/6"></div>
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-4/5"></div>
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-full"></div>
+                        <div class="skeleton h-4 w-3/4"></div>
+                    </div>
+
+
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-2">
+                            <div class="skeleton h-8 w-20 rounded-md"></div>
+                            <div class="skeleton h-8 w-24 rounded-md"></div>
+                            <div class="skeleton h-8 w-28 rounded-md"></div>
+                            <div class="skeleton h-8 w-32 rounded-md"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden p-8">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="skeleton h-6 w-6 rounded"></div>
+                    <div class="skeleton h-8 w-40"></div>
+                </div>
+
+
+                <div class="space-y-6">
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="flex gap-4">
+                            <div class="skeleton h-10 w-10 rounded-full flex-shrink-0"></div>
+                            <div class="flex-1">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="skeleton h-5 w-32"></div>
+                                        <div class="skeleton h-4 w-24"></div>
+                                    </div>
+                                    <div class="skeleton h-4 w-full mb-2"></div>
+                                    <div class="skeleton h-4 w-3/4"></div>
+                                </div>
+                                <div class="mt-2 flex items-center gap-4">
+                                    <div class="skeleton h-4 w-16"></div>
+                                    <div class="skeleton h-4 w-16"></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+                <div class="mt-8">
+                    <div class="flex gap-4">
+                        <div class="skeleton h-10 w-10 rounded-full flex-shrink-0"></div>
+                        <div class="flex-1">
+                            <div class="skeleton h-24 w-full rounded-lg mb-3"></div>
+                            <div class="flex justify-end">
+                                <div class="skeleton h-10 w-32 rounded-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
         else
         {
@@ -49,9 +155,12 @@
                 </div>
 
 
-                <div class="w-full h-96 overflow-hidden">
-                    <img src="@Preview" class="w-full h-full object-cover" alt="@PostDto.Title" />
-                </div>
+                @if (Preview is not null)
+                {
+                    <div class="w-full h-96 overflow-hidden">
+                        <img src="@Preview" class="w-full h-full object-cover" />
+                    </div>
+                }
 
 
                 <div class="px-8 py-6 border-b border-gray-200">
@@ -59,7 +168,7 @@
                         <div class="flex items-center gap-4">
                             <button @onclick="HandlePostLike"
                                     class="flex items-center gap-2 px-4 cursor-pointer py-2 rounded-lg transition-colors @(PostDto.PhotoIsliked ? "bg-red-50 text-red-600" : "bg-gray-100 text-gray-600 hover:bg-gray-200")">
-                                <svg class="w-5 h-5 @(PostDto.PhotoIsliked ? "fill-current" : "")" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="w-5 h-5 @(PostDto.PhotoIsliked ? "fill-current" : "")" fill="@(PostDto.PhotoIsliked ? "currentColor" : "none")" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
                                 <span class="font-semibold">@PostDto.PostLike</span>
@@ -75,7 +184,7 @@
 
                         <button @onclick="() => HandleBookMark()"
                                 class="p-2 cursor-pointer rounded-lg transition-colors @(PostDto.IsBookMark ? "bg-indigo-50 text-indigo-600" : "bg-gray-100 text-gray-600 hover:bg-gray-200")">
-                            <svg class="w-5 h-5 @(PostDto.IsBookMark ? "fill-current" : "")" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-5 h-5 @(PostDto.IsBookMark ? "fill-current" : "")" fill="@(PostDto.IsBookMark ? "currentColor" : "none")" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                             </svg>
                         </button>
@@ -84,10 +193,8 @@
 
 
                 <div class="px-8 py-8">
-                    <div class="prose prose-lg max-w-none">
-                        <div class="prose prose-lg max-w-none mb-6">
-                            @((MarkupString)PostDto.Content!)
-                        </div>
+                    <div class="blog-content">
+                        @((MarkupString)PostDto.Content!)
                     </div>
 
 
@@ -115,10 +222,6 @@
                     </svg>
                     Comments (@PostDto.CommentCount)
                 </h2>
-
-
-               
-
 
                 <div class="space-y-6">
                     @foreach (var comment in PostDto.Comments)

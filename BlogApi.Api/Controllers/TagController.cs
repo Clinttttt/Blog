@@ -2,6 +2,7 @@
 using BlogApi.Application.Commands.Tags.DeleteTag;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Queries.Tags.GetAllTags;
+using BlogApi.Application.Queries.Tags.GetListPostTag;
 using BlogApi.Application.Request.Tag;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,10 +37,19 @@ namespace BlogApi.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("GetAllTags")]
-        public async Task<ActionResult<List<TagDto>>> GetAllTags()
+        [HttpGet("GetListing")]
+        public async Task<ActionResult<List<TagDto>>> GetListing()
         {
             var command = new GetListQuery();
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin, Author")]
+        [HttpGet("GetListingPostTag")]
+        public async Task<ActionResult<List<TagDto>>> GetListingPostTag()
+        {
+            var command = new GetListPostTagQuery();
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }

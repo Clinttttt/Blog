@@ -1,24 +1,21 @@
-﻿using AutoMapper;
-using BlogApi.Application.Common.Interfaces;
+﻿using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
-using BlogApi.Domain.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Queries.Tags.GetAllTags
+namespace BlogApi.Application.Queries.Tags.GetListPostTag
 {
-    public class GetListQueryHandler(ITagRespository respository) : IRequestHandler<GetListQuery, Result<List<TagDto>>>
+    public class GetListPostTagQueryHandler(ITagRespository respository) : IRequestHandler<GetListPostTagQuery, Result<List<TagDto>>>
     {
-        public async Task<Result<List<TagDto>>> Handle(GetListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<TagDto>>> Handle(GetListPostTagQuery request, CancellationToken cancellationToken)
         {
             var tag = await respository.GetListing(
-                null, cancellationToken);
+                filter: c => c.PostTags.Any(s => s.TagId == c.Id), cancellationToken);
 
             if (!tag.Any())
                 return Result<List<TagDto>>.NoContent();
@@ -27,10 +24,9 @@ namespace BlogApi.Application.Queries.Tags.GetAllTags
             {
                 Id = s.Id,
                 Name = s.Name
-            }).ToList();       
+            }).ToList();
 
             return Result<List<TagDto>>.Success(filter);
         }
     }
 }
-

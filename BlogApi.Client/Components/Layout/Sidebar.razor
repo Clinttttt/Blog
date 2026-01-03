@@ -5,16 +5,29 @@
     <aside class="bg-white min-h-screen w-70 p-5 ">
 
         <div class="mb-6">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-4">Categories</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-4">Popular Categories</h3>
             <ul class="space-y-1">
-                <li class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-600 font-semibold cursor-pointer">
-                    <span class="text-xl">💻</span>
+                <li class="flex  items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-50 text-indigo-600 font-semibold cursor-pointer">
+                   
                     <span>All Posts</span>
-                    <span class="ml-auto bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold">@categories?.FirstOrDefault()?.AllPost</span>
+                    <span class="ml-auto bg-indigo-600 text-white px-2 py-0.5 rounded-full text-xs font-semibold">@categories?.FirstOrDefault()?.AllPost</span>
                 </li>
-                @if (categories?.Any() == true && categories is not null)
+
+                @if (!hasrender)
                 {
-                    foreach (var category in categories)
+                  
+                    @for (int i = 0; i < 1; i++)
+                    {
+                        <li class="flex items-center gap-3 px-3 py-2.5 rounded-lg">
+                            <div class="skeleton h-6 w-6 rounded"></div>
+                            <div class="skeleton h-5 w-24"></div>
+                            <div class="skeleton h-5 w-8 rounded-full ml-auto"></div>
+                        </li>
+                    }
+                }
+                else if (categories?.Any() == true && categories is not null)
+                {
+                    foreach (var category in categories.Take(5))
                     {
                         <NavLink href="@($"category/{category.Id}")" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
                             <span class="text-xl text-indigo-500">
@@ -29,14 +42,14 @@
                 }
                 else
                 {
-                    <li class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
-                        <span class="text-xl text-indigo-500">
-                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                    <li class="text-center py-8 px-3">
+                        <div class="flex flex-col items-center gap-2">
+                            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                             </svg>
-                        </span>
-                        <span>No post yet</span>
-                        <span class="ml-auto bg-gray-200 px-2 py-0.5 rounded-full text-xs font-semibold">0</span>
+                            <p class="text-sm font-medium text-gray-500">No categories yet</p>
+                            <p class="text-xs text-gray-400">Categories will appear here</p>
+                        </div>
                     </li>
                 }
 
@@ -62,25 +75,41 @@
         <div class="mb-6">
             <h3 class="text-xs font-bold uppercase tracking-wider text-gray-600 mb-4">Popular Tags</h3>
             <div class="flex flex-wrap gap-2">
-                @if (tags?.Any() == true && tags is not null)
+                @if (!hasrender)
                 {
-                foreach (var tag in tags)
+                    
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div class="skeleton h-7 w-20 rounded-md"></div>
+                    }
+                }
+                else if (tags?.Any() == true && tags is not null)
+                {
+                    foreach (var tag in tags.Take(5))
                     {
                         <span class="bg-gray-200 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer hover:bg-gray-300 hover:-translate-y-0.5 transition-all">
-                           @tag.Name
+                            @tag.Name
                         </span>
                     }
                 }
                 else
                 {
-                    <h1>No tags yet</h1>
+                    <div class="w-full text-center py-6">
+                        <div class="flex flex-col items-center gap-2">
+                            <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            <p class="text-sm font-medium text-gray-500">No tags yet</p>
+                            <p class="text-xs text-gray-400">Tags will appear here</p>
+                        </div>
+                    </div>
                 }
             </div>
         </div>
-        <div class="mt-6">     
+        <div class="mt-6">
             <div id="googleButtonContainer" style="margin-top: 20px;"></div>
         </div>
-     
+
     </aside>
 </div>
 
@@ -89,6 +118,7 @@
 @code {
     private const string GoogleClientId = "981649586366-fv3d4al1foo7u24bigmuhhhu98uq2fd1.apps.googleusercontent.com";
     private DotNetObjectReference<Sidebar>? _objRef;
+    private bool hasrender = false;
 
     private List<CategoryDto>? categories { get; set; } = new List<CategoryDto>();
     private List<TagDto>? tags { get; set; } = new List<TagDto>();
@@ -99,10 +129,11 @@
         {
             _objRef = DotNetObjectReference.Create(this);
             await JS.InvokeVoidAsync("initGoogleAuth", GoogleClientId, _objRef);
-            var category = await CategoryClient.GetListing();
-            var tag = await TagClient.GetAllTags();
+            var category = await CategoryClient.GetListPostCategory();
+            var tag = await TagClient.GetListingPostTag();
             tags = tag.Value;
             categories = category.Value;
+            hasrender = true;
             StateHasChanged();
         }
     }

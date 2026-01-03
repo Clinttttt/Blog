@@ -2,6 +2,7 @@
 using BlogApi.Application.Commands.Category.DeleteCategory;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Queries.Category.GetAllCategory;
+using BlogApi.Application.Queries.Category.GetListPostCategory;
 using BlogApi.Application.Request.Category;
 using BlogApi.Domain.Entities;
 using MediatR;
@@ -27,13 +28,22 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
         [AllowAnonymous]
-        [HttpGet("GetCategory")]
+        [HttpGet("GetListing")]
         public async Task<ActionResult<List<CategoryDto>>> GetListing()
         {
             var query = new GetListQuery();
             var result = await Sender.Send(query);
             return HandleResponse(result);
         }
+        [AllowAnonymous]
+        [HttpGet("GetListPostCategory")]
+        public async Task<ActionResult<List<CategoryDto>>> GetListPostCategory()
+        {
+            var query = new GetListPostCategoryQuery();
+            var result = await Sender.Send(query);
+            return HandleResponse(result);
+        }
+
         [Authorize(Roles = "Admin,Author")]
         [HttpDelete("DeleteCategory/{Id}")]
         public async Task<ActionResult<bool>> Delete([FromQuery] int Id)
