@@ -1,21 +1,21 @@
-﻿@if (ListPosts?.Any() == true)
+﻿@*@if (ListPosts?.Any() == true)
 {
     <div class="space-y-6">
         @foreach (var post in ListPosts)
         {
             <article class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100">
 
-                <!-- Image First (when available) -->
+               
                 @if (!string.IsNullOrEmpty(post.PhotoPreview))
                 {
                     <div class="relative w-full h-80 overflow-hidden group cursor-pointer">
                         <img src="@post.PhotoPreview"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                              alt="@post.Title" />
-                        <!-- Gradient Overlay -->
+                     
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
-                        <!-- Category Badge on Image -->
+                    
                         <div class="absolute top-4 left-4">
                             <span class="inline-block bg-white/90 backdrop-blur-sm text-indigo-600 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                 @post.CategoryName
@@ -25,7 +25,7 @@
                 }
 
                 <div class="p-6 lg:p-8">
-                    <!-- Category and Date (if no image) -->
+               
                     @if (string.IsNullOrEmpty(post.PhotoPreview))
                     {
                         <div class="flex items-center justify-between mb-4">
@@ -34,20 +34,27 @@
                             </span>
                             <span class="text-sm text-gray-500 font-medium">@post.PostCreatedAt.ToString("MMM dd, yyyy")</span>
                         </div>
+
+                        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight hover:text-indigo-600 transition-colors cursor-pointer">
+                            @post.Title
+                        </h2>
                     }
                     else
                     {
-                        <div class="flex items-center justify-end mb-4">
-                            <span class="text-sm text-gray-500 font-medium">@post.PostCreatedAt.ToString("MMM dd, yyyy")</span>
-                        </div>
+
+                     <div class="flex justify-between">
+                            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight hover:text-indigo-600 transition-colors cursor-pointer">
+                                @post.Title
+                            </h2>
+                            <div class="flex items-center justify-end mb-4">
+                                <span class="text-sm text-gray-500 font-medium">@post.PostCreatedAt.ToString("MMM dd, yyyy")</span>
+                            </div>
+                     </div>
                     }
 
-                    <!-- Title -->
-                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight hover:text-indigo-600 transition-colors cursor-pointer">
-                        @post.Title
-                    </h2>
+                   
 
-                    <!-- Author and Reading Time -->
+               
                     <div class="flex items-center gap-6 text-sm text-gray-600 mb-5 pb-5 border-b border-gray-100">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
@@ -65,12 +72,12 @@
                         </div>
                     </div>
 
-                    <!-- Content Preview -->
+              
                     <p class="text-gray-700 text-base lg:text-lg line-clamp-3 leading-relaxed mb-6">
                         @post.Content
                     </p>
 
-                    <!-- Tags -->
+                 
                     @if (post.Tags?.Any() == true)
                     {
                         <div class="flex flex-wrap gap-2 mb-6">
@@ -89,7 +96,7 @@
                         </div>
                     }
 
-                    <!-- Footer: Stats and CTA -->
+                   
                     <div class="flex items-center justify-between pt-5 border-t border-gray-100">
                         <div class="flex items-center gap-6 text-sm">
                             <button class="flex items-center gap-2 hover:text-red-500 transition-colors group">
@@ -215,3 +222,4 @@ else
         public string? Name { get; set; }
     }
 }
+*@

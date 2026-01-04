@@ -27,7 +27,7 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
-        [AllowAnonymous]
+        [Authorize(Roles = "Author,Admin")]
         [HttpGet("GetListing")]
         public async Task<ActionResult<List<CategoryDto>>> GetListing()
         {

@@ -1,0 +1,136 @@
+﻿@if (featuredPosts is null)
+{
+    <div class="col-span-full text-center py-12">
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">No featured yet</h3>
+        <p class="text-gray-500 text-sm">Start adding your first featured post!</p>
+    </div>
+}
+else if (!featuredPosts.Any())
+{
+    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-8 lg:p-12 mb-8 shadow-xl">
+        <div class="skeleton h-8 w-24 rounded-full mb-6 bg-white/20"></div>
+        <div class="skeleton h-10 w-3/4 mb-4 bg-white/20"></div>
+        <div class="skeleton h-10 w-1/2 mb-4 bg-white/20"></div>
+        <div class="skeleton h-4 w-full mb-2 bg-white/20"></div>
+        <div class="skeleton h-4 w-full mb-2 bg-white/20"></div>
+        <div class="skeleton h-4 w-2/3 mb-6 bg-white/20"></div>
+        <div class="flex flex-wrap gap-6 mb-8">
+            <div class="skeleton h-4 w-32 bg-white/20"></div>
+            <div class="skeleton h-4 w-24 bg-white/20"></div>
+            <div class="skeleton h-4 w-28 bg-white/20"></div>
+        </div>
+        <div class="skeleton h-12 w-40 rounded-lg bg-white/30"></div>
+    </section>
+}
+else
+{
+    <div class="relative mb-8">
+
+        @if (featuredPosts.Count > 1)
+        {
+            <button @onclick="ScrollLeft"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all hover:scale-110">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button @onclick="ScrollRight"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition-all hover:scale-110">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        }
+
+
+        <div @ref="carouselContainer" class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scrollbar pb-2">
+            @foreach (var featuredPost in featuredPosts)
+            {
+                <section class="relative flex-shrink-0 w-full overflow-hidden bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-8 lg:p-12 text-white shadow-xl snap-start">
+                    <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
+                        Featured
+                    </div>
+                    <h2 class="text-3xl lg:text-4xl font-bold mb-4 leading-tight">
+                        @featuredPost.Title
+                    </h2>
+                    <p class="text-lg leading-relaxed line-clamp-3 opacity-95 mb-6 max-w-3xl [&_*]:!text-md [&_*]:!text-white">
+                        @((MarkupString)featuredPost.Content!)
+                    </p>
+                    <div class="flex flex-wrap gap-6 mb-8 text-sm opacity-90">
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            @featuredPost.CreatedAt.ToString("MMMM dd, yyyy")
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            @featuredPost.ReadingDuration.GetDisplayName()
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            3 views
+                        </span>
+                    </div>
+                    <NavLink href="@($"viewblogconstruct/{featuredPost.PostId}")" class="inline-flex items-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold text-base hover:-translate-y-0.5 hover:shadow-lg transition-all">
+                        Read Article
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </NavLink>
+                </section>
+            }
+        </div>
+
+
+        @if (featuredPosts.Count > 1)
+        {
+            <div class="flex justify-center gap-2 mt-4">
+                @for (int i = 0; i < featuredPosts.Count; i++)
+                {
+                    int index = i;
+                    <button @onclick="() => ScrollToSlide(index)"
+                            class="w-2 h-2 rounded-full transition-all @(currentSlide == index ? "bg-indigo-600 w-8" : "bg-gray-300 hover:bg-gray-400")">
+                    </button>
+                }
+            </div>
+        }
+    </div>
+}
+
+
+
+@code {
+
+
+    private ElementReference carouselContainer;
+    private int currentSlide = 0;
+
+    [Parameter]
+    public List<FeaturedPostDto>? featuredPosts { get; set; } = new List<FeaturedPostDto>();
+    private async Task ScrollLeft()
+    {
+        await JS.InvokeVoidAsync("eval", $"document.querySelector('.hide-scrollbar').scrollBy({{ left: -window.innerWidth, behavior: 'smooth' }})");
+        if (currentSlide > 0) currentSlide--;
+    }
+
+    private async Task ScrollRight()
+    {
+        await JS.InvokeVoidAsync("eval", $"document.querySelector('.hide-scrollbar').scrollBy({{ left: window.innerWidth, behavior: 'smooth' }})");
+        if (currentSlide < featuredPosts.Count - 1) currentSlide++;
+    }
+
+    private async Task ScrollToSlide(int index)
+    {
+        await JS.InvokeVoidAsync("eval", $"document.querySelector('.hide-scrollbar').scrollTo({{ left: window.innerWidth * {index}, behavior: 'smooth' }})");
+        currentSlide = index;
+    }
+}

@@ -10,6 +10,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Queries.BookMark.GetAllBookMark
 {
-    public record GetListQuery(Guid UserId) : IRequest<Result<List<PostDto>>>;
+    public record GetListQuery(Guid? UserId, int PageNumber = 1, int PageSize = 10) : IRequest<Result<PagedResult<PostDto>>>;
     
 }

@@ -1,4 +1,5 @@
 ﻿@page "/category/{Id:int}"
+
 <div class="p-5 h-screen overflow-auto">
     @if (!hasrender)
     {
@@ -7,7 +8,7 @@
     }
     else
     {
-        <h2 class="text-lg font-bold mb-6 text-gray-700">@PostDtos?.FirstOrDefault()?.CategoryName</h2>
+        <h2 class="text-lg font-bold mb-6 text-gray-700">@PostDtos?.Items?.FirstOrDefault()?.CategoryName</h2>
     }
 
     <section class="pt-5 border-t border-gray-300">
@@ -41,9 +42,9 @@
                     </article>
                 }
             }
-            else if (PostDtos != null && PostDtos.Any())
+            else if (PostDtos != null && PostDtos.Items.Any())
             {
-                foreach (var post in PostDtos)
+                foreach (var post in PostDtos.Items)
                 {
                     <article class="bg-white rounded-2xl p-6 border border-gray-200 hover:-translate-y-1 hover:shadow-xl hover:border-indigo-600 transition-all cursor-pointer group">
                         <div class="flex justify-between items-center mb-4">
@@ -108,17 +109,17 @@
     public int Id { get; set; }
     private bool IsBookMark { get; set; }
     private bool hasrender = false;
-    private List<PostDto>? PostDtos { get; set; }
+    private PagedResult<PostDto>? PostDtos { get; set; }
+    public ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
     private AddBookMarkRequest addBookMarkRequest { get; set; } = new AddBookMarkRequest();
 
     protected override async Task OnParametersSetAsync()
     {
         hasrender = false;
         StateHasChanged();
-
-        var request = await PostClient.ListByCategory(Id);
+     
+        var request = await PostClient.ListByCategory(Id, Pagination);
         PostDtos = request.Value;
-
         hasrender = true;
         StateHasChanged();
     }
@@ -129,7 +130,7 @@
         await PostClient.AddBookMark(addBookMarkRequest);
 
        
-        var request = await PostClient.ListByCategory(Id);
+        var request = await PostClient.ListByCategory(Id, Pagination);
         PostDtos = request.Value;
         StateHasChanged();
     }

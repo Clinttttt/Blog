@@ -1,6 +1,8 @@
 ﻿using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
+using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,34 +15,21 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Queries.BookMark.GetAllBookMark
 {
-    public class GetListQueryHandler(IPostRespository respository) : IRequestHandler<GetListQuery, Result<List<PostDto>>>
+    public class GetListQueryHandler(IPostRespository respository) : IRequestHandler<GetListQuery, Result<PagedResult<PostDto>>>
     {
 
-        public async Task<Result<List<PostDto>>> Handle(GetListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<PostDto>>> Handle(GetListQuery request, CancellationToken cancellationToken)
         {
-            var bookmark = await respository.GetNonPaginatedPostAsync(
-                filter: b=> b.BookMarks.Any(s=> s.UserId == request.UserId),
-                cancellationToken);
+            var postpage = await respository.GetPaginatedPostDtoAsync(
+               request.UserId,
+               request.PageNumber,
+               request.PageSize,
+               filter: b => b.BookMarks.Any(s => s.UserId == request.UserId),
+               cancellationToken);
 
-            if (!bookmark.Any())
-                return Result<List<PostDto>>.NoContent();
-            var filter = bookmark.Select(s => new PostDto
-            {
-                Id = s.Id,
-                IsBookMark = s.BookMarks.Any(s => s.UserId == request.UserId),
-                Title = s.Title,
-                Content = s.Content,
-                CreatedAt = s.CreatedAt,
-                CategoryName = s.Category.Name,
-                readingDuration = s.readingDuration,
-                Tags = s.PostTags.Select(s => new TagDto
-                {
-                    Id = s.TagId,
-                    Name = s.tag != null ? s.tag.Name : "N/A",
-
-                }).ToList(),
-            }).ToList();
-            return Result<List<PostDto>>.Success(filter);
+            if (!postpage.Value!.Items.Any())
+                return Result<PagedResult<PostDto>>.NoContent();
+            return Result<PagedResult<PostDto>>.Success(postpage.Value);
         }
     }
 }

@@ -9,8 +9,6 @@ namespace BlogApi.Client.Services
 {
     public class PostClientService(HttpClient httpClient) : HandleResponse(httpClient), IPostClientService
     {
-      
-
         public async Task<Result<int>> Create(CreatePostRequest dto)
             => await PostAsync<CreatePostRequest, int>("api/Posts/AddPost", dto);
 
@@ -26,37 +24,44 @@ namespace BlogApi.Client.Services
         public async Task<Result<bool>> Delete(DeletePostRequest request)
             => await DeleteAsync<bool>($"api/Posts/DeletePost?PostId={request.PostId}");
 
+    
 
 
-        public async Task<Result<PagedResult<PostDto>>> ListForAdmin(ListForAdminPostsRequest request)
-           => await GetAsync<PagedResult<PostDto>>($"api/Posts/ListForAdmin?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+        public async Task<Result<PagedResult<PostDto>>> ListPublishedForAdmin(ListPaginatedRequest request)
+           => await GetAsync<PagedResult<PostDto>>(
+               $"api/Posts/ListPublishedForAdmin?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-        public async Task<Result<PagedResult<PostDto>>> ListPublished(ListPublishedPostsRequest request)
-            => await GetAsync<PagedResult<PostDto>>($"api/Posts/ListPublished?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+        public async Task<Result<PagedResult<PostDto>>> ListDraftForAdmin(ListPaginatedRequest request)
+           => await GetAsync<PagedResult<PostDto>>(
+               $"api/Posts/ListDraftForAdmin?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-        public async Task<Result<List<PostDto>>> ListByTag(int id)
-            => await GetAsync<List<PostDto>>($"api/Posts/ListByTag/{id}");
+        public async Task<Result<PagedResult<PostDto>>> ListPublished(ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PostDto>>(
+                $"api/Posts/ListPublished?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-        public async Task<Result<List<PostDto>>> ListByCategory(int id)
-            => await GetAsync<List<PostDto>>($"api/Posts/ListByCategory/{id}");
+        public async Task<Result<PagedResult<PostDto>>> ListByTag(int tagId, ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PostDto>>(
+                $"api/Posts/ListByTag/{tagId}?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-        
+        public async Task<Result<PagedResult<PostDto>>> ListByCategory(int categoryId, ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PostDto>>(
+                $"api/Posts/ListByCategory/{categoryId}?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+
         public async Task<Result<bool>> ToggleLikePost(TogglePostLikeRequest request)
             => await PostAsync<bool>($"api/Posts/ToggleLikePost?PostId={request.PostId}");
 
         public async Task<Result<bool>> AddBookMark(AddBookMarkRequest request)
             => await PostAsync<bool>($"api/Posts/AddBookMark?PostId={request.PostId}");
 
-        public async Task<Result<List<PostDto>>> ListBookMark()
-            => await GetAsync<List<PostDto>>("api/Posts/ListBookMark");
+        public async Task<Result<PagedResult<PostDto>>> ListBookMark(ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PostDto>>(
+                $"api/Posts/ListBookMark?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
         public async Task<Result<bool>> AddFeatured(AddFeaturedRequest dto)
             => await PostAsync<AddFeaturedRequest, bool>("api/Posts/AddFeatured", dto);
 
         public async Task<Result<List<FeaturedPostDto>>> ListFeatured()
             => await GetAsync<List<FeaturedPostDto>>("api/Posts/ListFeatured");
-
-       
 
         public async Task<Result<int>> AddComment(AddCommentRequest dto)
             => await PostAsync<AddCommentRequest, int>("api/Posts/AddComment", dto);
@@ -66,7 +71,6 @@ namespace BlogApi.Client.Services
 
         public async Task<Result<bool>> ToggleLikeComment(ToggleCommentLikeRequest dto)
             => await PostAsync<ToggleCommentLikeRequest, bool>("api/Posts/ToggleLikeComment", dto);
-
 
         public async Task<Result<StatisticsDto>> GetPublicStatistics()
             => await GetAsync<StatisticsDto>("api/Posts/GetPublicStatistics");

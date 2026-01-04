@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Posts.LikePost
 {
-    public record TogglePostLikeCommand(int PostId, Guid UserId) : IRequest<Result<bool>>;
+    public record TogglePostLikeCommand(int? PostId, Guid UserId) : IRequest<Result<bool>>;
   
 }

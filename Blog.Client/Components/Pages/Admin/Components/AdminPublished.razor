@@ -1,0 +1,78 @@
+﻿
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @if (ListForAdmin?.Items.Any() == true)
+    {
+        foreach (var post in ListForAdmin.Items)
+        {
+
+            <article class="bg-white rounded-2xl p-6 border border-gray-200 hover:-translate-y-1 hover:shadow-xl hover:border-indigo-600 transition-all cursor-pointer relative group">
+                <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                    <button class="bg-indigo-100 hover:bg-indigo-200 text-indigo-600 p-2 rounded-lg">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+                    <button class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-md text-xs font-semibold uppercase">@post.CategoryName</span>
+                    <span class="text-sm text-gray-600">Dec 18, 2025</span>
+                </div>
+                <h3 class="text-xl font-bold line-clamp-2 mb-3 text-gray-700 leading-snug">
+                    @post.Title
+                </h3>
+                <div class="prose prose-sm max-w-none line-clamp-3 mb-4 [&_*]:!text-sm">
+                    @((MarkupString)post.Content!)
+                </div>
+                <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                    <div class="flex items-center gap-4 text-sm text-gray-600">
+                        <span>⏱️  @post.readingDuration.GetDisplayName()</span>
+                        <span>👁️ 1.2k</span>
+                    </div>
+                    <span class="@(post.Status == Status.Published ? "text-indigo-600" : "text-amber-600")  font-semibold text-xs flex items-center gap-1">
+
+                        @post.Status
+                    </span>
+                </div>
+            </article>
+        }
+    }
+    else
+    {
+        <div class="col-span-full text-center py-12">
+            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">No posts yet</h3>
+            <p class="text-gray-500 text-sm">Start creating your first blog post!</p>
+        </div>
+    }
+
+</div>
+
+
+
+
+@code {
+
+
+    [Parameter]
+    public ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
+
+    [Parameter]
+    public PagedResult<PostDto>? ListForAdmin { get; set; } = new PagedResult<PostDto>();
+
+    [Parameter]
+    public EventCallback<bool> Refresh { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh.InvokeAsync();
+    }
+}

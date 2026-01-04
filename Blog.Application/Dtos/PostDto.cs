@@ -19,6 +19,15 @@ namespace BlogApi.Application.Dtos
         public List<TagDto>? Tags { get; set; }
         public bool IsBookMark { get; set; }
         public Status Status { get; set; }
+        public byte[]? Photo { get; set; }
+        public string? PhotoContent { get; set; }
+        public string? Author { get; set; }
+        public bool PhotoIsliked { get; set; }
+        public int CommentCount { get; set; }
+        public int PostLike { get; set; }
+        public string? Preview => Photo != null && PhotoContent != null
+        ? $"data:{PhotoContent};base64,{Convert.ToBase64String(Photo)}"
+        : null;
     }
 
 }

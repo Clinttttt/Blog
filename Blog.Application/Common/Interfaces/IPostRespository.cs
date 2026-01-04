@@ -18,13 +18,20 @@ namespace BlogApi.Application.Common.Interfaces
            int PageSize = 10,
            Expression<Func<Post, bool>>? filter = null,
            CancellationToken cancellationToken = default);
+
         Task<List<Post>> GetNonPaginatedPostAsync(
             Expression<Func<Post, bool>>?
             filter = null,
             CancellationToken cancellationToken = default);
+
         Task<Post?> GetAsync(
            int postId,
            CancellationToken
            cancellationToken = default);
+
+        Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? UserIds, int PageNumber = 1,
+            int PageSize = 10,
+            Expression<Func<Post, bool>>? filter = null,
+            CancellationToken cancellationToken = default);
     }
 }

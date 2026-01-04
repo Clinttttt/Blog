@@ -1,11 +1,14 @@
-﻿namespace Blog.Client.State
+﻿using Blog.Client.Components.Pages.Public;
+
+namespace Blog.Client.State
 {
     public class PageState
     {
         public event Action? Onchange;
 
-        public PostState PostView { get; set; } = PostState.all_post;
-        public enum PostState
+        public AuthorPostState AuthorPageView { get; set; } = AuthorPostState.all_post;
+        public AdminPostState AdminPageView { get; set; } = AdminPostState.home;
+        public enum AuthorPostState
         {
             all_post,
             published,
@@ -13,10 +16,25 @@
             drafts,
             bookmarks
         }
-        public void View(PostState view)
+        public enum AdminPostState
         {
-            PostView = view;
+            home,
+            all_post,
+            published,
+            draft,
+            author,
+            overview
+        }
+        public void AuthorView(AuthorPostState view)
+        {
+            AuthorPageView = view;
             Onchange?.Invoke();
         }
+        public void AdminView(AdminPostState view)
+        {
+            AdminPageView = view;
+            Onchange?.Invoke();
+        }
+    
     }
 }

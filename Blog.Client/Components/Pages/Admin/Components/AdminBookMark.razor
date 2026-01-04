@@ -101,6 +101,7 @@
 </div>
 
 @code {
+    private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
     private List<PostDto>? PostDtos { get; set; } = new();
     private AddBookMarkRequest addBookMarkRequest { get; set; } = new();
     private bool _isAuthChecked = false;
@@ -108,8 +109,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var request = await PostClient.ListBookMark();
-        PostDtos = request.Value;
+        var request = await PostClient.ListBookMark(Pagination);
+        PostDtos = request.Value?.Items;
         hasrender = true;
     }
 
@@ -117,8 +118,8 @@
     {
         addBookMarkRequest.PostId = PostId;
         await PostClient.AddBookMark(addBookMarkRequest);
-        var bookmark = await PostClient.ListBookMark();
-        PostDtos = bookmark.Value;
+        var bookmark = await PostClient.ListBookMark(Pagination);
+        PostDtos = bookmark.Value?.Items;
         StateHasChanged();
     }
 }

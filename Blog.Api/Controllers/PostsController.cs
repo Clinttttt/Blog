@@ -3,9 +3,7 @@ using BlogApi.Application.Commands.Posts.ApprovePost;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Queries.BookMark.GetAllBookMark;
-using BlogApi.Application.Queries.Posts.GetByCategory;
 using BlogApi.Application.Queries.Posts.GetFeatured;
-using BlogApi.Application.Queries.Posts.GetListByTag;
 using BlogApi.Application.Queries.Posts.GetPublicStatistics;
 using BlogApi.Application.Queries.Posts.GetStatistics;
 using BlogApi.Application.Request.Posts;
@@ -13,6 +11,7 @@ using BlogApi.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BlogApi.Application.Queries.Posts; 
 
 namespace BlogApi.Api.Controllers
 {
@@ -22,9 +21,7 @@ namespace BlogApi.Api.Controllers
     {
         public PostsController(ISender sender) : base(sender) { }
 
-      
-
-         [Authorize(Roles = "Admin,Author")]
+        [Authorize(Roles = "Admin,Author")]
         [HttpPost("AddPost")]
         public async Task<ActionResult<int>> AddPost([FromBody] CreatePostRequest request)
         {
@@ -69,16 +66,22 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-
+    
 
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("ListForAdmin")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListForAdmin(
-             [FromQuery] ListForAdminPostsRequest request,
+        [HttpGet("ListPublishedForAdmin")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListPublishedForAdmin(
+             [FromQuery] ListPaginatedRequest request,
              CancellationToken cancellationToken)
         {
-            var query = request.ToQuery(UserId);
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserId,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.PublishedByUser
+            };
             var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);
         }
@@ -86,34 +89,76 @@ namespace BlogApi.Api.Controllers
         [AllowAnonymous]
         [HttpGet("ListPublished")]
         public async Task<ActionResult<PagedResult<PostDto>>> ListPublished(
-            [FromQuery] ListPublishedPostsRequest request,
+            [FromQuery] ListPaginatedRequest request,
             CancellationToken cancellationToken)
         {
-            var query = request.ToQuery();
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.Published
+            };
+            var result = await Sender.Send(query, cancellationToken);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("ListDraftForAdmin")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListDraftForAdmin(
+            [FromQuery] ListPaginatedRequest request,
+            CancellationToken cancellationToken)
+        {
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserId,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.DraftsByUser
+            };
             var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);
         }
 
         [AllowAnonymous]
         [HttpGet("ListByTag/{id}")]
-        public async Task<ActionResult<List<PostDto>>> ListByTag([FromRoute] int id)
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByTag(
+            [FromRoute] int id,
+            [FromQuery] ListPaginatedRequest request,
+            CancellationToken cancellationToken)
         {
-            var query = new GetListByTagQuery(id);
-            var result = await Sender.Send(query);
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.ByTag,
+                TagId = id
+            };
+            var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);
         }
 
         [AllowAnonymous]
         [HttpGet("ListByCategory/{id}")]
-        public async Task<ActionResult<List<PostDto>>> ListByCategory([FromRoute] int id)
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByCategory(
+            [FromRoute] int id,
+            [FromQuery] ListPaginatedRequest request,
+            CancellationToken cancellationToken)
         {
-            var query = new GetListByCategoryQuery(id);
-            var result = await Sender.Send(query);
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.ByCategory,
+                CategoryId = id
+            };
+            var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);
         }
 
-
-
+  
 
 
         [Authorize(Roles = "Admin,Author")]
@@ -136,9 +181,9 @@ namespace BlogApi.Api.Controllers
 
         [Authorize(Roles = "Admin,Author")]
         [HttpGet("ListBookMark")]
-        public async Task<ActionResult<List<PostDto>>> ListBookMark()
+        public async Task<ActionResult<PagedResult<PostDto>>> ListBookMark()
         {
-            var query = new GetListQuery(UserId);
+            var query = new GetListQuery(UserIdOrNull);
             var result = await Sender.Send(query);
             return HandleResponse(result);
         }
@@ -170,10 +215,6 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-
-
-
-
         [Authorize(Roles = "Admin,Author")]
         [HttpPost("AddComment")]
         public async Task<ActionResult<int>> AddComment([FromBody] AddCommentRequest request)
@@ -201,9 +242,6 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-
-
-
         [AllowAnonymous]
         [HttpGet("GetPublicStatistics")]
         public async Task<ActionResult<StatisticsDto>> GetPublicStatistics()
@@ -229,6 +267,11 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
-
     }
 }
+
+// ============================================
+// UPDATE YOUR ListPaginatedRequest TO SUPPORT PAGINATION
+// ============================================
+// Add this to your Request models file if PageNumber/PageSize aren't there yet
+

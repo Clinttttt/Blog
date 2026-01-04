@@ -9,7 +9,7 @@ namespace BlogApi.Application.Request.Posts
 {
     public class TogglePostLikeRequest
     {
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
 
         public TogglePostLikeCommand ToCommand(Guid userId)
             => new(PostId, userId);
