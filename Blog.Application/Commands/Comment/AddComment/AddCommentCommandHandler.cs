@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Comment.AddComment
 {
-    public class AddCommentCommandHandler(IAppDbContext context, IPostHubService hubService) : IRequestHandler<AddCommentCommand, Result<int>>
+    public class AddCommentCommandHandler(IAppDbContext context, IPostHubService hubService, ICacheInvalidationService cacheInvalidation) : IRequestHandler<AddCommentCommand, Result<int>>
     {
       
 
@@ -31,6 +31,7 @@ namespace BlogApi.Application.Commands.Comment.AddComment
             context.Comments.Add(comment);
             await context.SaveChangesAsync();
             await hubService.BroadcastSentComment(request.PostId, request.Content);
+            await cacheInvalidation.InvalidatePostCacheAsync(request.PostId);
             return Result<int>.Success(comment.Id);
         }
     }

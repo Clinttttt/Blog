@@ -1,6 +1,5 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
-
 @using Blog.Client.Services
 @using Blog.Client.State
 @using BlogApi.Client.Security
@@ -36,7 +35,10 @@
 @using Blog.Client.Components.Pages.Admin.Components
 @using Blog.Client.Components.Pages.Components
 @using Blog.Client.Helper
-
+@using Application.Queries
+@using Blog.Application.Queries.Posts.RecentActivity
+@using Blog.Application.Queries.Posts.GetAdminRequest
+@using Blog.Application.Queries.Posts.GetApprovalTotal
 
 @inject IJSRuntime JS
 @inject HttpClient Http
@@ -47,9 +49,12 @@
 @inject ICategoryClientService CategoryClient
 @inject ITagClientService TagClient
 @inject IPostClientService PostClient
-@inject ITagClientService TagClient
-@inject ICategoryClientService CategoryClient
 @inject AuthStateProvider AuthStateProvider
 @inject PageState PageState
 @inject SignalRService SignalR
 @inject AuthenticationStateProvider AuthProvider
+@inject ICommentsClientService CommentsClient
+@inject IFeaturedPostsClientService FeaturedClient
+@inject IPostAnalyticsClientService PostAnalyticsClient
+@inject IPostInteractionsClientService PostInteractionsClient
+@inject IPostModerationClientService PostModerationClient

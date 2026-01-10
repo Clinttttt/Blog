@@ -1,0 +1,21 @@
+﻿using Blog.Application.Queries.Posts.RecentActivity;
+using BlogApi.Application.Dtos;
+using BlogApi.Application.Models;
+using BlogApi.Client.Helper;
+using BlogApi.Client.Interface;
+using BlogApi.Domain.Common;
+
+namespace BlogApi.Client.Services
+{
+    public class PostAnalyticsClientService(HttpClient httpClient) : HandleResponse(httpClient), IPostAnalyticsClientService
+    {
+        public async Task<Result<StatisticsDto>> GetPublicStatistics()
+            => await GetAsync<StatisticsDto>("api/PostAnalytics/GetPublicStatistics");
+
+        public async Task<Result<StatisticsDto>> GetStatistics()
+            => await GetAsync<StatisticsDto>("api/PostAnalytics/GetStatistics");
+
+        public async Task<Result<List<RecentActivityItemDto>>> GetRecentActivity(int limit = 5, int daysBack = 7)
+            => await GetAsync<List<RecentActivityItemDto>>($"api/PostAnalytics/GetRecentActivity?limit={limit}&daysBack={daysBack}");
+    }
+}

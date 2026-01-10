@@ -1,22 +1,12 @@
-﻿using Application.Queries.GetRecentActivity;
-using Azure.Core;
-using Blog.Application.Commands.Posts.TrackPostView;
-using Blog.Application.Queries.GetRecentActivity;
-using Blog.Application.Queries.Posts.GetApprovalTotal;
-using BlogApi.Api.Shared;
-using BlogApi.Application.Commands.Posts.ApprovePost;
+﻿using BlogApi.Api.Shared;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
-using BlogApi.Application.Queries.Posts; 
-using BlogApi.Application.Queries.Posts.GetFeatured;
-using BlogApi.Application.Queries.Posts.GetPublicStatistics;
-using BlogApi.Application.Queries.Posts.GetStatistics;
+using BlogApi.Application.Queries.Posts;
 using BlogApi.Application.Request.Posts;
 using BlogApi.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BlogApi.Api.Controllers
 {
@@ -71,12 +61,9 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-    
-
-
         [Authorize(Roles = "Admin")]
         [HttpGet("ListPublishedForAdmin")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByPublishedForAdmin([FromQuery] ListPaginatedRequest request,CancellationToken cancellationToken)
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByPublishedForAdmin([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
             {
@@ -91,7 +78,7 @@ namespace BlogApi.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("ListPublished")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByPublished([FromQuery] ListPaginatedRequest request,CancellationToken cancellationToken)
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByPublished([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
             {
@@ -106,7 +93,7 @@ namespace BlogApi.Api.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("ListDraftForAdmin")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByDraftForAdmin([FromQuery] ListPaginatedRequest request,CancellationToken cancellationToken)
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByDraftForAdmin([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
             {
@@ -121,7 +108,7 @@ namespace BlogApi.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("ListByTag/{id}")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByTag([FromRoute] int id,[FromQuery] ListPaginatedRequest request,
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByTag([FromRoute] int id, [FromQuery] ListPaginatedRequest request,
             CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
@@ -138,7 +125,7 @@ namespace BlogApi.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("ListByCategory/{id}")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByCategory([FromRoute] int id,[FromQuery] ListPaginatedRequest request,
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByCategory([FromRoute] int id, [FromQuery] ListPaginatedRequest request,
             CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
@@ -152,181 +139,5 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);
         }
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("ListByPending")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByPending([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
-        {
-            var query = new GetPagedPostsQuery
-            {
-                UserId = UserIdOrNull,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                FilterType = PostFilterType.Pending,
-            };
-             var result = await Sender.Send(query, cancellationToken);
-             return HandleResponse(result);
-        }
-        
-
-
-        [Authorize(Roles = "Admin,Author")]
-        [HttpPost("ToggleLikePost")]
-        public async Task<ActionResult<bool>> ToggleLikePost([FromQuery] TogglePostLikeRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin,Author")]
-        [HttpPost("AddBookMark")]
-        public async Task<ActionResult<bool>> AddBookMark([FromQuery] AddBookMarkRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin,Author")]
-        [HttpGet("ListBookMark")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListBookMark([FromQuery] ListPaginatedRequest request)
-        {
-            var query = new GetPagedPostsQuery
-            {
-                UserId = UserIdOrNull,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                FilterType = PostFilterType.BookMark,         
-            };           
-            var result = await Sender.Send(query);
-            return HandleResponse(result);
-        }
-
-
-
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost("AddFeatured")]
-        public async Task<ActionResult<bool>> AddFeatured([FromBody] AddFeaturedRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteFeatured")]
-        public async Task<ActionResult<bool>> DeleteFeatured([FromBody] DeletePostRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("ListFeatured")]
-        public async Task<ActionResult<List<FeaturedPostDto>>> ListFeatured()
-        {
-            var query = new GetListFeaturedQuery();
-            var result = await Sender.Send(query);
-            return HandleResponse(result);
-        }
-
-
-
-
-
-
-        [Authorize(Roles = "Admin,Author")]
-        [HttpPost("AddComment")]
-        public async Task<ActionResult<int>> AddComment([FromBody] AddCommentRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin,Author")]
-        [HttpPatch("UpdateComment")]
-        public async Task<ActionResult<int>> UpdateComment([FromBody] UpdateCommentRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin,Author")]
-        [HttpPost("ToggleLikeComment")]
-        public async Task<ActionResult<bool>> ToggleLikeComment([FromBody] ToggleCommentLikeRequest request)
-        {
-            var command = request.ToCommand(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-
-
-
-
-        [AllowAnonymous]
-        [HttpPost("TrackPostView")]
-        public async Task<ActionResult<bool>> TrackPostView([FromQuery] int PostId)
-        {
-            var command = new TrackPostViewCommand(UserIdOrNull, PostId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("GetPublicStatistics")]
-        public async Task<ActionResult<StatisticsDto>> GetPublicStatistics()
-        {
-            var command = new GetPublicStatisticsQuery();
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("GetStatistics")]
-        public async Task<ActionResult<StatisticsDto>> GetStatistics()
-        {
-            var command = new GetStatisticsQuery(UserId);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("GetRecentActivity")]
-        public async Task<ActionResult<List<RecentActivityItemDto>>> GetRecentActivity([FromQuery] int limit = 4, [FromQuery] int daysBack = 7)
-        {
-            var query = new RecentActivityQuery
-            {
-                Limit = limit,
-                DaysBack = daysBack
-            };
-            var result = await Sender.Send(query);
-            return Ok(result.Value);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost("ApprovePost")]
-        public async Task<ActionResult<bool>> ApprovePost([FromQuery] ApprovePostCommand command)
-        {
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("GetApprovalTotal")]
-        public async Task<ActionResult<GetApprovalTotalDto>> GetApprovalTotal()
-        {
-            var request = new GetApprovalTotalQuery();
-            var result = await Sender.Send(request);
-            return HandleResponse(result);
-        }
     }
 }
-
-
-

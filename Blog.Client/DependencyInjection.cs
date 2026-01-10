@@ -15,7 +15,6 @@ namespace BlogApi.Client
         {
             AddPersistence(services, configuration);
             AddCustomAuthentication(services);
-
             services.AddScoped<PageState>();
             services.AddScoped<SignalRService>();
             return services;
@@ -23,9 +22,8 @@ namespace BlogApi.Client
 
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-          
-            services.AddHttpContextAccessor();         
-         
+            services.AddHttpContextAccessor();
+
             services.AddScoped<GoogleAuthCallbackService>();
             services.AddScoped<AuthorizationDelegatingHandler>();
             services.AddScoped<RefreshTokenDelegatingHandler>();
@@ -39,9 +37,10 @@ namespace BlogApi.Client
             {
                 client.BaseAddress = new Uri("https://localhost:7096");
             })
-                  .AddHttpMessageHandler<RefreshTokenDelegatingHandler>() 
-    .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationDelegatingHandler>());
+                .AddHttpMessageHandler<RefreshTokenDelegatingHandler>()
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationDelegatingHandler>());
 
+         
             services.AddScoped<IPostClientService>(sp =>
             {
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
@@ -49,6 +48,42 @@ namespace BlogApi.Client
                 return new PostClientService(httpClient);
             });
 
+            services.AddScoped<IPostInteractionsClientService>(sp =>
+            {
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient("Api");
+                return new PostInteractionsClientService(httpClient);
+            });
+
+            services.AddScoped<ICommentsClientService>(sp =>
+            {
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient("Api");
+                return new CommentsClientService(httpClient);
+            });
+
+            services.AddScoped<IPostModerationClientService>(sp =>
+            {
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient("Api");
+                return new PostModerationClientService(httpClient);
+            });
+
+            services.AddScoped<IFeaturedPostsClientService>(sp =>
+            {
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient("Api");
+                return new FeaturedPostsClientService(httpClient);
+            });
+
+            services.AddScoped<IPostAnalyticsClientService>(sp =>
+            {
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient("Api");
+                return new PostAnalyticsClientService(httpClient);
+            });
+
+          
             services.AddScoped<ICategoryClientService>(sp =>
             {
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
@@ -72,6 +107,7 @@ namespace BlogApi.Client
 
             return services;
         }
+
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -86,14 +122,12 @@ namespace BlogApi.Client
                             context.Response.StatusCode = 401;
                             return Task.CompletedTask;
                         }
-
                         context.Response.Redirect(context.RedirectUri);
                         return Task.CompletedTask;
                     };
                 });
 
             services.AddAuthorizationCore();
-
             services.AddScoped<AuthStateProvider>();
             services.AddScoped<AuthenticationStateProvider>(provider =>
                 provider.GetRequiredService<AuthStateProvider>());

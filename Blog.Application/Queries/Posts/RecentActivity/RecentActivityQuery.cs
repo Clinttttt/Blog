@@ -1,9 +1,8 @@
-﻿using Blog.Application.Queries.GetRecentActivity;
-using BlogApi.Domain.Common;
+﻿using BlogApi.Domain.Common;
 using MediatR;
 using System.Collections.Generic;
 
-namespace Application.Queries.GetRecentActivity
+namespace Blog.Application.Queries.Posts.RecentActivity
 {
     public class RecentActivityQuery : IRequest<Result<List<RecentActivityItemDto>>>
     {

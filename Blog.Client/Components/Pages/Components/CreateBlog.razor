@@ -135,11 +135,28 @@
                                 <span class="text-red-500">*</span>
                             </div>
                             <div class="rounded-xl overflow-hidden shadow-sm flex-1 border border-indigo-100">
-                                <Editor ApiKey="pfj9zo4978ac5u36pu475q5zttfik7j191xq1ktkjhgxi4ct"
-                                        @bind-Value="Post.Content"
-                                        Field="@(() => Post.Content)"
-                                        Conf="@editorConf" />
+                                @if (isEditorLoading)
+                                {
+                                    <div class="w-full h-96 bg-gray-50 animate-pulse rounded-xl p-4 space-y-3">
+                                        <div class="h-10 bg-gray-200 rounded"></div>
+                                        <div class="h-8 bg-gray-200 rounded w-3/4"></div>
+                                        <div class="h-6 bg-gray-200 rounded w-1/2"></div>
+                                        <div class="space-y-2 pt-4">
+                                            <div class="h-4 bg-gray-200 rounded"></div>
+                                            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                                            <div class="h-4 bg-gray-200 rounded w-4/5"></div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <Editor ApiKey="pfj9zo4978ac5u36pu475q5zttfik7j191xq1ktkjhgxi4ct"
+                                            @bind-Value="Post.Content"
+                                            Field="@(() => Post.Content)"
+                                            Conf="@editorConf" />
+                                }
                             </div>
+
                         </div>
 
                     </div>
@@ -382,7 +399,7 @@
 <PreviewPost Post="Post" Name="Name" FilteredTag="FilteredTag" previewImageUrl="@previewImageUrl" selectedTags="selectedTags" />
 
 @code {
-    
+
     private Result<List<TagDto>>? ListTag { get; set; }
     private Result<List<CategoryDto>>? ListCategory { get; set; }
     private Result<List<TagDto>>? FilteredTag { get; set; }
@@ -404,6 +421,7 @@
     private bool isSaving = false;
     private bool showNewCategory = false;
     private bool showNewTag = false;
+    private bool isEditorLoading = false;
 
     private string newCategory = string.Empty;
     private string newTag = string.Empty;
@@ -446,24 +464,39 @@
 
     private async Task LoadDataAsync()
     {
+        // Set both loading states to true at the start
         isLoading = true;
+        isEditorLoading = true;
         hasError = false;
         StateHasChanged();
 
         try
         {
+            // Set the publish date
             PublishedDate = DateTime.UtcNow.AddHours(8);
             await Task.Delay(200);
 
+            // Load categories and tags from API
             ListCategory = await CategoryClient.GetListing();
             ListTag = await TagClient.GetListing();
             FilteredTag = ListTag;
+
+            // Hide main loading (shows form fields with skeletons in some sections)
             isLoading = false;
+            StateHasChanged();
+
+            // Wait 1 second to simulate editor initialization
+            await Task.Delay(1000);
+
+            // Hide editor loading (shows actual TinyMCE editor)
+            isEditorLoading = false;
             StateHasChanged();
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
+            // Handle authentication errors
             isLoading = false;
+            isEditorLoading = false;
             hasError = true;
             errorMessage = "Authentication failed. Please log in again.";
             StateHasChanged();
@@ -473,14 +506,15 @@
         }
         catch (Exception ex)
         {
+            // Handle general errors
             Console.WriteLine($"Error loading data: {ex.Message}");
             isLoading = false;
+            isEditorLoading = false;
             hasError = true;
             errorMessage = "Failed to load data. Please try again.";
             StateHasChanged();
         }
     }
-
     private async Task RetryLoad()
     {
         await LoadDataAsync();

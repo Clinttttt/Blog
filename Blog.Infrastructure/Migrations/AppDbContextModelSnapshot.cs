@@ -22,6 +22,42 @@ namespace BlogApi.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Blog.Domain.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("ActorUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RecipientUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Blog.Domain.Entities.PostView", b =>
                 {
                     b.Property<Guid>("Id")
@@ -131,6 +167,9 @@ namespace BlogApi.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -394,6 +433,15 @@ namespace BlogApi.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("UserInfos");
+                });
+
+            modelBuilder.Entity("Blog.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("BlogApi.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.PostView", b =>

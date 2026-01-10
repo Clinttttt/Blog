@@ -11,7 +11,7 @@ namespace Blog.Application.Common.Interfaces
     {
         Task InvalidateCategoryCacheAsync();
         Task InvalidateTagsCacheAsync();
-        Task InvalidatePostCacheAsync(int? postId, Guid? userId = null);
+        Task InvalidatePostCacheAsync(int? postId);
         Task InvalidatePostListCachesAsync();
         Task InvalidateFeaturedCacheAsync();
         Task InvalidateStatisticsCacheAsync(Guid? userId = null);

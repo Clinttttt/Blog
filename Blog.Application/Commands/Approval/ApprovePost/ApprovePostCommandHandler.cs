@@ -9,9 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using static BlogApi.Domain.Enums.EntityEnum;
 
-namespace BlogApi.Application.Commands.Posts.ApprovePost
+namespace Blog.Application.Commands.Approval.ApprovePost
 {
-    public class ApprovePostCommandHandler(IAppDbContext context): IRequestHandler<ApprovePostCommand, Result<bool>>
+    public class ApprovePostCommandHandler(IAppDbContext context,ICacheInvalidationService cacheInvalidation): IRequestHandler<ApprovePostCommand, Result<bool>>
     {
         public async Task<Result<bool>> Handle(ApprovePostCommand request,CancellationToken cancellationToken)
         {        
@@ -25,8 +25,12 @@ namespace BlogApi.Application.Commands.Posts.ApprovePost
          
             post.Status = Status.Published;
             await context.SaveChangesAsync(cancellationToken);
-      
-           
+            await Task.WhenAll(
+                  cacheInvalidation.InvalidatePostListCachesAsync(),
+                  cacheInvalidation.InvalidateActivityCacheAsync(),
+                  cacheInvalidation.InvalidateTagsCacheAsync(),
+                  cacheInvalidation.InvalidateCategoryCacheAsync());
+
             return Result<bool>.Success(true);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using BlogApi.Domain.Common;
 using Microsoft.Identity.Client;
 using System.Net;
+using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 
 namespace BlogApi.Client.Helper
@@ -28,7 +29,17 @@ namespace BlogApi.Client.Helper
         {
             var response = await httpClient.DeleteAsync(url);
             return await MapStatusCodeAsync<TResponse>(response);
-        }     
+        }
+        public async Task<Result<TResponse>> DeleteAsync<TRequest, TResponse>(string url, TRequest value)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, url)
+            {
+                Content = JsonContent.Create(value)
+            };
+
+            var response = await httpClient.SendAsync(request);
+            return await MapStatusCodeAsync<TResponse>(response);
+        }
         public async Task<Result<TResponse>> GetAsync<TResponse>(string Url)
         {
             var response = await httpClient.GetAsync(Url);

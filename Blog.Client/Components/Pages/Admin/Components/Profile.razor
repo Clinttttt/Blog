@@ -1,6 +1,6 @@
 ﻿@page "/profile"
-@using Application.Queries;
-@using Application.Queries.GetRecentActivity
+
+
 
 @attribute [Authorize(Roles = "Admin")]
 
@@ -319,14 +319,14 @@
 
     public async Task GetRecentActivity()
     {
-        var recent = await PostClient.GetRecentActivity();
+        var recent = await PostAnalyticsClient.GetRecentActivity();
         RecentActivities = recent.Value;
         StateHasChanged();
     }
 
     public async Task GetStatistics()
     {
-        var stats = await PostClient.GetStatistics();
+        var stats = await PostAnalyticsClient.GetStatistics();
         if (stats?.StatusCode == 204)
         {
             Stats = null;

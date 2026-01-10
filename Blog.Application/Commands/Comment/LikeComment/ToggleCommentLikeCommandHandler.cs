@@ -1,4 +1,5 @@
-﻿using BlogApi.Domain.Common;
+﻿using Blog.Application.Common.Interfaces;
+using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using BlogApi.Domain.Interfaces;
 using MediatR;
@@ -11,11 +12,12 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Comment.LikeComment
 {
-    public class ToggleCommentLikeCommandHandler(IAppDbContext context) : IRequestHandler<ToggleCommentLikeCommand, Result<bool>>
+    public class ToggleCommentLikeCommandHandler(IAppDbContext context, ICacheInvalidationService cacheInvalidation) : IRequestHandler<ToggleCommentLikeCommand, Result<bool>>
     {
         public async Task<Result<bool>> Handle(ToggleCommentLikeCommand request, CancellationToken cancellationToken)
         {
             var likecomment = await context.CommentLikes
+                .Include(s=> s.Comments)
                 .FirstOrDefaultAsync(s => s.CommentId == request.CommentId && s.UserId == request.UserId);
             if (likecomment is null)
             {
@@ -24,6 +26,7 @@ namespace BlogApi.Application.Commands.Comment.LikeComment
                 {
                     CommentId = request.CommentId,                
                     UserId = request.UserId,
+                    PostId = request.PostId,
                 });
             }
             else
@@ -31,6 +34,7 @@ namespace BlogApi.Application.Commands.Comment.LikeComment
                 context.CommentLikes.Remove(likecomment);
             }
             await context.SaveChangesAsync(cancellationToken);
+            await cacheInvalidation.InvalidatePostCacheAsync(request.PostId);
             return Result<bool>.Success(true);
         }
     }

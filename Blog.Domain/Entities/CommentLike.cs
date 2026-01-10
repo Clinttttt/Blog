@@ -11,6 +11,7 @@ namespace BlogApi.Domain.Entities
         public int Id { get; set; }
         public Guid UserId { get; set; }
         public int CommentId { get; set; }
+        public int PostId { get; set; }
         public Comment? Comments { get; set; }
     }
 }

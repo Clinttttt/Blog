@@ -151,7 +151,7 @@
 
     private async Task ListFeatured()
     {
-        var feaatured = await PostClient.ListFeatured();
+        var feaatured = await FeaturedClient.ListFeatured();
         featuredPosts = feaatured.Value;
     }
 
@@ -163,7 +163,7 @@
 
     public async Task HandleReadMore(int? Id)
     {
-        await PostClient.TrackPostView(Id);
+        await PostInteractionsClient.TrackPostView(Id);
         Navigation.NavigateTo($"viewblogconstruct/{Id}");
         StateHasChanged();
     }

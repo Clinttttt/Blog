@@ -1,6 +1,4 @@
-﻿using Application.Queries.GetRecentActivity;
-using Blog.Application.Common.Interfaces;
-using Blog.Application.Queries.GetRecentActivity;
+﻿using Blog.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
@@ -83,9 +81,6 @@ namespace Blog.Application.Queries.Posts.RecentActivity
 
             if (!result.Any())
                 return Result<List<RecentActivityItemDto>>.NoContent();
-
-
-
             var cachedResult = Result<List<RecentActivityItemDto>>.Success(result);
          
             return cachedResult;

@@ -132,7 +132,7 @@
     public async Task HandleBookMark(int? PostId)
     {
         addBookMarkRequest.PostId = PostId;
-        await PostClient.AddBookMark(addBookMarkRequest);
+        await PostInteractionsClient.AddBookMark(addBookMarkRequest);
 
        
         var request = await PostClient.ListByCategory(TagId, Pagination);

@@ -1,5 +1,6 @@
 ﻿using Blog.Application.Common.Interfaces;
 using Blog.Infrastructure.Services;
+using BlogApi.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,10 @@ namespace Blog.Application.Abstractions
         {
             await _cacheService.RemoveByPatternAsync(CacheKeys.Patterns.AllTags);
         }
-        public async Task InvalidatePostCacheAsync(int? postId, Guid? userId = null)
-        {        
-            await _cacheService.RemoveByPatternAsync(CacheKeys.Patterns.SpecificPost(postId));
-            await InvalidatePostListCachesAsync();
+        public async Task InvalidatePostCacheAsync(int? postId)
+        {
+
+            await _cacheService.RemoveAsync(CacheKeys.Patterns.SpecificPost(postId));
         }
 
         public async Task InvalidatePostListCachesAsync()

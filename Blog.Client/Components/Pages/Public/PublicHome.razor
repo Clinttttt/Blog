@@ -1,4 +1,4 @@
-﻿@page "/public"
+﻿@*@page "/public"
 @inject NavigationManager Navigation
 
 <div class="min-h-screen bg-gray-50 py-8">
@@ -538,4 +538,4 @@
         var plainText = System.Text.RegularExpressions.Regex.Replace(content ?? "", "<.*?>", string.Empty);
         return plainText.Length > 200 ? plainText.Substring(0, 200) + "..." : plainText;
     }
-}
+}*@

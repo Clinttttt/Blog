@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Comment.LikeComment
 {
-    public record ToggleCommentLikeCommand(int CommentId,  Guid UserId) :IRequest<Result<bool>>;
+    public record ToggleCommentLikeCommand(int CommentId, int PostId, Guid UserId) :IRequest<Result<bool>>;
     
 }

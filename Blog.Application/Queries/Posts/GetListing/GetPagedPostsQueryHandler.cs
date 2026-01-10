@@ -54,7 +54,6 @@ public class GetPagedPostsQueryHandler(IPostRespository repository,IPostFilterBu
             PostFilterType.ByCategory => CacheKeys.Expiration.Medium,
             PostFilterType.PublishedByUser => CacheKeys.Expiration.Short,
             PostFilterType.DraftsByUser => CacheKeys.Expiration.Short,
-            PostFilterType.Pending => CacheKeys.Expiration.Short,
             PostFilterType.BookMark => CacheKeys.Expiration.Short,
             _ => CacheKeys.Expiration.Short
         };

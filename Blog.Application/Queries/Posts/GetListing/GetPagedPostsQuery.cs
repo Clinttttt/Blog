@@ -27,8 +27,7 @@ namespace BlogApi.Application.Queries.Posts
         Published,              // All published posts
         PublishedByUser,        // Published posts by specific user
         Drafts,                 // All drafts
-        DraftsByUser,          // Drafts by specific user
-        Pending,               // Pending approval
+        DraftsByUser,          // Drafts by specific user          
         PendingByUser,         // Pending by specific user
         ByCategory,            // Filter by category
         ByTag                  // Filter by tag

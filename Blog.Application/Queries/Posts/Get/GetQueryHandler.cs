@@ -19,7 +19,7 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
         public async Task<Result<PostDetailDto>> Handle(GetQuery request, CancellationToken cancellationToken)
         {
 
-            var cachekey = CacheKeys.GetPost(request.PostId, request.UserId);
+            var cachekey = CacheKeys.Patterns.SpecificPost(request.PostId);
             var expiration = CacheKeys.Expiration.Medium;
 
 

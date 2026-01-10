@@ -56,5 +56,11 @@ namespace BlogApi.Domain.Enums
             [Display(Name = "1 Hour +")]
             OneHourPlus
         }
+        public enum Type
+        {
+            Like,
+            Comment,
+            BookMark,
+        }
     }
 }

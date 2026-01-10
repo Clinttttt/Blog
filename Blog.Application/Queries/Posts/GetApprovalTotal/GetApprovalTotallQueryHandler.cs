@@ -12,9 +12,7 @@ using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace Blog.Application.Queries.Posts.GetApprovalTotal
 {
-    public class GetApprovalTotalQueryHandler(
-        IAppDbContext context) 
-        : IRequestHandler<GetApprovalTotalQuery, Result<GetApprovalTotalDto>>
+    public class GetApprovalTotalQueryHandler(IAppDbContext context) : IRequestHandler<GetApprovalTotalQuery, Result<GetApprovalTotalDto>>
     {
         private static readonly TimeSpan DefaultCacheDuration = TimeSpan.FromMinutes(5);
 
@@ -23,9 +21,7 @@ namespace Blog.Application.Queries.Posts.GetApprovalTotal
             CancellationToken cancellationToken)
         {
 
-          
-
-             
+        
             var postCount = await context.Posts
                 .AsNoTracking()
                 .Where(s => s.Status == Status.Pending)
@@ -39,11 +35,8 @@ namespace Blog.Application.Queries.Posts.GetApprovalTotal
                 var noContent = Result<GetApprovalTotalDto>.NoContent();
                
                 return noContent;
-            }
-    
-            var result = Result<GetApprovalTotalDto>.Success(dto);
-            
-
+            }   
+            var result = Result<GetApprovalTotalDto>.Success(dto);          
             return result;
         }
     }

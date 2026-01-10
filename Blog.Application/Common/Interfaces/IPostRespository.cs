@@ -1,4 +1,5 @@
-﻿using BlogApi.Application.Dtos;
+﻿using Blog.Application.Queries.Posts.GetAdminRequest;
+using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
@@ -12,9 +13,7 @@ using System.Threading.Tasks;
 namespace BlogApi.Application.Common.Interfaces
 {
     public interface IPostRespository
-    {
-     
-
+    { 
         Task<List<PostDto>> GetNonPaginatedPostAsync(
             Expression<Func<Post, bool>>?
             filter = null,
@@ -28,6 +27,9 @@ namespace BlogApi.Application.Common.Interfaces
         Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? UserIds, int PageNumber = 1,
             int PageSize = 10,
             Expression<Func<Post, bool>>? filter = null,
+            CancellationToken cancellationToken = default);
+        Task<Result<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest(int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default);
     }
 }

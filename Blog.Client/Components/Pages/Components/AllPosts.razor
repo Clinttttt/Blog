@@ -201,7 +201,7 @@ else
     public async Task ToggleLikePost(int? PostId)
     {
         Id.PostId = PostId;
-        await PostClient.ToggleLikePost(Id);
+        await PostInteractionsClient.ToggleLikePost(Id);
         await Refresh.InvokeAsync();
         StateHasChanged();
     }
@@ -214,7 +214,7 @@ else
 
     public async Task HandleReadMore(int? PostId)
     {
-        await PostClient.TrackPostView(PostId);
+        await PostInteractionsClient.TrackPostView(PostId);
         Navigation.NavigateTo($"viewblogconstruct/{PostId}");
         StateHasChanged();
     }

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Azure;
 using Azure.Core;
+using Blog.Application.Queries.Posts.GetAdminRequest;
 using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
@@ -24,6 +25,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static BlogApi.Domain.Enums.EntityEnum;
 using static BlogApi.Infrastructure.Respository.PostRespository;
 
 namespace BlogApi.Infrastructure.Respository
@@ -31,12 +33,7 @@ namespace BlogApi.Infrastructure.Respository
     public class PostRespository(IAppDbContext context, IMapper mapper) : IPostRespository
     {
 
-        public async Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(
-            Guid? userId,
-            int pageNumber = 1,
-            int pageSize = 10,
-            Expression<Func<Post, bool>>? filter = null,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? userId,int pageNumber = 1,int pageSize = 10,Expression<Func<Post, bool>>? filter = null,CancellationToken cancellationToken = default)
         {
             IQueryable<Post> query = context.Posts.AsNoTracking();
 
@@ -45,17 +42,40 @@ namespace BlogApi.Infrastructure.Respository
                 query = query.Where(filter);
             }
 
-            var totalCount = await query.CountAsync(cancellationToken);
-
-
+            var totalCount = await query.CountAsync(cancellationToken); 
             var items = await query
                 .OrderByDescending(s => s.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ProjectTo<PostDto>(mapper.ConfigurationProvider)
+                .Select(p => new PostDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Content = p.Content,
+                    CreatedAt = p.CreatedAt,
+                    Status = p.Status,
+                    CommentCount = p.Comments.Count(),
+                    PostLike = p.PostLikes.Count(),
+                    IsBookMark = p.BookMarks.Any(),             
+                    CategoryName = p.Category.Name,
+                    Author = p.User.UserInfo != null && !string.IsNullOrEmpty(p.User.UserInfo.FullName)
+                        ? p.User.UserInfo.FullName
+                        : p.User.UserName,
+
+                    Tags = p.PostTags.Select(pt => new TagDto
+                    {
+                        Id = pt.tag!.Id,
+                        Name = pt.tag!.Name,
+                        PostId = pt.PostId,
+                        TagCount = pt.tag.PostTags.Count()
+                    }).ToList(),
+                    
+                    Photo = p.Photo,
+                    PhotoContent = p.PhotoContent,           
+                    PhotoIsliked = false
+                })
                 .ToListAsync(cancellationToken);
-
-
+      
             if (userId.HasValue)
             {
                 var postIds = items.Select(p => p.Id).ToList();
@@ -68,9 +88,10 @@ namespace BlogApi.Infrastructure.Respository
 
                 foreach (var item in items)
                 {
-                    item.PhotoIsliked = likedSet.Contains(item.Id);
+                    item.PhotoIsliked = likedSet.Contains(item.Id!.Value);
                 }
             }
+   
             foreach (var item in items)
             {
                 if (item.Photo != null && !string.IsNullOrEmpty(item.PhotoContent))
@@ -95,7 +116,6 @@ namespace BlogApi.Infrastructure.Respository
             {
                 query = query.Where(filter);
             }
-
             var items = await query
                 .OrderByDescending(s => s.CreatedAt)
                 .ProjectTo<PostDto>(mapper.ConfigurationProvider)
@@ -111,7 +131,6 @@ namespace BlogApi.Infrastructure.Respository
 
             return items;
         }
-
         public async Task<Post?> GetAsync(int postId, CancellationToken cancellationToken = default)
         {
             return await context.Posts
@@ -132,9 +151,41 @@ namespace BlogApi.Infrastructure.Respository
                           .AsSplitQuery()
                 .FirstOrDefaultAsync(s => s.Id == postId, cancellationToken);
         }
+        public async Task<Result<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        {
+            var post = await context.Posts
+                .AsNoTracking()
+                .Include(s=> s.User)
+                .ThenInclude(s=> s.UserInfo)
+                .OrderByDescending(s=> s.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Where(s => s.Status == Status.Pending)
+                 .Select( s=> new GetListAdminRequestDto
+                 {
+                     PostId = s.Id,
+                     Title = s.Title,
+                     Content = s.Content,
+                     CreatedAt = s.CreatedAt,
+                     Name = s.User.UserInfo != null && !string.IsNullOrEmpty(s.User.UserInfo.FullName)
+                        ? s.User.UserInfo.FullName
+                        : s.User.UserName,
+                     readingDuration = s.readingDuration,
+                     CategoryName = s.Category.Name,
+                 })
+                .ToListAsync(cancellationToken);
 
+            var totalcount = post.Count();
 
-
+            return Result<PagedResult<GetListAdminRequestDto>>.Success(new PagedResult<GetListAdminRequestDto>
+            {
+                Items = post,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalcount
+            });
+        }
+   
 
     }
 }

@@ -115,15 +115,15 @@
 
     private async Task ListBookMark()
     {
-        var request = await PostClient.ListBookMark(Pagination);
+        var request = await PostInteractionsClient.ListBookMark(Pagination);
         PostDtos = request.Value?.Items;
     }
 
     public async Task HandleBookMark(int? PostId)
     {
         addBookMarkRequest.PostId = PostId;
-        await PostClient.AddBookMark(addBookMarkRequest);
-        var bookmark = await PostClient.ListBookMark(Pagination);
+        await PostInteractionsClient.AddBookMark(addBookMarkRequest);
+        var bookmark = await PostInteractionsClient.ListBookMark(Pagination);
         PostDtos = bookmark.Value?.Items;
         StateHasChanged();
     }

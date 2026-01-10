@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 
-namespace Blog.Application.Queries.GetRecentActivity
+namespace Blog.Application.Queries.Posts.RecentActivity
 {
     public class RecentActivityItemDto
     {

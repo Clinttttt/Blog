@@ -29,9 +29,6 @@ namespace Blog.Application.Abstractions
                 PostFilterType.DraftsByUser =>
                     p => p.UserId == request.UserId && p.Status == Status.Draft,
 
-                PostFilterType.Pending =>
-                    p => p.Status == Status.Pending,
-
                 PostFilterType.PendingByUser =>
                     p => p.UserId == request.UserId && p.Status == Status.Pending,
 

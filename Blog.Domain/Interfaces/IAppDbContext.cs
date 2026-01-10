@@ -25,6 +25,7 @@ namespace BlogApi.Domain.Interfaces
         DbSet<UserInfo> UserInfos { get; set; }
         DbSet<Featured> Featureds { get; set; }
         DbSet<PostView> PostViews { get; set; }
+        DbSet<Notification> Notifications { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

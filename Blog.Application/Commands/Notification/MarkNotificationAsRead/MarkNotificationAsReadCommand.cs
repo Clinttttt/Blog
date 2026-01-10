@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Commands.Posts.ApprovePost
+namespace Blog.Application.Commands.Notification.MarkNotificationAsRead
 {
-    public record ApprovePostCommand(int PostId) : IRequest<Result<bool>>;
+    public record MarkNotificationAsReadCommand(int notifId) : IRequest<Result<bool>>;
     
 }
