@@ -1,8 +1,11 @@
-﻿using Blog.Application.Commands.Notification.DeleteNotification;
+﻿using Blog.Application.Commands.Notification.DeleteAllNotification;
+using Blog.Application.Commands.Notification.DeleteNotification;
+using Blog.Application.Commands.Notification.MarkAllNotificationAsRead;
 using Blog.Application.Commands.Notification.MarkNotificationAsRead;
 using Blog.Application.Queries.Posts.GetListNotification;
-using Blog.Application.Request.Notification;
 using BlogApi.Api.Shared;
+using BlogApi.Application.Models;
+using BlogApi.Application.Request.Posts;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,14 +18,6 @@ namespace Blog.Api.Controllers
     public class NotificationController(ISender sender) : ApiBaseController(sender)
     {
 
-        [Authorize(Roles = "Admin,Author")]
-        [HttpPost("CreateNotification")]
-        public async Task<ActionResult<bool>> CreateNotification([FromBody] CreateNotificationRequest request)
-        {
-            var command = request.CreateNotification(UserIdOrNull);
-            var result = await Sender.Send(command);
-            return HandleResponse(result);
-        }
 
         [Authorize(Roles = "Admin,Author")]
         [HttpDelete("DeleteNotification")]
@@ -35,9 +30,14 @@ namespace Blog.Api.Controllers
 
         [Authorize(Roles = "Admin,Author")]
         [HttpGet("GetListNotification")]
-        public async Task<ActionResult<List<GetListNotificationDto>>> GetListNotificatio()
+        public async Task<ActionResult<PagedResult<GetListNotificationDto>>> GetListNotification([FromQuery] ListPaginatedRequest request)
         {
-            var query = new GetListNotificationQuery(UserIdOrNull);
+            var query = new GetListNotificationQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSze = request.PageSize,
+            };
             var result = await Sender.Send(query);
             return HandleResponse(result);
         }
@@ -51,5 +51,22 @@ namespace Blog.Api.Controllers
             return HandleResponse(result);
         }
 
+        [Authorize(Roles = "Admin,Author")]
+        [HttpPatch("MarkAllNotificationAsRead")]
+        public async Task<ActionResult<bool>> MarkAllNotificationAsRead()
+        {
+            var command = new MarkAllNotificationAsReadCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpDelete("DeleteAllNotification")]
+        public async Task<ActionResult<bool>> DeleteAllNotification()
+        {
+            var command = new DeleteAllNotificationCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
     }
 }

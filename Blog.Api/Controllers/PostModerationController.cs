@@ -37,7 +37,7 @@ namespace BlogApi.Api.Controllers
         [HttpGet("GetApprovalTotal")]
         public async Task<ActionResult<GetApprovalTotalDto>> GetApprovalTotal()
         {
-            var request = new GetApprovalTotalQuery();
+            var request = new GetApprovalTotalQuery(UserIdOrNull);
             var result = await Sender.Send(request);
             return HandleResponse(result);
         }

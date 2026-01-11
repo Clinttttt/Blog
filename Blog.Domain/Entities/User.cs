@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blog.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace BlogApi.Domain.Entities
         public string? Email { get; set; }
         public ICollection<Post> Posts { get; set; } = new List<Post>();
         public List<ExternalLogin> ExternalLogins { get; set; } = new();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public UserInfo? UserInfo { get; set; }
     }
 }

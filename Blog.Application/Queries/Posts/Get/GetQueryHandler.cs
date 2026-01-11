@@ -39,6 +39,7 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
             var dto = new PostDetailDto
             {
                 PostId = result.Id,
+                UserId = result.UserId,
                 IsBookMark = result.BookMarks.Any(s => s.UserId == request.UserId),
                 PostLike = result.PostLikes.Count(),
                 Title = result.Title,

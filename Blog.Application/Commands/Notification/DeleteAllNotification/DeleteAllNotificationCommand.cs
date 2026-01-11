@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Queries.Posts.GetApprovalTotal
+namespace Blog.Application.Commands.Notification.DeleteAllNotification
 {
-    public record GetApprovalTotalQuery(Guid? UserId) : IRequest<Result<GetApprovalTotalDto>>;
-   
+    public record DeleteAllNotificationCommand(Guid UserId) : IRequest<Result<bool>>;
+    
 }

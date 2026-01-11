@@ -11,7 +11,7 @@ namespace Blog.Domain.Entities
     public class Notification
     {
         public int Id { get; set; }
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
         public Guid? ActorUserId { get; set; }
         public Guid RecipientUserId { get; set; }
         public EntityEnum.Type Type { get; set; }

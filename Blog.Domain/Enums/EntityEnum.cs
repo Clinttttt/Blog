@@ -58,7 +58,8 @@ namespace BlogApi.Domain.Enums
         }
         public enum Type
         {
-            Like,
+            LikePost,
+            LikeComment,
             Comment,
             BookMark,
         }

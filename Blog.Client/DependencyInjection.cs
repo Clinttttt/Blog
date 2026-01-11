@@ -1,4 +1,5 @@
-﻿using Blog.Client.Security;
+﻿using Blog.Client.Interface;
+using Blog.Client.Security;
 using Blog.Client.Services;
 using Blog.Client.State;
 using BlogApi.Client.Interface;
@@ -15,7 +16,8 @@ namespace BlogApi.Client
         {
             AddPersistence(services, configuration);
             AddCustomAuthentication(services);
-            services.AddScoped<PageState>();
+            services.AddScoped<PostViewState>();
+            services.AddScoped<NotificationState>();
             services.AddScoped<SignalRService>();
             return services;
         }
@@ -103,6 +105,13 @@ namespace BlogApi.Client
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateClient("Api");
                 return new UserClientServices(httpClient);
+            });
+
+            services.AddScoped<INotificationClientService>(sp =>
+            {
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient("Api");
+                return new NotificationClientService(httpClient);
             });
 
             return services;

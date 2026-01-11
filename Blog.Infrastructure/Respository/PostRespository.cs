@@ -50,13 +50,14 @@ namespace BlogApi.Infrastructure.Respository
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
+                    UserId = p.UserId,
                     Title = p.Title,
                     Content = p.Content,
                     CreatedAt = p.CreatedAt,
                     Status = p.Status,
                     CommentCount = p.Comments.Count(),
                     PostLike = p.PostLikes.Count(),
-                    IsBookMark = p.BookMarks.Any(),             
+                    IsBookMark = userId != null && p.BookMarks.Any(b => b.UserId == userId),
                     CategoryName = p.Category.Name,
                     Author = p.User.UserInfo != null && !string.IsNullOrEmpty(p.User.UserInfo.FullName)
                         ? p.User.UserInfo.FullName

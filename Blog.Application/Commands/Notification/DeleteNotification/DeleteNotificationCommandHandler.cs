@@ -16,10 +16,10 @@ namespace Blog.Application.Commands.Notification.DeleteNotification
         {
             var notif = await context.Notifications
                 .FirstOrDefaultAsync(s => s.Id == request.notifId, cancellationToken);
-            if (notif is null)
-            {
+            if (notif is null)           
                 return Result<bool>.NotFound();
-            }
+  
+            
             context.Notifications.Remove(notif);
             await context.SaveChangesAsync(cancellationToken);
             return Result<bool>.Success(true);

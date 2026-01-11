@@ -2,7 +2,7 @@
 
 namespace Blog.Client.State
 {
-    public class PageState
+    public class PostViewState
     {
         public event Action? Onchange;
 

@@ -8,6 +8,8 @@ namespace Blog.Application.Queries.Posts.GetApprovalTotal
 {
     public class GetApprovalTotalDto
     {
-        public int? Count { get; set; }
+        public int? ApprovalCount { get; set; }
+        public int? NotificationCount { get; set; }
+
     }
 }

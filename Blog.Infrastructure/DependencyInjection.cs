@@ -41,6 +41,7 @@ namespace BlogApi.Infrastructure
             services.AddScoped<ITagRespository, TagRespository>();
             services.AddScoped<ICategoryRespository, CategoryRespository>();
             services.AddScoped<IPostFilterBuilder, PostFilterBuilder>();
+            services.AddScoped<INotificationService, NotificationService>();
             return services;
         }
     }

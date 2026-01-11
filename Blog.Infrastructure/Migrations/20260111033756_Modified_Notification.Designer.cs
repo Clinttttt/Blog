@@ -4,6 +4,7 @@ using BlogApi.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260111033756_Modified_Notification")]
+    partial class Modified_Notification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +51,12 @@ namespace BlogApi.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
                 });
@@ -435,9 +441,8 @@ namespace BlogApi.Infrastructure.Migrations
             modelBuilder.Entity("Blog.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("BlogApi.Domain.Entities.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("ActorUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -606,8 +611,6 @@ namespace BlogApi.Infrastructure.Migrations
             modelBuilder.Entity("BlogApi.Domain.Entities.User", b =>
                 {
                     b.Navigation("ExternalLogins");
-
-                    b.Navigation("Notifications");
 
                     b.Navigation("Posts");
 

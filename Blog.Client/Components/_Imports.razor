@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using Blog.Client.Interface
 @using Blog.Client.Services
 @using Blog.Client.State
 @using BlogApi.Client.Security
@@ -50,7 +51,8 @@
 @inject ITagClientService TagClient
 @inject IPostClientService PostClient
 @inject AuthStateProvider AuthStateProvider
-@inject PageState PageState
+@inject PostViewState PostViewState
+@inject NotificationState NotificationState
 @inject SignalRService SignalR
 @inject AuthenticationStateProvider AuthProvider
 @inject ICommentsClientService CommentsClient
@@ -58,3 +60,4 @@
 @inject IPostAnalyticsClientService PostAnalyticsClient
 @inject IPostInteractionsClientService PostInteractionsClient
 @inject IPostModerationClientService PostModerationClient
+@inject INotificationClientService NotificationClient

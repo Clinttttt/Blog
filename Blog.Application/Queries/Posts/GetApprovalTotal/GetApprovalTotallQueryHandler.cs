@@ -14,28 +14,29 @@ namespace Blog.Application.Queries.Posts.GetApprovalTotal
 {
     public class GetApprovalTotalQueryHandler(IAppDbContext context) : IRequestHandler<GetApprovalTotalQuery, Result<GetApprovalTotalDto>>
     {
-        private static readonly TimeSpan DefaultCacheDuration = TimeSpan.FromMinutes(5);
+        
 
         public async Task<Result<GetApprovalTotalDto>> Handle(
             GetApprovalTotalQuery request,
             CancellationToken cancellationToken)
         {
-
-        
+       
             var postCount = await context.Posts
                 .AsNoTracking()
                 .Where(s => s.Status == Status.Pending)
                 .CountAsync(cancellationToken);
 
-            var dto = new GetApprovalTotalDto { Count = postCount };
+            var notifcount = await context.Notifications
+                .AsNoTracking()
+                .Where(s => s.RecipientUserId == request.UserId && s.IsRead == false)
+                .CountAsync(cancellationToken);
 
-            
-            if (dto.Count <= 0)
-            {
-                var noContent = Result<GetApprovalTotalDto>.NoContent();
-               
-                return noContent;
-            }   
+            var dto = new GetApprovalTotalDto
+            {                
+                ApprovalCount = postCount,
+                NotificationCount = notifcount
+            };  
+
             var result = Result<GetApprovalTotalDto>.Success(dto);          
             return result;
         }

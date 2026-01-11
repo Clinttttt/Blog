@@ -31,9 +31,9 @@
                 </NavLink>
             }
             <div class="indicator">
-                @if (TotalApproval?.Count > 0)
+                @if (TotalCount?.ApprovalCount > 0)
                 {
-                    <span class="indicator-item badge bg-indigo-500 text-white">@TotalApproval.Count</span>
+                    <span class="indicator-item badge bg-indigo-500 text-white">@TotalCount.ApprovalCount</span>
                 }
                 <NavLink href="approval" class=" cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
                     Approval
@@ -44,27 +44,30 @@
                     <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z" />
                 </svg>
 
-
             </NavLink>
-            <NavLink href="bookmark" class="">             
-                
-                <svg class="w-7 h-7 text-indigo-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.6" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z" />
-                </svg>
+            <div class="indicator">
+                @if (TotalCount?.NotificationCount > 0)
+                {
+                    <span class="indicator-item badge bg-indigo-500 text-white">@TotalCount.NotificationCount</span>
+                }
+                <NavLink href="notification" class="">
+                    <svg class="w-7 h-7 text-indigo-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.6" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z" />
+                    </svg>
+                </NavLink>
 
-            </NavLink>
+            </div>
 
-           
 
-          
 
-            <button @onclick="() => PageState.AdminView(PageState.AdminPostState.home)" class="cursor-pointer">
+
+            <button @onclick="() => PostViewState.AdminView(PostViewState.AdminPostState.home)" class="cursor-pointer">
                 <svg class="w-7 h-7  text-indigo-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.7" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
                 </svg>
 
             </button>
-         
+
         </div>
     </header>
 
@@ -72,13 +75,13 @@
 
         <div class="flex flex-row items-center gap-3 ">
             <div class="flex gap-2 flex-row">
-                <button @onclick="() => PageState.AdminView(PageState.AdminPostState.all_post)" class=" cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
+                <button @onclick="() => PostViewState.AdminView(PostViewState.AdminPostState.all_post)" class=" cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
                     All Posts
                 </button>
-                <button @onclick="() => PageState.AdminView(PageState.AdminPostState.published)" class="  cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
+                <button @onclick="() => PostViewState.AdminView(PostViewState.AdminPostState.published)" class="  cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
                     Published
                 </button>
-                <button @onclick="() => PageState.AdminView(PageState.AdminPostState.draft)" class=" cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
+                <button @onclick="() => PostViewState.AdminView(PostViewState.AdminPostState.draft)" class=" cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
                     Draft
                 </button>
                 <div class="dropdown dropdown-bottom">
@@ -92,12 +95,12 @@
                         </svg>
                     </button>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg border border-gray-200">
-                        <li><button @onclick="() => PageState.AdminView(PageState.AdminPostState.author)" class="btn">All Authors</button></li>
+                        <li><button @onclick="() => PostViewState.AdminView(PostViewState.AdminPostState.author)" class="btn">All Authors</button></li>
                         <li><a>John Doe</a></li>
                         <li><a>Jane Smith</a></li>
                     </ul>
                 </div>
-                <button @onclick="() => PageState.AdminView(PageState.AdminPostState.overview)" class=" cursor-pointer btn btn-outline gap-2">
+                <button @onclick="() => PostViewState.AdminView(PostViewState.AdminPostState.overview)" class=" cursor-pointer btn btn-outline gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
@@ -122,28 +125,28 @@
         </div>
     </div>
 
-    @if (PageState.AdminPageView == PageState.AdminPostState.home)
+    @if (PostViewState.AdminPageView == PostViewState.AdminPostState.home)
     {
         <Featured featuredPosts="featuredPosts" ReadMore="HandleReadMore" />
         <RecentPosts recentPost="recentPost" />
     }
-    else if (PageState.AdminPageView == PageState.AdminPostState.all_post)
+    else if (PostViewState.AdminPageView == PostViewState.AdminPostState.all_post)
     {
         <AllPosts recentPost="recentPost" Pagination="Pagination" Refresh="RefreshAsync" />
     }
-    else if (PageState.AdminPageView == PageState.AdminPostState.published)
+    else if (PostViewState.AdminPageView == PostViewState.AdminPostState.published)
     {
         <Blog.Client.Components.Pages.Admin.Components.Published ListForAdmin="ListForAdmin" Pagination="PaginationPublished" Refresh="RefreshPublishedAsync" />
     }
-    else if (PageState.AdminPageView == PageState.AdminPostState.draft)
+    else if (PostViewState.AdminPageView == PostViewState.AdminPostState.draft)
     {
         <Blog.Client.Components.Pages.Admin.Components.Draft ListDraftForAdmin="ListDraftForAdmin" Pagination="PaginationDraft" Refresh="RefreshDraftAsync" />
     }
-    else if (PageState.AdminPageView == PageState.AdminPostState.author)
+    else if (PostViewState.AdminPageView == PostViewState.AdminPostState.author)
     {
         <Blog.Client.Components.Pages.Admin.Components.Author />
     }
-    else if (PageState.AdminPageView == PageState.AdminPostState.overview)
+    else if (PostViewState.AdminPageView == PostViewState.AdminPostState.overview)
     {
         <Blog.Client.Components.Pages.Admin.Components.Overview />
     }
@@ -169,7 +172,7 @@
     private PagedResult<PostDto>? ListDraftForAdmin { get; set; } = new PagedResult<PostDto>();
 
 
-    private GetApprovalTotalDto? TotalApproval { get; set; } = new GetApprovalTotalDto();
+    private GetApprovalTotalDto? TotalCount { get; set; } = new GetApprovalTotalDto();
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private ListPaginatedRequest PaginationPublished { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private ListPaginatedRequest PaginationDraft { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
@@ -178,7 +181,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-       
+
         var getUserTask = GetCurrentUser();
         var listFeaturedTask = ListFeatured();
         var loadRecentTask = LoadPublishedPostsAsync();
@@ -186,7 +189,7 @@
         var loadAdminDraftTask = LoadAdminDraftPostsAsync();
         var getApprovalTask = GetApprovalTotal();
         var signalRTask = SignalR.InitializeAsync();
-    
+
         await Task.WhenAll(
             getUserTask,
             listFeaturedTask,
@@ -197,7 +200,7 @@
             signalRTask
         );
 
-        OnViewCountUpdate(); 
+        OnViewCountUpdate();
         hasrender = true;
     }
 
@@ -268,7 +271,7 @@
     public async Task GetApprovalTotal()
     {
         var request = await PostModerationClient.GetApprovalTotal();
-        TotalApproval = request.Value;
+        TotalCount = request.Value;
         StateHasChanged();
     }
 }

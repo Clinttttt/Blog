@@ -1,4 +1,5 @@
 ﻿using BlogApi.Domain.Common;
+using BlogApi.Domain.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;

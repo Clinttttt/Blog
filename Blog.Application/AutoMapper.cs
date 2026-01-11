@@ -13,7 +13,7 @@ namespace BlogApi.Application
     {
         public AutomapperProfile()
         {
-       
+
             CreateMap<Post, PostDto>()
                 .ForMember(d => d.CommentCount, opt => opt.MapFrom(s => s.Comments.Count))
                 .ForMember(d => d.CategoryName, opt => opt.MapFrom(s => s.Category.Name))
@@ -32,6 +32,7 @@ namespace BlogApi.Application
                 .ForMember(d => d.PostLike, opt => opt.MapFrom(s => s.PostLikes.Count()))
                 .ForMember(d => d.PhotoIsliked, opt => opt.Ignore())
                 .ForMember(d => d.Preview, opt => opt.Ignore());
+              
         
 
 

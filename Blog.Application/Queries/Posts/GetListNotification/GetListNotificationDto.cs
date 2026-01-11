@@ -11,8 +11,9 @@ namespace Blog.Application.Queries.Posts.GetListNotification
     {
         public int Id { get; set; }
         public EntityEnum.Type Type { get; set; }
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
         public string? UserName { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsRead { get; set; }
     }
 }
