@@ -1,4 +1,5 @@
-﻿using BlogApi.Domain.Entities;
+﻿using Blog.Domain.Dtos;
+using BlogApi.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Blog.Application.Common.Interfaces
     public interface IPostHubService
     {
         Task BroadcastViewCountUpdate(int postId, int viewCount);
-        Task BroadcastNewPost(string postTitle);
         Task BroadcastSentComment(int PostId, string Content);
+        Task BroadcastNotification(NotificationDto request, Guid? recipientUserId);
+        Task BroadcastNotificationCount(int Count, Guid? UserId);
     }
 }

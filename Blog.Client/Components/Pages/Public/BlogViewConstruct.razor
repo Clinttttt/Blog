@@ -2,6 +2,7 @@
 
 
 
+
 <div class="h-screen bg-gray-50 py-8 overflow-auto">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -310,6 +311,7 @@
         await SignalR.InitializeAsync();
 
         await Task.Delay(100);
+
         SignalR.OnSentComment(async (postId, content) =>
         {
 

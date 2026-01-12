@@ -62,6 +62,7 @@ namespace BlogApi.Application.Commands.Posts.LikePost
                     };
 
                     await _notificationService.NotificationAsync(notification, cancellationToken);
+
                 }
             }
             else

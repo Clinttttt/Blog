@@ -9,7 +9,7 @@ using MediatR;
 
 namespace BlogApi.Application.Queries.Posts.Handlers;
 
-public class GetPagedPostsQueryHandler(IPostRespository repository,IPostFilterBuilder builder, ICacheService cacheService) : IRequestHandler<GetPagedPostsQuery, Result<PagedResult<PostDto>>>
+public class GetPagedPostsQueryHandler(IPostRespository repository,IFilterBuilder builder, ICacheService cacheService) : IRequestHandler<GetPagedPostsQuery, Result<PagedResult<PostDto>>>
 {
     public async Task<Result<PagedResult<PostDto>>> Handle(GetPagedPostsQuery request,CancellationToken cancellationToken)
     {
@@ -27,7 +27,7 @@ public class GetPagedPostsQueryHandler(IPostRespository repository,IPostFilterBu
         var result = await cacheService.GetOrCreateAsync(cacheKey,
             async () =>
             {
-                var filter = builder.BuildFilter(request);
+                var filter = builder.PostBuildFilter(request);
                 var postPage = await repository.GetPaginatedPostDtoAsync(
                     request.UserId,
                     request.PageNumber,

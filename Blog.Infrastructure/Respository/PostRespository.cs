@@ -33,7 +33,7 @@ namespace BlogApi.Infrastructure.Respository
     public class PostRespository(IAppDbContext context, IMapper mapper) : IPostRespository
     {
 
-        public async Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? userId,int pageNumber = 1,int pageSize = 10,Expression<Func<Post, bool>>? filter = null,CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? userId, int pageNumber = 1, int pageSize = 10, Expression<Func<Post, bool>>? filter = null, CancellationToken cancellationToken = default)
         {
             IQueryable<Post> query = context.Posts.AsNoTracking();
 
@@ -42,7 +42,7 @@ namespace BlogApi.Infrastructure.Respository
                 query = query.Where(filter);
             }
 
-            var totalCount = await query.CountAsync(cancellationToken); 
+            var totalCount = await query.CountAsync(cancellationToken);
             var items = await query
                 .OrderByDescending(s => s.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
@@ -70,13 +70,13 @@ namespace BlogApi.Infrastructure.Respository
                         PostId = pt.PostId,
                         TagCount = pt.tag.PostTags.Count()
                     }).ToList(),
-                    
+
                     Photo = p.Photo,
-                    PhotoContent = p.PhotoContent,           
+                    PhotoContent = p.PhotoContent,
                     PhotoIsliked = false
                 })
                 .ToListAsync(cancellationToken);
-      
+
             if (userId.HasValue)
             {
                 var postIds = items.Select(p => p.Id).ToList();
@@ -92,7 +92,7 @@ namespace BlogApi.Infrastructure.Respository
                     item.PhotoIsliked = likedSet.Contains(item.Id!.Value);
                 }
             }
-   
+
             foreach (var item in items)
             {
                 if (item.Photo != null && !string.IsNullOrEmpty(item.PhotoContent))
@@ -156,13 +156,13 @@ namespace BlogApi.Infrastructure.Respository
         {
             var post = await context.Posts
                 .AsNoTracking()
-                .Include(s=> s.User)
-                .ThenInclude(s=> s.UserInfo)
-                .OrderByDescending(s=> s.CreatedAt)
+                .Include(s => s.User)
+                .ThenInclude(s => s.UserInfo)
+                .OrderByDescending(s => s.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Where(s => s.Status == Status.Pending)
-                 .Select( s=> new GetListAdminRequestDto
+                 .Select(s => new GetListAdminRequestDto
                  {
                      PostId = s.Id,
                      Title = s.Title,
@@ -186,7 +186,7 @@ namespace BlogApi.Infrastructure.Respository
                 TotalCount = totalcount
             });
         }
-   
+
 
     }
 }

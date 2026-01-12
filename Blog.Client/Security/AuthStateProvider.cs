@@ -39,6 +39,13 @@ namespace BlogApi.Client.Security
                 return Anonymous();
             }
         }
+        public async Task<string?> GetUserIdAsync()
+        {
+            var state = await GetAuthenticationStateAsync();
+            return state.User.Identity?.IsAuthenticated == true
+                ? state.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                : null;
+        }
 
         public Task MarkUserAsAuthenticated()
         {

@@ -2,6 +2,7 @@ using AutoMapper;
 using Blog.Application.Abstractions;
 using Blog.Application.Common.Interfaces;
 using Blog.Infrastructure.Hubs;
+using Blog.Infrastructure.Hubs.HubService;
 using Blog.Infrastructure.Services;
 using BlogApi.Application;
 using BlogApi.Infrastructure;

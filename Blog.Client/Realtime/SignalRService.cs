@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blog.Domain.Dtos;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 
-namespace Blog.Client.Services
+namespace Blog.Client.Realtime
 {
     public class SignalRService(NavigationManager navigationManager, IConfiguration configuration) : IAsyncDisposable
     {
@@ -11,11 +12,11 @@ namespace Blog.Client.Services
         private readonly string _apiBaseUrl = configuration["ApiBaseUrl"] ?? "https://localhost:7096";
         private HubConnection? _hubConnection;
 
-      
+
         public async Task InitializeAsync()
         {
             if (_hubConnection != null)
-                return; 
+                return;
 
             var hubUrl = new Uri($"{_apiBaseUrl.TrimEnd('/')}/posthub");
 
@@ -26,19 +27,25 @@ namespace Blog.Client.Services
 
             await _hubConnection.StartAsync();
         }
+
         public void OnViewCountUpdate(Action<int, int> handler)
         {
             _hubConnection?.On("ReceiveViewCountUpdate", handler);
         }
 
-        public void OnSentComment(Action<int,string> handler)
+        public void OnNotification(Action<NotificationDto> handler)
         {
-            _hubConnection?.On("ReceiveSentMessage", handler);
+            _hubConnection?.On<NotificationDto>("ReceiveNotification", handler);
         }
 
-        public void OnNewPost(Action<string> handler)
+        public void OnNotificationCount(Action<int, Guid?> handler)
         {
-            _hubConnection?.On("ReceiveNewPost", handler);
+            _hubConnection?.On("ReceiveNewNotification", handler);
+        }
+
+        public void OnSentComment(Action<int, string> handler)
+        {
+            _hubConnection?.On("ReceiveSentMessage", handler);
         }
 
         public HubConnectionState? ConnectionState => _hubConnection?.State;

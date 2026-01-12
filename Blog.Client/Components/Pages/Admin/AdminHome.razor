@@ -1,7 +1,7 @@
 ﻿@page "/admin_home"
 
-
 @using Blog.Application.Queries.Posts.GetApprovalTotal
+@using Blog.Client.Realtime
 @using Microsoft.AspNetCore.SignalR.Client
 
 <main class="p-6 lg:p-8 max-w-7xl w-full overflow-auto h-screen ">
@@ -165,6 +165,7 @@
 
 @code {
     public bool hasrender = false;
+    private bool isSubscribedNotificationCount = false;
     private UserProfileDto? userProfile { get; set; } = new UserProfileDto();
     private List<FeaturedPostDto>? featuredPosts { get; set; } = new List<FeaturedPostDto>();
     private PagedResult<PostDto>? recentPost { get; set; } = new PagedResult<PostDto>();
@@ -176,8 +177,9 @@
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private ListPaginatedRequest PaginationPublished { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private ListPaginatedRequest PaginationDraft { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
-
     private HubConnection? _hubConnection;
+
+ 
 
     protected override async Task OnInitializedAsync()
     {
@@ -201,6 +203,7 @@
         );
 
         OnViewCountUpdate();
+        await NoticationCount();
         hasrender = true;
     }
 
@@ -216,6 +219,31 @@
        }
    });
     }
+
+   
+
+    public async Task NoticationCount()
+    {
+        if (isSubscribedNotificationCount) return;
+
+        var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
+
+        SignalR.OnNotificationCount((Count, UserId) =>
+        {
+            if (UserId.ToString() == CurrentUserId)
+            {
+                if (TotalCount is not null)
+                {
+                    TotalCount.NotificationCount = Count;
+                    InvokeAsync(StateHasChanged);
+                }
+            }
+        });
+
+        isSubscribedNotificationCount = true;
+    }
+
+
 
     public async ValueTask DisposeAsync()
     {

@@ -10,6 +10,7 @@ namespace BlogApi.Client.Security
 {
     public static class JwtHelper
     {
+
         public static ClaimsPrincipal? ParseToken(string token)
         {
             if (string.IsNullOrWhiteSpace(token)) return null;
@@ -86,5 +87,7 @@ namespace BlogApi.Client.Security
             output += new string('=', (4 - output.Length % 4) % 4);
             return Convert.FromBase64String(output);
         }
+
+      
     }
 }

@@ -1,4 +1,5 @@
-﻿
+﻿@using Blog.Client.Realtime
+
 @if (isLoading)
 {
     <div class="space-y-6">
@@ -197,6 +198,8 @@ else
     {
         isLoading = recentPost == null || !recentPost.Items?.Any() == true;
     }
+
+   
 
     public async Task ToggleLikePost(int? PostId)
     {

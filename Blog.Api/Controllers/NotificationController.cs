@@ -2,7 +2,8 @@
 using Blog.Application.Commands.Notification.DeleteNotification;
 using Blog.Application.Commands.Notification.MarkAllNotificationAsRead;
 using Blog.Application.Commands.Notification.MarkNotificationAsRead;
-using Blog.Application.Queries.Posts.GetListNotification;
+using Blog.Application.Queries.Notification.GetListNotification;
+
 using BlogApi.Api.Shared;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
@@ -30,17 +31,65 @@ namespace Blog.Api.Controllers
 
         [Authorize(Roles = "Admin,Author")]
         [HttpGet("GetListNotification")]
-        public async Task<ActionResult<PagedResult<GetListNotificationDto>>> GetListNotification([FromQuery] ListPaginatedRequest request)
+        public async Task<ActionResult<PagedResult<GetListNotificationDto>>> GetListNotification([FromQuery] ListPaginatedRequest request, [FromQuery] GetListNotificationQuery.NotifType notiftype)
         {
             var query = new GetListNotificationQuery
             {
                 UserId = UserIdOrNull,
                 PageNumber = request.PageNumber,
                 PageSze = request.PageSize,
+                NotifTypes = notiftype
             };
             var result = await Sender.Send(query);
             return HandleResponse(result);
         }
+
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpGet("GetCommentNotification")]
+        public async Task<ActionResult<PagedResult<GetListNotificationDto>>> GetCommentNotification([FromQuery] ListPaginatedRequest request)
+        {
+            var query = new GetListNotificationQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSze = request.PageSize,
+                NotifTypes = GetListNotificationQuery.NotifType.Comments
+            };
+            var result = await Sender.Send(query);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpGet("GetPostNotification")]
+        public async Task<ActionResult<PagedResult<GetListNotificationDto>>> GetPostNotification([FromQuery] ListPaginatedRequest request)
+        {
+            var query = new GetListNotificationQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSze = request.PageSize,
+                NotifTypes = GetListNotificationQuery.NotifType.Posts
+            };
+            var result = await Sender.Send(query);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpGet("GetUnreadNotification")]
+        public async Task<ActionResult<PagedResult<GetListNotificationDto>>> GetUnreadNotification([FromQuery] ListPaginatedRequest request)
+        {
+            var query = new GetListNotificationQuery
+            {
+                UserId = UserIdOrNull,
+                PageNumber = request.PageNumber,
+                PageSze = request.PageSize,
+                NotifTypes = GetListNotificationQuery.NotifType.Unread
+            };
+            var result = await Sender.Send(query);
+            return HandleResponse(result);
+        }
+
 
         [Authorize(Roles = "Admin,Author")]
         [HttpPatch("MarkNotificationAsRead")]

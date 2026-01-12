@@ -37,6 +37,7 @@ namespace Blog.Application.Queries.Posts.GetApprovalTotal
                 NotificationCount = notifcount
             };  
 
+
             var result = Result<GetApprovalTotalDto>.Success(dto);          
             return result;
         }

@@ -1,4 +1,5 @@
 ﻿using Blog.Application.Common.Interfaces;
+using Blog.Domain.Dtos;
 using Blog.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Infrastructure.Services
+namespace Blog.Infrastructure.Hubs.HubService
 {
     public class PostHubService : IPostHubService
     {
@@ -26,11 +27,17 @@ namespace Blog.Infrastructure.Services
         {
             await _hubContext.Clients.All.SendAsync("ReceiveSentMessage", PostId, Content);
         }
-        
 
-        public async Task BroadcastNewPost(string postTitle)
+        public async Task BroadcastNotification(NotificationDto request, Guid? recipientUserId)
         {
-            await _hubContext.Clients.All.SendAsync("ReceiveNewPost", postTitle);
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", request);
+            
+        }
+
+        public async Task BroadcastNotificationCount(int Count, Guid? UserId)
+        {
+            await _hubContext.Clients.All.SendAsync("ReceiveNewNotification", Count, UserId);
+
         }
     }
 }

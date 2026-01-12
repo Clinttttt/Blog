@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Queries.Posts.GetListNotification
+namespace Blog.Application.Queries.Notification.GetListNotification
 {
     public class GetListNotificationDto
     {
@@ -15,5 +15,8 @@ namespace Blog.Application.Queries.Posts.GetListNotification
         public string? UserName { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsRead { get; set; }
+
+        
+       
     }
 }
