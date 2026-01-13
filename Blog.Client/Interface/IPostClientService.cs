@@ -1,4 +1,5 @@
-﻿using BlogApi.Application.Dtos;
+﻿using Blog.Application.Queries.Posts.GetAdminRequest;
+using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
 using BlogApi.Domain.Common;
@@ -18,5 +19,6 @@ namespace BlogApi.Client.Interface
         Task<Result<PagedResult<PostDto>>> ListPublished(ListPaginatedRequest request);
         Task<Result<PagedResult<PostDto>>> ListByTag(int tagId, ListPaginatedRequest request);
         Task<Result<PagedResult<PostDto>>> ListByCategory(int Id, ListPaginatedRequest request);
+        Task<Result<PagedResult<PendingRequestDto>>> GetListAuthorRequest(ListPaginatedRequest request);
     }
 }

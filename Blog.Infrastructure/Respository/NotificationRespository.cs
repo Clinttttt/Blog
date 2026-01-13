@@ -1,8 +1,11 @@
-﻿using Blog.Application.Common.Interfaces;
+﻿using Azure.Core;
+using Blog.Application.Common.Interfaces;
 using Blog.Application.Queries.Notification.GetListNotification;
+using Blog.Application.Queries.Posts.GetApprovalTotal;
 using Blog.Domain.Entities;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
+using BlogApi.Domain.Entities;
 using BlogApi.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace Blog.Infrastructure.Respository
 {
@@ -55,5 +60,35 @@ namespace Blog.Infrastructure.Respository
 
             return Result<PagedResult<GetListNotificationDto>>.Success(dto);
         }
+
+        public async Task<Result<UnreadDto>> GetunreadAsync(Guid? UserId, Expression<Func<Post, bool>>? filter = null, CancellationToken cancellationToken = default)
+        {
+            IQueryable<Post> entity = context.Posts.AsNoTracking();
+
+            if(filter != null)
+            {
+                entity = entity.Where(filter);
+            }
+
+            var postCount = await entity
+              .Where(s => s.Status == Status.Pending)
+              .CountAsync(cancellationToken);
+                  
+            var notifcount = await context.Notifications
+                .AsNoTracking()
+                .Where(s => s.RecipientUserId == UserId && s.IsRead == false)
+                .CountAsync(cancellationToken);
+
+            var dto = new UnreadDto
+            {
+                PendingCount = postCount,
+                NotificationCount = notifcount
+            };
+
+           return Result<UnreadDto>.Success(dto);
+        }
+
+
+
     }
 }

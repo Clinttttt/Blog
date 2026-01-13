@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Queries.Posts.GetAdminRequest
+namespace Blog.Application.Queries.Posts.GetApproveRespond
 {
-    public record GetListAdminRequestQuery : IRequest<Result<PagedResult<GetListAdminRequestDto>>>
+    public class GetListApproveRespondQuery : IRequest<Result<PagedResult<ApproveRespondDto>>>
     {
+        public Guid UserId { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
+
+
 }

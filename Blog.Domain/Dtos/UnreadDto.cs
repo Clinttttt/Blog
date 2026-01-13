@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Blog.Application.Queries.Posts.GetApprovalTotal
 {
-    public class GetApprovalTotalDto
+    public class UnreadDto
     {
-        public int? ApprovalCount { get; set; }
+        public int? PendingCount { get; set; }
         public int? NotificationCount { get; set; }
 
     }

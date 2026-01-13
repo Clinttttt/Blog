@@ -62,6 +62,8 @@ namespace BlogApi.Domain.Enums
             LikeComment,
             Comment,
             BookMark,
+            PostApproval,
+            PostDecline
         }
     }
 }

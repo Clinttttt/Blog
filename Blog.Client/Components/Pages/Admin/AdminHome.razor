@@ -31,9 +31,9 @@
                 </NavLink>
             }
             <div class="indicator">
-                @if (TotalCount?.ApprovalCount > 0)
+                @if (TotalCount?.PendingCount > 0)
                 {
-                    <span class="indicator-item badge bg-indigo-500 text-white">@TotalCount.ApprovalCount</span>
+                    <span class="indicator-item badge bg-indigo-500 text-white">@TotalCount.PendingCount</span>
                 }
                 <NavLink href="approval" class=" cursor-pointer px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all">
                     Approval
@@ -173,7 +173,7 @@
     private PagedResult<PostDto>? ListDraftForAdmin { get; set; } = new PagedResult<PostDto>();
 
 
-    private GetApprovalTotalDto? TotalCount { get; set; } = new GetApprovalTotalDto();
+    private UnreadDto? TotalCount { get; set; } = new UnreadDto();
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private ListPaginatedRequest PaginationPublished { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private ListPaginatedRequest PaginationDraft { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
@@ -189,7 +189,7 @@
         var loadRecentTask = LoadPublishedPostsAsync();
         var loadAdminPublishedTask = LoadAdminPublishedPostsAsync();
         var loadAdminDraftTask = LoadAdminDraftPostsAsync();
-        var getApprovalTask = GetApprovalTotal();
+        var getApprovalTask = GetUnreadNotificationCount();
         var signalRTask = SignalR.InitializeAsync();
 
         await Task.WhenAll(
@@ -296,9 +296,9 @@
         StateHasChanged();
     }
 
-    public async Task GetApprovalTotal()
+    public async Task GetUnreadNotificationCount()
     {
-        var request = await PostModerationClient.GetApprovalTotal();
+        var request = await PostAnalyticsClient.GetAdminUnreadTotal();
         TotalCount = request.Value;
         StateHasChanged();
     }

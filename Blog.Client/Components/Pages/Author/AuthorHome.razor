@@ -11,15 +11,15 @@
         <div class="mb-8">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome back, Author! </h1>
+                    <h1 class="text-3xl font-bold text-gray-700 mb-2">Welcome back, Author! </h1>
                     <p class="text-gray-600">Manage your posts and content</p>
                 </div>
                 <NavLink href="create-post"
-                         class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-lg hover:shadow-xl">
+                         class="bg-indigo-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-lg hover:shadow-xl">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Create New Post
+                    Submit Post
                 </NavLink>
             </div>
 
@@ -28,21 +28,39 @@
 
         <div class="flex flex-col md:flex-row md:space-y-0 md:space-x-1 justify-between bg-white rounded-2xl shadow-sm p-4 mb-6 ">
             <div class="flex gap-1">
-                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.all_post)" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors ">
+                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.all_post)" class="px-2 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-400 hover:text-white cursor-pointer transition-colors ">
                     All Posts
                 </button>
-                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.published)" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors ">
+                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.published)" class="px-2 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-400 hover:text-white cursor-pointer transition-colors ">
                     Published
                 </button>
-                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.pending)" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors ">
-                    Pending Approval
-                </button>
-                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.drafts)" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-500 hover:text-white cursor-pointer transition-colors ">
+
+                <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.drafts)" class="px-2 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-400 hover:text-white cursor-pointer transition-colors ">
                     Drafts
                 </button>
+                <div class="indicator">
+                    @if (TotalCount?.PendingCount > 0)
+                    {
+                        <span class=" indicator-item badge bg-indigo-500 text-white">@TotalCount.PendingCount</span>
+                    }
+                    <button @onclick="() => PostViewState.AuthorView(PostViewState.AuthorPostState.pending)" class="px-2 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-400 hover:text-white cursor-pointer transition-colors ">
+                        Pending Approval
+                    </button>
+                </div>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 relative">
+                <div class="indicator ">
+                    @if (TotalCount?.NotificationCount > 0)
+                    {
+                        <span class=" absolute left-4 top-0 indicator-item badge bg-indigo-500 text-white">@TotalCount.NotificationCount</span>
+                    }
+                    <NavLink href="notification" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-500  cursor-pointer  ">
+                        <svg class="w-7 h-7 text-indigo-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.6" d="M12 5.365V3m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175 0 .593 0 1.292-.538 1.292H5.538C5 18 5 17.301 5 16.708c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 12 5.365ZM8.733 18c.094.852.306 1.54.944 2.112a3.48 3.48 0 0 0 4.646 0c.638-.572 1.236-1.26 1.33-2.112h-6.92Z" />
+                        </svg>
+                    </NavLink>
 
+                </div>
                 <label class="input input-bordered flex items-center gap-2 w-[100%]">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -113,20 +131,23 @@
 
 
 @code {
+    private bool isSubscribedNotificationCount = false;
 
     private List<FeaturedPostDto>? featuredPosts { get; set; } = new List<FeaturedPostDto>();
     private PagedResult<PostDto>? recentPost { get; set; } = new PagedResult<PostDto>();
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
-
+    private UnreadDto? TotalCount { get; set; } = new UnreadDto();
 
     protected override async Task OnInitializedAsync()
     {
         var listfeature = ListFeatured();
         var listpublished = ListPublished();
+        await GetUnreadNotificationCount();
         await SignalR.InitializeAsync();
 
         await Task.WhenAll(listfeature, listpublished);
         OnViewCountUpdate();
+        await NoticationCount();
 
     }
 
@@ -143,6 +164,26 @@
 });
     }
 
+    public async Task NoticationCount()
+    {
+        if (isSubscribedNotificationCount) return;
+
+        var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
+
+        SignalR.OnNotificationCount((Count, UserId) =>
+        {
+            if (UserId.ToString() == CurrentUserId)
+            {
+                if (TotalCount is not null)
+                {
+                    TotalCount.NotificationCount = Count;
+                    InvokeAsync(StateHasChanged);
+                }
+            }
+        });
+
+        isSubscribedNotificationCount = true;
+    }
     public async Task RefreshAsync()
     {
         var recent = await PostClient.ListPublished(Pagination);
@@ -154,6 +195,13 @@
     {
         var feaatured = await FeaturedClient.ListFeatured();
         featuredPosts = feaatured.Value;
+    }
+
+    public async Task GetUnreadNotificationCount()
+    {
+        var request = await PostAnalyticsClient.GetAuthorUnreadTotal();
+        TotalCount = request.Value;
+        StateHasChanged();
     }
 
     private async Task ListPublished()

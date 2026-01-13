@@ -54,7 +54,9 @@ namespace Blog.Application.Abstractions
             return request.NotifTypes switch
             {
                 NotifType.All =>
-                 s => s.RecipientUserId == request.UserId,
+                 s => s.RecipientUserId == request.UserId
+                 && s.Type != EntityEnum.Type.PostApproval
+                 && s.Type != EntityEnum.Type.PostDecline,
 
                 NotifType.Comments =>
                   s => s.RecipientUserId == request.UserId && s.Type == EntityEnum.Type.Comment,
@@ -63,19 +65,16 @@ namespace Blog.Application.Abstractions
                  s => s.RecipientUserId == request.UserId && s.IsRead == false,
 
                 NotifType.Posts =>
-                 s => s.RecipientUserId == request.UserId &&  s.Type == EntityEnum.Type.LikePost,
+                 s => s.RecipientUserId == request.UserId && s.Type == EntityEnum.Type.LikePost,
 
                 _ => s => s.RecipientUserId == request.UserId
             };
-
-
-
         }
-        }
-        }
+    }
+}
 
 
 
 
-    
+
 

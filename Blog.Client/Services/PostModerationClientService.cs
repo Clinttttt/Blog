@@ -16,12 +16,9 @@ namespace BlogApi.Client.Services
 
         public async Task<Result<bool>> RejectPost(int PostId)
             => await DeleteAsync<bool>($"api/PostModeration/RejectPost?PostId={PostId}");
-
-        public async Task<Result<GetApprovalTotalDto>> GetApprovalTotal()
-            => await GetAsync<GetApprovalTotalDto>("api/PostModeration/GetApprovalTotal");
-
-        public async Task<Result<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest(ListPaginatedRequest request)
-            => await GetAsync<PagedResult<GetListAdminRequestDto>>(
+     
+        public async Task<Result<PagedResult<PendingRequestDto>>> GetListAdminRequest(ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PendingRequestDto>>(
                 $"api/PostModeration/GetListAdminRequest?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
     }
 }

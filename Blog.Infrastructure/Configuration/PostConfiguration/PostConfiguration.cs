@@ -32,6 +32,8 @@ namespace BlogApi.Infrastructure.Configuration.PostConfiguration
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+
             builder.HasMany(s => s.PostViews)
                 .WithOne(s => s.Post)
                 .HasForeignKey(s => s.PostId)

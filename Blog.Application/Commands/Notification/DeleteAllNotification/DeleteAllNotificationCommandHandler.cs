@@ -1,4 +1,5 @@
 ﻿using BlogApi.Domain.Common;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace Blog.Application.Commands.Notification.DeleteAllNotification
         public async Task<Result<bool>> Handle(DeleteAllNotificationCommand request, CancellationToken cancellationToken)
         {
             var list = await context.Notifications
-                .Where(s => s.RecipientUserId == request.UserId).ToListAsync();
+                .Where(s => s.RecipientUserId == request.UserId && s.Type != EntityEnum.Type.PostApproval && s.Type != EntityEnum.Type.PostDecline).ToListAsync();
 
             foreach (var notif in list)
             {

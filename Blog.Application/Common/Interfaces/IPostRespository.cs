@@ -24,12 +24,18 @@ namespace BlogApi.Application.Common.Interfaces
            CancellationToken
            cancellationToken = default);
 
-        Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? UserIds, int PageNumber = 1,
+        Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(
+            Guid? UserIds, 
+            int PageNumber = 1,
             int PageSize = 10,
             Expression<Func<Post, bool>>? filter = null,
-            CancellationToken cancellationToken = default);
-        Task<Result<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest(int pageNumber = 1,
-            int pageSize = 10,
-            CancellationToken cancellationToken = default);
+            CancellationToken cancellationToken = default
+            );
+
+        Task<Result<PagedResult<PendingRequestDto>>> GetPaginatedPendingAsync(
+            Expression<Func<Post, bool>>? filter = null,
+            int pageNumber = 1,
+            int pageSize = 10, CancellationToken cancellationToken = default
+            );
     }
 }

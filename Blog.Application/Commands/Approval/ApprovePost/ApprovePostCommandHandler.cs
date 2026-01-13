@@ -24,6 +24,17 @@ namespace Blog.Application.Commands.Approval.ApprovePost
                 return Result<bool>.NotFound();
          
             post.Status = Status.Published;
+
+            await context.Notifications.AddAsync(new Blog.Domain.Entities.Notification
+            {
+                PostId = request.PostId,
+                ActorUserId = post.UserId,
+                RecipientUserId = post.UserId,
+                Type = BlogApi.Domain.Enums.EntityEnum.Type.PostApproval,
+                CreatedAt = DateTime.UtcNow.AddHours(8),
+                IsRead = false,
+            });
+
             await context.SaveChangesAsync(cancellationToken);
             await Task.WhenAll(
                   cacheInvalidation.InvalidatePostListCachesAsync(),

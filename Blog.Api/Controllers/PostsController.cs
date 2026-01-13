@@ -1,4 +1,6 @@
-﻿using BlogApi.Api.Shared;
+﻿using Blog.Application.Queries.Posts.GetAdminRequest;
+using Blog.Application.Queries.Posts.GetListAuthorRequest;
+using BlogApi.Api.Shared;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Queries.Posts;
@@ -135,6 +137,20 @@ namespace BlogApi.Api.Controllers
                 PageSize = request.PageSize,
                 FilterType = PostFilterType.ByCategory,
                 CategoryId = id
+            };
+            var result = await Sender.Send(query, cancellationToken);
+            return HandleResponse(result);
+        }
+
+        [HttpGet("Author")]
+        [HttpGet("GetListAuthorRequest")]
+        public async Task<ActionResult<PagedResult<PendingRequestDto>>> GetListAuthorRequest([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        {
+            var query = new GetListPendingRequestQuery
+            {
+                filter = s => s.UserId == UserId,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
             };
             var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);

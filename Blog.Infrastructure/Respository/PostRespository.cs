@@ -152,17 +152,23 @@ namespace BlogApi.Infrastructure.Respository
                           .AsSplitQuery()
                 .FirstOrDefaultAsync(s => s.Id == postId, cancellationToken);
         }
-        public async Task<Result<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PendingRequestDto>>> GetPaginatedPendingAsync(Expression<Func<Post, bool>>? filter = null, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
         {
-            var post = await context.Posts
-                .AsNoTracking()
+            IQueryable<Post> Entity = context.Posts.AsNoTracking();
+
+            if (filter != null)
+            {
+                Entity = Entity.Where(filter);
+            }
+
+            var post = await Entity
                 .Include(s => s.User)
                 .ThenInclude(s => s.UserInfo)
                 .OrderByDescending(s => s.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Where(s => s.Status == Status.Pending)
-                 .Select(s => new GetListAdminRequestDto
+                 .Select(s => new PendingRequestDto
                  {
                      PostId = s.Id,
                      Title = s.Title,
@@ -176,9 +182,9 @@ namespace BlogApi.Infrastructure.Respository
                  })
                 .ToListAsync(cancellationToken);
 
-            var totalcount = post.Count();
+            var totalcount = Entity.Count();
 
-            return Result<PagedResult<GetListAdminRequestDto>>.Success(new PagedResult<GetListAdminRequestDto>
+            return Result<PagedResult<PendingRequestDto>>.Success(new PagedResult<PendingRequestDto>
             {
                 Items = post,
                 PageNumber = pageNumber,

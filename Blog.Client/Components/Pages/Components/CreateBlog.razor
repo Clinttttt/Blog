@@ -368,7 +368,16 @@
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
-                                        <span>Publish Post</span>
+                                        <AuthorizeView Roles="Admin">
+                                            <Authorized Context="authState">
+                                                  <span>Publish Post</span>
+                                            </Authorized>
+                                        </AuthorizeView>
+                                        <AuthorizeView Roles="Author">
+                                            <Authorized Context="authState">
+                                                <span>Submit Post</span>
+                                            </Authorized>
+                                        </AuthorizeView>                                   
                                     }
                                 </button>
 
@@ -465,7 +474,7 @@
 
     private async Task LoadDataAsync()
     {
-        // Set both loading states to true at the start
+       
         isLoading = true;
         isEditorLoading = true;
         hasError = false;
@@ -473,29 +482,29 @@
 
         try
         {
-            // Set the publish date
+         
             PublishedDate = DateTime.UtcNow.AddHours(8);
             await Task.Delay(200);
 
-            // Load categories and tags from API
+          
             ListCategory = await CategoryClient.GetListing();
             ListTag = await TagClient.GetListing();
             FilteredTag = ListTag;
 
-            // Hide main loading (shows form fields with skeletons in some sections)
+           
             isLoading = false;
             StateHasChanged();
 
-            // Wait 1 second to simulate editor initialization
+          
             await Task.Delay(1000);
 
-            // Hide editor loading (shows actual TinyMCE editor)
+          
             isEditorLoading = false;
             StateHasChanged();
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
-            // Handle authentication errors
+         
             isLoading = false;
             isEditorLoading = false;
             hasError = true;
@@ -507,7 +516,7 @@
         }
         catch (Exception ex)
         {
-            // Handle general errors
+         
             Console.WriteLine($"Error loading data: {ex.Message}");
             isLoading = false;
             isEditorLoading = false;

@@ -32,8 +32,6 @@ namespace Blog.Application.Abstractions
                 await context.Notifications.AddAsync(request, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
 
-
-
             }
 
             var user = await context.Users

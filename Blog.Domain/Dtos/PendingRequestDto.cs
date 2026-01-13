@@ -7,7 +7,7 @@ using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace Blog.Application.Queries.Posts.GetAdminRequest
 {
-    public class GetListAdminRequestDto
+    public class PendingRequestDto
     {
         public int PostId { get; set; }
         public string? Title { get; set; }

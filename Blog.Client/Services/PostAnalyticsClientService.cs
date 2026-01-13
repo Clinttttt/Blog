@@ -1,4 +1,5 @@
-﻿using Blog.Application.Queries.Posts.RecentActivity;
+﻿using Blog.Application.Queries.Posts.GetApprovalTotal;
+using Blog.Application.Queries.Posts.RecentActivity;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Client.Helper;
@@ -14,6 +15,10 @@ namespace BlogApi.Client.Services
 
         public async Task<Result<StatisticsDto>> GetStatistics()
             => await GetAsync<StatisticsDto>("api/PostAnalytics/GetStatistics");
+        public async Task<Result<UnreadDto>> GetAuthorUnreadTotal()
+         => await GetAsync<UnreadDto>("api/PostAnalytics/GetAuthorUnreadTotal");
+        public async Task<Result<UnreadDto>> GetAdminUnreadTotal()
+         => await GetAsync<UnreadDto>("api/PostAnalytics/GetAdminUnreadTotal");
 
         public async Task<Result<List<RecentActivityItemDto>>> GetRecentActivity(int limit = 5, int daysBack = 7)
             => await GetAsync<List<RecentActivityItemDto>>($"api/PostAnalytics/GetRecentActivity?limit={limit}&daysBack={daysBack}");

@@ -11,7 +11,6 @@ namespace BlogApi.Client.Interface
     {
         Task<Result<bool>> ApprovePost(int PostId);
         Task<Result<bool>> RejectPost(int PostId);
-        Task<Result<GetApprovalTotalDto>> GetApprovalTotal();
-        Task<Result<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest(ListPaginatedRequest request);
+        Task<Result<PagedResult<PendingRequestDto>>> GetListAdminRequest(ListPaginatedRequest request);
     }
 }

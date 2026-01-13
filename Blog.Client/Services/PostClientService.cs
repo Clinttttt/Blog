@@ -1,4 +1,5 @@
-﻿using BlogApi.Application.Dtos;
+﻿using Blog.Application.Queries.Posts.GetAdminRequest;
+using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
 using BlogApi.Client.Helper;
@@ -44,5 +45,10 @@ namespace BlogApi.Client.Services
         public async Task<Result<PagedResult<PostDto>>> ListByCategory(int categoryId, ListPaginatedRequest request)
             => await GetAsync<PagedResult<PostDto>>(
                 $"api/Posts/ListByCategory/{categoryId}?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+
+
+        public async Task<Result<PagedResult<PendingRequestDto>>> GetListAuthorRequest(ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PendingRequestDto>>(
+                $"api/Posts/GetListAuthorRequest?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
     }
 }

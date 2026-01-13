@@ -3,6 +3,7 @@ using Blog.Application.Commands.Approval.RejectPost;
 
 using Blog.Application.Queries.Posts.GetAdminRequest;
 using Blog.Application.Queries.Posts.GetApprovalTotal;
+using Blog.Application.Queries.Posts.GetListAuthorRequest;
 using BlogApi.Api.Shared;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
@@ -35,18 +36,10 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-        [HttpGet("GetApprovalTotal")]
-        public async Task<ActionResult<GetApprovalTotalDto>> GetApprovalTotal()
-        {
-            var request = new GetApprovalTotalQuery(UserIdOrNull);
-            var result = await Sender.Send(request);
-            return HandleResponse(result);
-        }
-
         [HttpGet("GetListAdminRequest")]
-        public async Task<ActionResult<PagedResult<GetListAdminRequestDto>>> GetListAdminRequest([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<PagedResult<PendingRequestDto>>> GetListAdminRequest([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
-            var query = new GetListAdminRequestQuery
+            var query = new GetListPendingRequestQuery
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize

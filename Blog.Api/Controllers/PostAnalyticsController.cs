@@ -1,4 +1,5 @@
-﻿using Blog.Application.Queries.Posts.RecentActivity;
+﻿using Blog.Application.Queries.Posts.GetApprovalTotal;
+using Blog.Application.Queries.Posts.RecentActivity;
 using BlogApi.Api.Shared;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
@@ -31,6 +32,31 @@ namespace BlogApi.Api.Controllers
         {
             var command = new GetStatisticsQuery(UserId);
             var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpGet("GetAdminUnreadTotal")]
+        public async Task<ActionResult<UnreadDto>> GetAdminUnreadTotal()
+        {
+            var request = new GetUnreadTotalQuery
+            {
+                UserId = UserId,                      
+            };
+            var result = await Sender.Send(request);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpGet("GetAuthorUnreadTotal")]
+        public async Task<ActionResult<UnreadDto>> GetAuthorUnreadTotal()
+        {
+            var request = new GetUnreadTotalQuery
+            {
+                UserId = UserId,
+                filter = s => s.UserId == UserId
+            };
+            var result = await Sender.Send(request);
             return HandleResponse(result);
         }
 

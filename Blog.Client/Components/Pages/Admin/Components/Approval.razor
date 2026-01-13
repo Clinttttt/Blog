@@ -138,7 +138,7 @@
 
 @code {
 
-    private PagedResult<GetListAdminRequestDto>? Pendings { get; set; } = new PagedResult<GetListAdminRequestDto>();
+    private PagedResult<PendingRequestDto>? Pendings { get; set; } = new PagedResult<PendingRequestDto>();
     private ListPaginatedRequest PaginationPending { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
 
     protected override async Task OnInitializedAsync()
@@ -150,7 +150,7 @@
     {
         var response = await PostModerationClient.GetListAdminRequest(PaginationPending);
 
-        Pendings = new BlogApi.Application.Models.PagedResult<GetListAdminRequestDto>
+        Pendings = new BlogApi.Application.Models.PagedResult<PendingRequestDto>
         {
             Items = response.Value!.Items,
             PageNumber = response.Value!.PageNumber,

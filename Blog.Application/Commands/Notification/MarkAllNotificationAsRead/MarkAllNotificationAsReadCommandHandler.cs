@@ -1,4 +1,5 @@
 ﻿using BlogApi.Domain.Common;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using Mapster;
 using MediatR;
@@ -16,7 +17,7 @@ namespace Blog.Application.Commands.Notification.MarkAllNotificationAsRead
         public async Task<Result<bool>> Handle(MarkAllNotificationAsReadCommand request, CancellationToken cancellationToken)
         {
             var list = await context.Notifications
-                 .Where(s => s.RecipientUserId == request.UserId && s.IsRead == false).ToListAsync();
+                 .Where(s => s.RecipientUserId == request.UserId && s.IsRead == false && s.Type != EntityEnum.Type.PostApproval && s.Type != EntityEnum.Type.PostDecline).ToListAsync();
 
             foreach (var notif in list)
             {
