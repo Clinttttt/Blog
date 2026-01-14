@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static BlogApi.Domain.Enums.EntityEnum;
@@ -21,19 +22,22 @@ namespace Blog.Application.Queries.Posts.GetApproveRespond
         {
             var approvalTypes = new[] { EntityEnum.Type.PostApproval, EntityEnum.Type.PostDecline };
 
-            var post = await context.Notifications
+            var notif = await context.Notifications
+                .Include(s => s.User)
+                .ThenInclude(s => s!.Posts)
                  .AsNoTracking()
                  .OrderByDescending(s => s.CreatedAt)
                  .Where(s => s.RecipientUserId == request.UserId && approvalTypes.Contains(s.Type))
                  .ToListAsync(cancellationToken);
 
-            var dto = post.Select(s => new ApproveRespondDto
+
+
+            var dto = notif.Select(s => new ApproveRespondDto
             {
                 PostId = s.Id,
                 CreatedAt = s.CreatedAt,
-                Title = s.Type == EntityEnum.Type.PostApproval
-                ? "Your post has been approved and is now published"
-                : "Your post has been declined"
+                Title = s.User?.Posts != null ? s.User?.Posts.Select(p => p.Title).First() : "N/A",
+                Type = s.Type
 
             }).ToList();
 

@@ -12,7 +12,7 @@
                 { "promotion", false },
                 { "statusbar", false },
                 { "highlight_on_focus", false },
-                { "placeholder", "Start writing your content here..." },
+              { "placeholder", "Start writing your content here..." },
                 { "plugins", "lists link image code codesample table paste autoresize visualblocks fullscreen" },
                 { "toolbar", "undo redo | styles | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table | codesample fullscreen | removeformat code" },
 
@@ -35,15 +35,37 @@
                 }},
 
                 { "codesample_global_prismjs", true },
+                
+                // IMAGE UPLOAD CONFIGURATION - Convert images to base64
+                { "automatic_uploads", false },
+                { "images_upload_url", "" },
+                { "file_picker_types", "image" },
+                { "images_reuse_filename", true },
+                
+                // PASTE SETTINGS - Clean up pasted content and allow images
+                { "paste_data_images", true },  // MOVED HERE - only defined once!
                 { "paste_as_text", false },
                 { "paste_merge_formats", true },
-                { "paste_retain_style_properties", "all" },
-                { "paste_remove_styles_if_webkit", false },
-                { "paste_word_valid_elements", "b,strong,i,em,u,s,h1,h2,h3,h4,h5,h6,p,ul,ol,li,a[href],span[style],table,tr,td,th,thead,tbody,div[style],br,code,pre" },
-                { "paste_webkit_styles", "all" },
-                { "paste_preprocess", true },
-                { "paste_enable_default_filters", false },
-                { "paste_data_images", true },
+                { "paste_retain_style_properties", "none" },
+                { "paste_remove_styles_if_webkit", true },
+                { "paste_word_valid_elements", "b,strong,i,em,u,h1,h2,h3,h4,h5,h6,p,ul,ol,li,a[href],table,tr,td,th,thead,tbody,br,code,pre" },
+                { "paste_webkit_styles", "none" },
+                { "paste_enable_default_filters", true },
+                { "paste_strip_class_attributes", "all" },
+                { "paste_remove_spans", true },
+                { "paste_remove_styles", true },
+                
+                // Additional cleanup settings
+                { "verify_html", true },
+                { "cleanup", true },
+                { "forced_root_block", "p" },
+                { "remove_trailing_brs", true },
+                { "element_format", "html" },
+                
+                // Prevent excessive spacing
+                { "force_br_newlines", false },
+                { "force_p_newlines", true },
+                { "convert_newlines_to_brs", false },
 
                 { "content_style", ContentStyle }
             };
@@ -61,6 +83,30 @@
                 background: #ffffff;
             }
 
+
+
+            .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+                content: 'Start writing your content here...' !important;
+                display: block !important;
+                color: #9ca3af !important;
+                font-size: 16px !important;
+                font-style: normal !important;
+                pointer-events: none !important;
+            }
+
+            .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::after {
+                content: '(you can drag and drop images)' !important;
+                display: block !important;
+                color: #9ca3af !important;
+                font-size: 12px !important;
+                font-style: italic !important;
+                margin-top: 0.25em !important;
+                pointer-events: none !important;
+            }
+            
+
+
+
             h1, h2, h3, h4, h5, h6 {
                 font-weight: 700;
                 line-height: 1.3;
@@ -74,7 +120,10 @@
             h3 { font-size: 1.5em; }
             h4 { font-size: 1.25em; }
 
-            p { margin-bottom: 1.25em; }
+            p { 
+                margin-bottom: 1.25em;
+                margin-top: 0;
+            }
 
             strong, b {
                 font-weight: 600;
@@ -120,6 +169,7 @@
             ul, ol {
                 padding-left: 1.5em;
                 margin-bottom: 1.25em;
+                margin-top: 0;
             }
 
             li { margin-bottom: 0.5em; }
@@ -162,6 +212,10 @@
                 border-radius: 8px;
                 margin: 1.5em 0;
             }
+            
+            /* Remove excessive spacing between elements */
+            p + p { margin-top: 0; }
+            * { max-height: none !important; }
         ";
     }
 }

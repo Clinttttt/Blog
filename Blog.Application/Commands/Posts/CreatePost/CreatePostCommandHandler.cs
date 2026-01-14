@@ -26,7 +26,7 @@ namespace BlogApi.Application.Commands.Posts.CreatePost
                 return Result<int>.NotFound();
 
             if (user.Role != "Author" && user.Role != "Admin")
-                return Result<int>.Failure();
+                return Result<int>.Failure("Login first");
 
             var postStatus = user.Role == "Author"
                 ? Status.Pending

@@ -1,5 +1,8 @@
 using AutoMapper;
+using Blog.Api.Middleware;
+using Blog.Application;
 using Blog.Application.Abstractions;
+using Blog.Application.Behaviors;
 using Blog.Application.Common.Interfaces;
 using Blog.Infrastructure.Hubs;
 using Blog.Infrastructure.Hubs.HubService;
@@ -7,6 +10,8 @@ using Blog.Infrastructure.Services;
 using BlogApi.Application;
 using BlogApi.Infrastructure;
 using CQRSMEDIATR.Api;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -14,22 +19,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddMediatR(configuration =>
-{
-    configuration.RegisterServicesFromAssembly(typeof(ApplicationAssemblyMarker).Assembly);
-});
-builder.Services.AddSignalR();
-builder.Services.AddScoped<IPostHubService, PostHubService>();
-
-builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
-builder.Services.AddScoped<ICacheInvalidationService, CacheInvalidationService>();
 
 builder.ConfigureServices();
-builder.Services.AddAutoMapper(cfg =>
-{
-    cfg.AddProfile<AutomapperProfile>();
-});
+builder.Services.AddApplicationService(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
+
 
 builder.Services.AddCors(options =>
 {
@@ -46,7 +40,6 @@ builder.Services.AddCors(options =>
 builder.Configuration
        .AddJsonFile("appsettings.json", optional: false)
        .AddJsonFile("appsettings.Local.json", optional: true);
-
 
 
 builder.Services.AddControllers();
@@ -106,6 +99,7 @@ app.MapHub<PostHub>("/posthub");
 app.UseHttpsRedirection();
 app.UseCors("AllowBlazor");
 app.UseAuthentication();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

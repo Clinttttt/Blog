@@ -1,7 +1,9 @@
 ﻿
 using Blog.Application.Abstractions;
 using Blog.Application.Common.Interfaces;
+using Blog.Infrastructure.Hubs.HubService;
 using Blog.Infrastructure.Respository;
+using Blog.Infrastructure.Services;
 using BlogApi.Application.Common.Interfaces;
 using BlogApi.Domain.Interfaces;
 using BlogApi.Infrastructure.Persistence;
@@ -44,6 +46,10 @@ namespace BlogApi.Infrastructure
             services.AddScoped<IFilterBuilder, FilterBuilder>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<INotificationRespository, NotificationRespository>();
+
+
+            services.AddSingleton<IPostHubService, PostHubService>();
+            services.AddSingleton<ICacheService, MemoryCacheService>();
             return services;
         }
     }

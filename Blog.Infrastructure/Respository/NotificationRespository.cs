@@ -6,8 +6,10 @@ using Blog.Domain.Entities;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,14 +71,15 @@ namespace Blog.Infrastructure.Respository
             {
                 entity = entity.Where(filter);
             }
-
+         
             var postCount = await entity
               .Where(s => s.Status == Status.Pending)
               .CountAsync(cancellationToken);
-                  
+
+            var approval = new[] { EntityEnum.Type.PostApproval, EntityEnum.Type.PostDecline };
             var notifcount = await context.Notifications
                 .AsNoTracking()
-                .Where(s => s.RecipientUserId == UserId && s.IsRead == false)
+                .Where(s => s.RecipientUserId == UserId && s.IsRead == false && !approval.Contains(s.Type))
                 .CountAsync(cancellationToken);
 
             var dto = new UnreadDto

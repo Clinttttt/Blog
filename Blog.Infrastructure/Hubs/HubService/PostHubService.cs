@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Blog.Infrastructure.Hubs.HubService
 {
     public class PostHubService : IPostHubService
     {
+      
         private readonly IHubContext<PostHub> _hubContext;
 
         public PostHubService(IHubContext<PostHub> hubContext)
@@ -28,8 +30,9 @@ namespace Blog.Infrastructure.Hubs.HubService
             await _hubContext.Clients.All.SendAsync("ReceiveSentMessage", PostId, Content);
         }
 
+
         public async Task BroadcastNotification(NotificationDto request, Guid? recipientUserId)
-        {
+        {          
             await _hubContext.Clients.All.SendAsync("ReceiveNotification", request);
             
         }

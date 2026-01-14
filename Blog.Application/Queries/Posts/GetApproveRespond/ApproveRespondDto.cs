@@ -12,5 +12,6 @@ namespace Blog.Application.Queries.Posts.GetApproveRespond
         public int PostId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? Title { get; set; }
+        public BlogApi.Domain.Enums.EntityEnum.Type Type { get; set; }
     }
 }

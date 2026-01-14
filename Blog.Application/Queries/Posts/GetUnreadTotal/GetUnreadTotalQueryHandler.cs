@@ -12,7 +12,7 @@ using static BlogApi.Domain.Enums.EntityEnum;
 
 namespace Blog.Application.Queries.Posts.GetApprovalTotal
 {
-    public class GetApprovalTotalQueryHandler(INotificationRespository respository) : IRequestHandler<GetUnreadTotalQuery, Result<UnreadDto>>
+    public class GetUnreadTotalQueryHandler(INotificationRespository respository) : IRequestHandler<GetUnreadTotalQuery, Result<UnreadDto>>
     {
         public async Task<Result<UnreadDto>> Handle(GetUnreadTotalQuery request,CancellationToken cancellationToken)
         {

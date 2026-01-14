@@ -23,10 +23,7 @@ namespace BlogApi.Infrastructure.Services
             {
                 return Result<AuthResult>.Conflict();
             }
-            if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
-            {
-                return Result<AuthResult>.Failure();
-            }
+           
             var user = new User();
             var passwordHashed = new PasswordHasher<User>()
                 .HashPassword(user, request.Password);

@@ -3,6 +3,7 @@ using Blog.Domain.Dtos;
 using Blog.Domain.Entities;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
+using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -51,12 +52,13 @@ namespace Blog.Application.Abstractions
                       request.RecipientUserId);
 
 
+            var approval = new[] { EntityEnum.Type.PostApproval, EntityEnum.Type.PostDecline };
+        
             var num = await context.Notifications
-            .CountAsync(n => n.RecipientUserId == request.RecipientUserId, cancellationToken);
-           
+            .CountAsync(n => n.RecipientUserId == request.RecipientUserId && n.IsRead == false && !approval.Contains(n.Type), cancellationToken);
+
+
             await hubService.BroadcastNotificationCount(num, request.RecipientUserId);
-
-
 
             return Result<bool>.Success(true);
         }

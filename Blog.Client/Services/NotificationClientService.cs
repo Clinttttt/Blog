@@ -1,4 +1,5 @@
 ﻿using Blog.Application.Queries.Notification.GetListNotification;
+using Blog.Application.Queries.Posts.GetApproveRespond;
 using Blog.Client.Interface;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
@@ -25,7 +26,8 @@ namespace Blog.Client.Services
         public async Task<Result<PagedResult<GetListNotificationDto>>> GetUnreadNotification(ListPaginatedRequest request)
             => await GetAsync<PagedResult<GetListNotificationDto>>($"api/Notification/GetUnreadNotification?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-
+        public async Task<Result<PagedResult<ApproveRespondDto>>> GetListApproveRespond(ListPaginatedRequest request)
+            => await GetAsync<PagedResult<ApproveRespondDto>>($"api/Notification/GetListApproveRespond?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
         public async Task<Result<bool>> MarkNotificationAsRead(int notifId)
             => await UpdateAsync<bool>($"api/Notification/MarkNotificationAsRead?notifId={notifId}");
 

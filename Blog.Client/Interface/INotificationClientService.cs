@@ -1,4 +1,5 @@
 ﻿using Blog.Application.Queries.Notification.GetListNotification;
+using Blog.Application.Queries.Posts.GetApproveRespond;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
 using BlogApi.Domain.Common;
@@ -13,6 +14,7 @@ namespace Blog.Client.Interface
         Task<Result<PagedResult<GetListNotificationDto>>> GetCommentNotification(ListPaginatedRequest request);
         Task<Result<PagedResult<GetListNotificationDto>>> GetPostNotification(ListPaginatedRequest request);
         Task<Result<PagedResult<GetListNotificationDto>>> GetUnreadNotification(ListPaginatedRequest request);
+        Task<Result<PagedResult<ApproveRespondDto>>> GetListApproveRespond(ListPaginatedRequest request);
         Task<Result<bool>> MarkNotificationAsRead(int notifId);
         Task<Result<bool>> MarkAllNotificationAsRead();
         Task<Result<bool>> DeleteAllNotification();

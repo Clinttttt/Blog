@@ -15,14 +15,17 @@ namespace BlogApi.Domain.Common
         public bool IsSuccess { get; }
         public T? Value { get; }
         public int StatusCode { get; set; }
-        private Result(bool isSuccess, T? value,  int statusCode = 200) 
+        public string? Error { get; set; }
+        private Result(bool isSuccess, T? value,  int statusCode = 200, string? error = null) 
         {
             IsSuccess = isSuccess;
             Value = value;
             StatusCode = statusCode;
+            Error = isSuccess ? null : error;
+           
         }
         public static Result<T> Success(T value) => new(true, value);
-        public static Result<T> Failure( int StatusCode = 400) => new(false, default, StatusCode);
+        public static Result<T> Failure(string error, int StatusCode = 400) => new(false, default, StatusCode, error);
 
         public static Result<T> NotFound() => new(false, default, 404);
         public static Result<T> Unauthorized() => new(false, default, 401);
