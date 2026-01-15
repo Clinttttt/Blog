@@ -1,12 +1,16 @@
 ﻿
 using Blog.Application.Abstractions;
-using Blog.Application.Common.Interfaces;
-using Blog.Infrastructure.Hubs.HubService;
+using Blog.Application.Common.Interfaces.Repositories;
+using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.SignalR;
+using Blog.Application.Common.Interfaces.Utilities;
+using Blog.Infrastructure.Persistence;
 using Blog.Infrastructure.Respository;
 using Blog.Infrastructure.Services;
-using BlogApi.Application.Common.Interfaces;
+using Blog.Infrastructure.SignalR.Comments;
+using Blog.Infrastructure.SignalR.Notifications;
+using Blog.Infrastructure.SignalR.Posts;
 using BlogApi.Domain.Interfaces;
-using BlogApi.Infrastructure.Persistence;
 using BlogApi.Infrastructure.Respository;
 using BlogApi.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -30,26 +34,35 @@ namespace BlogApi.Infrastructure
                      configuration.GetConnectionString("DefaultConnection"),
                      sqlServerOptions =>
                      {
-                     sqlServerOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                         sqlServerOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                      }));
+
 
             services.AddScoped<IAppDbContext, AppDbContext>();
             services.AddHttpClient<IGoogleTokenValidator, GoogleTokenValidator>();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IFilterBuilder, FilterBuilder>();
+
+
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IEmailService, SendGridEmailService>();
-            services.AddScoped<IPostRespository, PostRespository>();
-            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddSingleton<ICacheService, MemoryCacheService>();
+
+
             services.AddScoped<IUserRespository, UserRespository>();
+            services.AddScoped<IPostRespository, PostRespository>();
+            services.AddScoped<INotificationRespository, NotificationRespository>();
+            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
             services.AddScoped<ITagRespository, TagRespository>();
             services.AddScoped<ICategoryRespository, CategoryRespository>();
-            services.AddScoped<IFilterBuilder, FilterBuilder>();
-            services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<INotificationRespository, NotificationRespository>();
 
 
-            services.AddSingleton<IPostHubService, PostHubService>();
-            services.AddSingleton<ICacheService, MemoryCacheService>();
+            services.AddScoped<IPostHubService, PostHubService>();
+            services.AddScoped<INotificatonHubService, NotificatonHubService>();
+            services.AddScoped<ICommentHubService, CommentHubService>();
+
+
             return services;
         }
     }

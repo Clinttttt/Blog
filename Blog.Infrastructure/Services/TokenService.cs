@@ -1,8 +1,8 @@
-﻿using BlogApi.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Services;
+using Blog.Infrastructure.Persistence;
 using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
-using BlogApi.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;

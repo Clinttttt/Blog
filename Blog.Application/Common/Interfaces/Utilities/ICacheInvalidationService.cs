@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Common.Interfaces
+namespace Blog.Application.Common.Interfaces.Utilities
 {
     public interface ICacheInvalidationService
     {

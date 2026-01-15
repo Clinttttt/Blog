@@ -1,6 +1,6 @@
 ﻿using Blog.Application.Abstractions;
 using Blog.Application.Behaviors;
-using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Utilities;
 using BlogApi.Application;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;

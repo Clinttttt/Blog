@@ -1,5 +1,7 @@
 using Blog.Client.Components;
-using Blog.Infrastructure.Hubs;
+using Blog.Infrastructure.SignalR.Comments;
+using Blog.Infrastructure.SignalR.Notifications;
+using Blog.Infrastructure.SignalR.Posts;
 using BlogApi.Client;
 using BlogApi.Client.Middleware;
 using BlogApi.Client.Security;
@@ -41,7 +43,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.Middleware();
 app.UseAntiforgery();
-app.MapHub<PostHub>("/posthub");
+
+app.MapHub<PostHub>("/hubs/posts");
+app.MapHub<CommentHub>("/hubs/comments");
+app.MapHub<NotificatonHub>("/hubs/notifications");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

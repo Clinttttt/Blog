@@ -1,4 +1,5 @@
-﻿using Blog.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Repositories;
+using Blog.Application.Common.Interfaces.Utilities;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;

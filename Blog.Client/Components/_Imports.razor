@@ -20,6 +20,7 @@
 @using Blog.Client.Realtime
 @using Blog.Client.Services
 @using Blog.Client.State
+@using Blog.Infrastructure.SignalR.Notifications
 @using BlogApi.Application.Dtos
 @using BlogApi.Application.Models
 @using BlogApi.Application.Request.Category
@@ -57,7 +58,6 @@
 @inject AuthStateProvider AuthStateProvider
 @inject PostViewState PostViewState
 @inject NotificationState NotificationState
-@inject SignalRService SignalR
 @inject AuthenticationStateProvider AuthProvider
 @inject ICommentsClientService CommentsClient
 @inject IFeaturedPostsClientService FeaturedClient
@@ -65,3 +65,6 @@
 @inject IPostInteractionsClientService PostInteractionsClient
 @inject IPostModerationClientService PostModerationClient
 @inject INotificationClientService NotificationClient
+@inject PostHubClient PostSignalR
+@inject NotificationHubClient NotificationSignalR
+@inject CommenthubClient CommentSignalR

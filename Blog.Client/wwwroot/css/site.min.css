@@ -2575,9 +2575,6 @@
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);
   }
-  .mt-20 {
-    margin-top: calc(var(--spacing) * 20);
-  }
   .-mr-32 {
     margin-right: calc(var(--spacing) * -32);
   }
@@ -3474,20 +3471,11 @@
   .border-indigo-700 {
     border-color: var(--color-indigo-700);
   }
-  .border-red-100 {
-    border-color: var(--color-red-100);
-  }
   .border-red-200 {
     border-color: var(--color-red-200);
   }
-  .border-red-500 {
-    border-color: var(--color-red-500);
-  }
   .border-red-600 {
     border-color: var(--color-red-600);
-  }
-  .border-red-700 {
-    border-color: var(--color-red-700);
   }
   .border-slate-200 {
     border-color: var(--color-slate-200);
@@ -3599,9 +3587,6 @@
   }
   .bg-red-500 {
     background-color: var(--color-red-500);
-  }
-  .bg-red-600 {
-    background-color: var(--color-red-600);
   }
   .bg-slate-200 {
     background-color: var(--color-slate-200);
@@ -4553,13 +4538,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-red-600);
-      }
-    }
-  }
-  .hover\:bg-red-700 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-red-700);
       }
     }
   }

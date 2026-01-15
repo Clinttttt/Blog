@@ -8,17 +8,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Infrastructure.Hubs
+namespace Blog.Infrastructure.SignalR.Posts
 {
    
     public class PostHub : Hub
     {
-        /* [Authorize] 
-         public async Task SendPersonalNotification(string message)
-         {
-             var userId = Context.UserIdentifier;
-             await Clients.User(userId!).SendAsync("ReceiveNotification", message);
-         }*/
+        
     }
 }
 

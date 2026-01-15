@@ -1,8 +1,8 @@
-﻿using BlogApi.Api.Shared;
+﻿using Blog.Application.Common.Interfaces.Services;
+using BlogApi.Api.Shared;
 using BlogApi.Application.Commands.Newsletter.SendNewsletter;
 using BlogApi.Application.Commands.Newsletter.SubscribeToNewsletter;
 using BlogApi.Application.Commands.Newsletter.UnSubscribeToNewsletter;
-using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 
 using BlogApi.Application.Queries.User.CurrentUser;

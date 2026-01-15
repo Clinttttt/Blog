@@ -1,8 +1,9 @@
 ﻿using Blog.Application.Abstractions;
 using Blog.Application.Common;
-using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.Utilities;
 using Blog.Domain.Entities;
-using BlogApi.Application.Common.Interfaces;
+
 using BlogApi.Application.Queries.Posts;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;

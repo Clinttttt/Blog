@@ -1,6 +1,6 @@
 ﻿using Blog.Application.Abstractions;
 using Blog.Application.Common;
-using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Utilities;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;
 using MediatR;

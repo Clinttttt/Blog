@@ -32,6 +32,7 @@ namespace BlogApi.Domain.Entities
         public ICollection<BookMark> BookMarks { get; set; } = new List<BookMark>();
         public ICollection<Featured> Featured { get; set; } = new List<Featured>();
         public ICollection<PostView> PostViews { get; set; } = new List<PostView>();
+        public ICollection<Notification>Notifications { get; set; } = new List<Notification>();
     }
 
 

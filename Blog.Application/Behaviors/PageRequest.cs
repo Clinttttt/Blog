@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Abstractions
+namespace Blog.Application.Behaviors
 {
     public class PageRequest
     {

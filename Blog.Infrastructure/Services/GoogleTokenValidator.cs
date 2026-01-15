@@ -1,4 +1,4 @@
-﻿using BlogApi.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Utilities;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using System;

@@ -2,15 +2,14 @@
 using AutoMapper.QueryableExtensions;
 using Azure;
 using Azure.Core;
+using Blog.Application.Common.Interfaces.Repositories;
 using Blog.Application.Queries.Posts.GetAdminRequest;
-using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using BlogApi.Domain.Enums;
 using BlogApi.Domain.Interfaces;
-using BlogApi.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;

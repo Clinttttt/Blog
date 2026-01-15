@@ -3,33 +3,38 @@ using BlogApi.Application.Models;
 using BlogApi.Client.Interface;
 using BlogApi.Domain.Common;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Http;
 
 namespace BlogApi.Client.Common.Auth
 {
     public class TokenService : ITokenService
     {
-        private readonly ProtectedLocalStorage localStorage;
-        private readonly IAuthClientService AuthClient;
-        public TokenService(ProtectedLocalStorage localStorage, IAuthClientService AuthClient)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public TokenService(IHttpContextAccessor httpContextAccessor)
         {
-            this.localStorage = localStorage;
-            this.AuthClient = AuthClient;
-        }   
-        public async Task<bool> TryRefreshTokenAsync()
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public Task<string?> GetAccessTokenAsync()
         {
-            var RefreshTokens = await localStorage.GetAsync<string>("RefreshToken");
-            var UserId = await localStorage.GetAsync<string>("UserId");
-            if (!RefreshTokens.Success || !UserId.Success) return false;
-            var request = new RefreshTokenDto()
+            try
             {
-                UserId = Guid.Parse(UserId.Value!),
-                RefreshToken = RefreshTokens.Value!
-            };
-            var NewToken = await AuthClient.RefreshToken(request);
-            if (NewToken is null) return false;
-            await localStorage.SetAsync("AccessToken", NewToken.Value!.AccessToken!);
-            await localStorage.SetAsync("RefreshToken", NewToken.Value.RefreshToken!);
-            return true;
+                var httpContext = _httpContextAccessor.HttpContext;
+                if (httpContext == null)
+                    return Task.FromResult<string?>(null);
+
+                if (!httpContext.Request.Cookies.TryGetValue("AccessToken", out var token) ||
+                    string.IsNullOrWhiteSpace(token))
+                    return Task.FromResult<string?>(null);
+
+                token = token.Trim().Trim('"').Trim();
+                return Task.FromResult<string?>(token);
+            }
+            catch
+            {
+                return Task.FromResult<string?>(null);
+            }
         }
     }
 }

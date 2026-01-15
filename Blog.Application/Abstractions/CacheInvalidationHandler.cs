@@ -1,4 +1,5 @@
-﻿using Blog.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.Utilities;
 using Blog.Infrastructure.Services;
 using BlogApi.Domain.Entities;
 using System;

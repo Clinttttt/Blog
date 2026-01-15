@@ -1,4 +1,4 @@
-﻿using BlogApi.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Services;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;

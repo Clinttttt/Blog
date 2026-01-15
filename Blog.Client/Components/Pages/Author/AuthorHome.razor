@@ -140,28 +140,38 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var listfeature = ListFeatured();
-        var listpublished = ListPublished();
-        await GetUnreadNotificationCount();
-        await SignalR.InitializeAsync();
+        var listFeatureTask = ListFeatured();
+        var listPublishedTask = ListPublished();
+        var unreadNotificationTask = GetUnreadNotificationCount();
+        var notificationHubTask = NotificationSignalR.NotificationInitializeAsync();
+        var postHubTask = PostSignalR.PostInitializeAsync();
+        var notificationCountTask = NoticationCount();
 
-        await Task.WhenAll(listfeature, listpublished);
+        await Task.WhenAll(
+            listFeatureTask,
+            listPublishedTask,
+            unreadNotificationTask,
+            notificationHubTask,
+            postHubTask,
+            notificationCountTask
+        );
+
         OnViewCountUpdate();
-        await NoticationCount();
-
     }
+
+    
 
     public void OnViewCountUpdate()
     {
-        SignalR.OnViewCountUpdate((postId, viewCount) =>
-{
-    var post = featuredPosts?.FirstOrDefault(p => p.PostId == postId);
-    if (post != null)
-    {
-        post.ViewCount = viewCount;
-        InvokeAsync(StateHasChanged);
-    }
-});
+        PostSignalR.OnViewCountUpdate((postId, viewCount) =>
+        {
+            var post = featuredPosts?.FirstOrDefault(p => p.PostId == postId);
+            if (post != null)
+            {
+                post.ViewCount = viewCount;
+                InvokeAsync(StateHasChanged);
+            }
+        });
     }
 
     public async Task NoticationCount()
@@ -170,7 +180,7 @@
 
         var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
 
-        SignalR.OnNotificationCount((Count, UserId) =>
+        NotificationSignalR.OnNotificationCount((Count, UserId) =>
         {
             if (UserId.ToString() == CurrentUserId)
             {

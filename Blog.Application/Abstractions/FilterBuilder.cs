@@ -1,4 +1,4 @@
-﻿using Blog.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Utilities;
 using Blog.Application.Queries.Notification.GetListNotification;
 using Blog.Domain.Entities;
 using BlogApi.Application.Queries.Posts;
@@ -37,10 +37,10 @@ namespace Blog.Application.Abstractions
                     p => p.UserId == request.UserId && p.Status == Status.Pending,
 
                 PostFilterType.ByCategory =>
-                    p => p.CategoryId == request.CategoryId,
+                    p => p.CategoryId == request.CategoryId && p.Status != Status.Pending,
 
                 PostFilterType.ByTag =>
-                    p => p.PostTags.Any(pt => pt.TagId == request.TagId),
+                    p => p.PostTags.Any(pt => pt.TagId == request.TagId) && p.Status != Status.Pending,
 
                 PostFilterType.BookMark =>
                    p => p.BookMarks.Any(s => s.UserId == request.UserId),

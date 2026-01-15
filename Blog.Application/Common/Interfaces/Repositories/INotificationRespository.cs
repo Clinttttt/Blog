@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Common.Interfaces
+namespace Blog.Application.Common.Interfaces.Repositories
 {
     public interface INotificationRespository
     {

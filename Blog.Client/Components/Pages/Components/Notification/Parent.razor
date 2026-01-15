@@ -105,36 +105,50 @@
 
     public ViewState NotifState { get; set; } = NotificationState.ViewState.All;
     private UserProfileDto? user { get; set; } = new UserProfileDto();
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadNotif(NotifState);
-        await SignalR.InitializeAsync();
+   
+        private bool _isInitialized = false;
 
-        var UserId = await AuthStateProvider.GetUserIdAsync();
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadNotif(NotifState);
 
-        SignalR.OnNotification(async (notification) =>
-   {
-     
+            if (!_isInitialized)
+            {
+                try
+                {
+                    await NotificationSignalR.NotificationInitializeAsync();
+                    _isInitialized = true;
 
-       if (notification.RecipientUserId.ToString() == UserId)
-       {
-           if (list != null)
-           {
-               var newNotification = new GetListNotificationDto
-               {
-                   PostId = notification.PostId,
-                   Type = notification.Type,
-                   CreatedAt = notification.CreatedAt,
-                   UserName = notification.ActorName,
-                   IsRead = false
-               };
-        
-               list.Insert(0, newNotification);
-               await InvokeAsync(StateHasChanged);
-           }
-       }
-   });
+                    var UserIdString = await AuthStateProvider.GetUserIdAsync();
+                    Guid.TryParse(UserIdString, out var UserId);
 
+                    NotificationSignalR.OnNotification(async (notification) =>
+                    {
+                        if (notification.RecipientUserId == UserId)
+                        {
+                            if (list != null)
+                            {
+                                var newNotification = new GetListNotificationDto
+                            {
+                                PostId = notification.PostId,
+                                Type = notification.Type,
+                                CreatedAt = notification.CreatedAt,
+                                UserName = notification.ActorName,
+                                IsRead = false
+                            };
+
+                                list.Insert(0, newNotification);
+                                await InvokeAsync(StateHasChanged);
+                            }
+                        }
+                    });
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Service was disposed during initialization, ignore
+                    Console.WriteLine("Hub was disposed during initialization");
+                }
+        }
     }
 
 

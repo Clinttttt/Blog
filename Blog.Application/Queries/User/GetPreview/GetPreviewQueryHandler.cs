@@ -1,5 +1,5 @@
 ﻿using Blog.Application.Common.Interfaces;
-using BlogApi.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Repositories;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Queries.User.CurrentUser;
 using BlogApi.Domain.Common;

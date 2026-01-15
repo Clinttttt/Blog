@@ -1,4 +1,6 @@
 ﻿using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.SignalR;
 using Blog.Domain.Dtos;
 using Blog.Domain.Entities;
 using BlogApi.Domain.Common;
@@ -14,18 +16,18 @@ using System.Threading.Tasks;
 
 namespace Blog.Application.Abstractions
 {
-    public class NotificationService(IAppDbContext context, IPostHubService hubService) : INotificationService
+    public class NotificationService(IAppDbContext context, INotificatonHubService hubService) : INotificationService
     {
 
 
         public async Task<Result<bool>> NotificationAsync(Notification request, CancellationToken cancellationToken = default)
         {
 
-            bool exists = await context.Notifications.AnyAsync(n =>
+            var exists = await context.Notifications.AnyAsync(n =>
                 n.PostId == request.PostId &&
                 n.ActorUserId == request.ActorUserId &&
                 n.RecipientUserId == request.RecipientUserId &&
-                n.Type == request.Type,
+                n.Type == request.Type && n.IsRead == false,
                 cancellationToken);
 
             if (!exists)

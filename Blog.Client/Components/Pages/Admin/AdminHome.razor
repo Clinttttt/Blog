@@ -179,7 +179,7 @@
     private ListPaginatedRequest PaginationDraft { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private HubConnection? _hubConnection;
 
- 
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -190,7 +190,8 @@
         var loadAdminPublishedTask = LoadAdminPublishedPostsAsync();
         var loadAdminDraftTask = LoadAdminDraftPostsAsync();
         var getApprovalTask = GetUnreadNotificationCount();
-        var signalRTask = SignalR.InitializeAsync();
+        var postsignalRTask = PostSignalR.PostInitializeAsync();
+        var notificationsignalRTask = NotificationSignalR.NotificationInitializeAsync();
 
         await Task.WhenAll(
             getUserTask,
@@ -199,7 +200,8 @@
             loadAdminPublishedTask,
             loadAdminDraftTask,
             getApprovalTask,
-            signalRTask
+            postsignalRTask,
+            notificationsignalRTask
         );
 
         OnViewCountUpdate();
@@ -209,7 +211,7 @@
 
     public void OnViewCountUpdate()
     {
-        SignalR.OnViewCountUpdate((postId, viewCount) =>
+        PostSignalR.OnViewCountUpdate((postId, viewCount) =>
    {
        var post = featuredPosts?.FirstOrDefault(p => p.PostId == postId);
        if (post != null)
@@ -220,7 +222,6 @@
    });
     }
 
-   
 
     public async Task NoticationCount()
     {
@@ -228,7 +229,7 @@
 
         var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
 
-        SignalR.OnNotificationCount((Count, UserId) =>
+        NotificationSignalR.OnNotificationCount((Count, UserId) =>
         {
             if (UserId.ToString() == CurrentUserId)
             {
@@ -247,7 +248,7 @@
 
     public async ValueTask DisposeAsync()
     {
-        await SignalR.DisposeAsync();
+        await NotificationSignalR.DisposeAsync();     
     }
 
     public async Task RefreshAsync() => await LoadPublishedPostsAsync();

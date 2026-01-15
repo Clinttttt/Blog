@@ -1,6 +1,7 @@
-﻿using Blog.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Repositories;
+using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.Utilities;
 using Blog.Infrastructure.Services;
-using BlogApi.Application.Common.Interfaces;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Queries.Posts;

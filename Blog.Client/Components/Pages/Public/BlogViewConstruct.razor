@@ -308,11 +308,11 @@
     {
         postRequest.PostId = PostId;
         await Get();
-        await SignalR.InitializeAsync();
+        await CommentSignalR.CommentInitializeAsync();
 
         await Task.Delay(100);
 
-        SignalR.OnSentComment(async (postId, content) =>
+        CommentSignalR.OnSentComment(async (postId, content) =>
         {
 
             if (PostDto?.PostId == postId)
@@ -330,7 +330,7 @@
 
     public async ValueTask DisposeAsync()
     {
-        await SignalR.DisposeAsync();
+        await CommentSignalR.DisposeAsync();
     }
 
     private async Task Get()

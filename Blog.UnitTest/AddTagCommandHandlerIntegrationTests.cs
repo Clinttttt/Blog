@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Blog.Infrastructure.Persistence;
 using BlogApi.Application.Commands.Tags.AddTag;
 using BlogApi.Domain.Entities;
 using BlogApi.Domain.Interfaces;
-using BlogApi.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;

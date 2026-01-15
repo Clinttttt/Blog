@@ -35,7 +35,7 @@ namespace Blog.Api.Controllers
         {
             var query = new GetListNotificationQuery
             {
-                UserId = UserIdOrNull,
+                UserId = UserId,
                 PageNumber = request.PageNumber,
                 PageSze = request.PageSize,
                 NotifTypes = notiftype

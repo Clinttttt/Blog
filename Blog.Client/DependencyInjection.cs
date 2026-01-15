@@ -1,8 +1,10 @@
-﻿using Blog.Client.Interface;
+﻿
+using Blog.Client.Interface;
 using Blog.Client.Realtime;
 using Blog.Client.Security;
 using Blog.Client.Services;
 using Blog.Client.State;
+using BlogApi.Client.Common.Auth;
 using BlogApi.Client.Interface;
 using BlogApi.Client.Security;
 using BlogApi.Client.Services;
@@ -17,9 +19,13 @@ namespace BlogApi.Client
         {
             AddPersistence(services, configuration);
             AddCustomAuthentication(services);
+
             services.AddScoped<PostViewState>();
             services.AddScoped<NotificationState>();
-            services.AddScoped<SignalRService>();
+            services.AddScoped<PostHubClient>();
+            services.AddScoped<CommenthubClient>();
+            services.AddScoped<NotificationHubClient>();
+
             return services;
         }
 
@@ -142,6 +148,7 @@ namespace BlogApi.Client
             services.AddScoped<AuthenticationStateProvider>(provider =>
                 provider.GetRequiredService<AuthStateProvider>());
 
+            services.AddScoped<ITokenService, TokenService>();
             return services;
         }
     }

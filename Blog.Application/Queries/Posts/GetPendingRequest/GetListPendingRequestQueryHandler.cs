@@ -1,5 +1,5 @@
-﻿using Blog.Application.Queries.Posts.GetAdminRequest;
-using BlogApi.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Repositories;
+using Blog.Application.Queries.Posts.GetAdminRequest;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using MediatR;

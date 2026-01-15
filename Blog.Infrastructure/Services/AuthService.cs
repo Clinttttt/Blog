@@ -1,9 +1,10 @@
-﻿using BlogApi.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.Utilities;
+using Blog.Infrastructure.Persistence;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
-using BlogApi.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

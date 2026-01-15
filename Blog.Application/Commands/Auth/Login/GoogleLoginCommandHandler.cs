@@ -1,4 +1,4 @@
-﻿using BlogApi.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Services;
 using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
 using MediatR;

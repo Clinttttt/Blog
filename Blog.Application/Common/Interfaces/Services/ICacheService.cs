@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Common.Interfaces
+namespace Blog.Application.Common.Interfaces.Services
 {
     public interface ICacheService
     {

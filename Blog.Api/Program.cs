@@ -4,9 +4,10 @@ using Blog.Application;
 using Blog.Application.Abstractions;
 using Blog.Application.Behaviors;
 using Blog.Application.Common.Interfaces;
-using Blog.Infrastructure.Hubs;
-using Blog.Infrastructure.Hubs.HubService;
 using Blog.Infrastructure.Services;
+using Blog.Infrastructure.SignalR.Comments;
+using Blog.Infrastructure.SignalR.Notifications;
+using Blog.Infrastructure.SignalR.Posts;
 using BlogApi.Application;
 using BlogApi.Infrastructure;
 using CQRSMEDIATR.Api;
@@ -95,7 +96,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapHub<PostHub>("/posthub");
+//app.MapHub<PostHub>("/posthub");
+
+
+app.MapHub<PostHub>("/hubs/posts");
+app.MapHub<CommentHub>("/hubs/comments");
+app.MapHub<NotificatonHub>("/hubs/notifications");
+
+
 app.UseHttpsRedirection();
 app.UseCors("AllowBlazor");
 app.UseAuthentication();

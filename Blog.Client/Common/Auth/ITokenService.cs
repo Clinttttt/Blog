@@ -2,6 +2,6 @@
 {
     public interface ITokenService
     {
-        Task<bool> TryRefreshTokenAsync();
+        Task<string?> GetAccessTokenAsync();
     }
 }

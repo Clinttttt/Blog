@@ -1,5 +1,5 @@
 ﻿using Azure.Core;
-using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Repositories;
 using Blog.Application.Queries.Notification.GetListNotification;
 using Blog.Application.Queries.Posts.GetApprovalTotal;
 using Blog.Domain.Entities;
@@ -28,7 +28,7 @@ namespace Blog.Infrastructure.Respository
         {
 
             IQueryable<Notification> entities = context.Notifications.AsNoTracking();
-     
+
             if (filter != null)
             {
                 entities = entities.Where(filter);
@@ -67,14 +67,16 @@ namespace Blog.Infrastructure.Respository
         {
             IQueryable<Post> entity = context.Posts.AsNoTracking();
 
-            if(filter != null)
+            if (filter != null)
             {
                 entity = entity.Where(filter);
             }
-         
+      
             var postCount = await entity
+              .Include(s => s.Notifications)
               .Where(s => s.Status == Status.Pending)
               .CountAsync(cancellationToken);
+
 
             var approval = new[] { EntityEnum.Type.PostApproval, EntityEnum.Type.PostDecline };
             var notifcount = await context.Notifications
@@ -88,7 +90,7 @@ namespace Blog.Infrastructure.Respository
                 NotificationCount = notifcount
             };
 
-           return Result<UnreadDto>.Success(dto);
+            return Result<UnreadDto>.Success(dto);
         }
 
 

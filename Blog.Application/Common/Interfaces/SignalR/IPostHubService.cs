@@ -6,13 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blog.Application.Common.Interfaces
+namespace Blog.Application.Common.Interfaces.SignalR
 {
     public interface IPostHubService
     {
         Task BroadcastViewCountUpdate(int postId, int viewCount);
-        Task BroadcastSentComment(int PostId, string Content);
-        Task BroadcastNotification(NotificationDto request, Guid? recipientUserId);
-        Task BroadcastNotificationCount(int Count, Guid? UserId);
     }
 }

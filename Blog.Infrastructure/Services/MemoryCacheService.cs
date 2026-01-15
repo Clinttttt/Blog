@@ -1,4 +1,4 @@
-﻿using Blog.Application.Common.Interfaces;
+﻿using Blog.Application.Common.Interfaces.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;

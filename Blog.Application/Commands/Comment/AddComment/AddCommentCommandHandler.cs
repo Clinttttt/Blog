@@ -1,5 +1,7 @@
 ﻿using Blog.Application.Abstractions;
-using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Common.Interfaces.SignalR;
+using Blog.Application.Common.Interfaces.Utilities;
 using Blog.Domain.Entities;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
@@ -17,11 +19,11 @@ namespace BlogApi.Application.Commands.Comment.AddComment
     public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, Result<int>>
     {
         private readonly IAppDbContext _context;
-        private readonly IPostHubService _hubService;
+        private readonly ICommentHubService _hubService;
         private readonly ICacheInvalidationService _cacheInvalidation;
         private readonly INotificationService _notification;
 
-        public AddCommentCommandHandler(IAppDbContext context, IPostHubService hubService, ICacheInvalidationService cacheInvalidation, INotificationService notification)
+        public AddCommentCommandHandler(IAppDbContext context, ICommentHubService hubService, ICacheInvalidationService cacheInvalidation, INotificationService notification)
         {
             _context = context;
             _hubService = hubService;

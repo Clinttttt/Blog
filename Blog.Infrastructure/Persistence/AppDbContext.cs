@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Infrastructure.Persistence
+namespace Blog.Infrastructure.Persistence
 {
     public class AppDbContext : DbContext, IAppDbContext
     {

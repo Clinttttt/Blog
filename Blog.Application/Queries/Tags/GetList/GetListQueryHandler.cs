@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BlogApi.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Repositories;
 using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;

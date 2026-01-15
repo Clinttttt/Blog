@@ -5,6 +5,7 @@ using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Queries.Posts.GetPublicStatistics;
 using BlogApi.Application.Queries.Posts.GetStatistics;
+using BlogApi.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,9 +40,11 @@ namespace BlogApi.Api.Controllers
         [HttpGet("GetAdminUnreadTotal")]
         public async Task<ActionResult<UnreadDto>> GetAdminUnreadTotal()
         {
+            var approval = new[] { EntityEnum.Type.PostApproval, EntityEnum.Type.PostDecline };
             var request = new GetUnreadTotalQuery
             {
-                UserId = UserId,                      
+                UserId = UserId,
+                filter = s => s.Notifications.Any(s => !approval.Contains(s.Type))
             };
             var result = await Sender.Send(request);
             return HandleResponse(result);
