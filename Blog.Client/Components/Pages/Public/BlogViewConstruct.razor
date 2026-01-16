@@ -295,6 +295,7 @@
     private bool isLiked = false;
     private bool commentisliked = false;
     private bool islike { get; set; }
+    private bool _isSubscribed;
 
     private PostDetailDto? PostDto;
     private GetPostRequest postRequest { get; set; } = new GetPostRequest();
@@ -310,22 +311,29 @@
         await Get();
         await CommentSignalR.CommentInitializeAsync();
 
-        await Task.Delay(100);
-
-        CommentSignalR.OnSentComment(async (postId, content) =>
+        if (!_isSubscribed)
         {
-
-            if (PostDto?.PostId == postId)
-            {
-                var updatedResult = await PostClient.Get(postRequest);
-                PostDto = updatedResult.Value;
-                await InvokeAsync(StateHasChanged);
-
-            }
-
-        });
-
+            SubscribeToSentComments();
+            _isSubscribed = true;
+        }
         hasrender = true;
+    }
+
+
+    public void SubscribeToSentComments()
+    {
+        CommentSignalR.OnSentComment(async (postId, content) =>
+    {
+
+        if (PostDto?.PostId == postId)
+        {
+            var updatedResult = await PostClient.Get(postRequest);
+            PostDto = updatedResult.Value;
+            await InvokeAsync(StateHasChanged);
+
+        }
+
+    });
     }
 
     public async ValueTask DisposeAsync()

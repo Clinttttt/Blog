@@ -43,8 +43,7 @@ namespace BlogApi.Api.Controllers
             var approval = new[] { EntityEnum.Type.PostApproval, EntityEnum.Type.PostDecline };
             var request = new GetUnreadTotalQuery
             {
-                UserId = UserId,
-                filter = s => s.Notifications.Any(s => !approval.Contains(s.Type))
+                UserId = UserId,              
             };
             var result = await Sender.Send(request);
             return HandleResponse(result);

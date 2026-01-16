@@ -11,7 +11,7 @@ namespace Blog.Application.Common.Interfaces.SignalR
     {
         Task BroadcastNotificationCount(int Count, Guid? UserId);
         Task BroadcastNotification(NotificationDto request, Guid? recipientUserId);
-
-
+        Task BroadcastPendingCountAdmin(int Count);
+        Task BroadcastPendingCountAuthor(int Count, Guid? authorUserId);
     }
 }

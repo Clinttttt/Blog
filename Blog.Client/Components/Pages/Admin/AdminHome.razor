@@ -136,7 +136,7 @@
     }
     else if (PostViewState.AdminPageView == PostViewState.AdminPostState.published)
     {
-        <Blog.Client.Components.Pages.Admin.Components.Published ListForAdmin="ListForAdmin" Pagination="PaginationPublished" Refresh="RefreshPublishedAsync" />
+        <Blog.Client.Components.Pages.Admin.Components.Published ListForAdmin="ListForAdmin" Pagination="PaginationPublished" Refresh="RefreshPublishedAsync" OnLoadMore="LoadAdminPublishedPostsAsync" />
     }
     else if (PostViewState.AdminPageView == PostViewState.AdminPostState.draft)
     {
@@ -175,10 +175,10 @@
 
     private UnreadDto? TotalCount { get; set; } = new UnreadDto();
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
-    private ListPaginatedRequest PaginationPublished { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
+    private ListPaginatedRequest PaginationPublished { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 9 };
     private ListPaginatedRequest PaginationDraft { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
     private HubConnection? _hubConnection;
-
+    private bool _isSubscribedToSignalR = false;
 
 
     protected override async Task OnInitializedAsync()
@@ -204,56 +204,75 @@
             notificationsignalRTask
         );
 
-        OnViewCountUpdate();
-        await NoticationCount();
+        if (!_isSubscribedToSignalR)
+        {
+            SubscribeCountUpdate();
+            await SubscribeNoticationCount();
+            await SubscribePendingCountAdmin();
+        }
+
+        _isSubscribedToSignalR = true;
+
         hasrender = true;
     }
 
-    public void OnViewCountUpdate()
+    public async Task SubscribePendingCountAdmin()
     {
-        PostSignalR.OnViewCountUpdate((postId, viewCount) =>
-   {
-       var post = featuredPosts?.FirstOrDefault(p => p.PostId == postId);
-       if (post != null)
-       {
-           post.ViewCount = viewCount;
-           InvokeAsync(StateHasChanged);
-       }
-   });
+        var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
+        NotificationSignalR.OnPendingCountAdmin((Count) =>
+        {          
+                if (TotalCount is not null)
+                {
+                    TotalCount.PendingCount = Count;
+                    InvokeAsync(StateHasChanged);
+                }
+            
+        });
     }
 
-
-    public async Task NoticationCount()
+    public void SubscribeCountUpdate()
     {
-        if (isSubscribedNotificationCount) return;
+        PostSignalR.OnViewCountUpdate((postId, viewCount) =>
+    {
+        var post = featuredPosts?.FirstOrDefault(p => p.PostId == postId);
+        if (post != null)
+        {
+            post.ViewCount = viewCount;
+            InvokeAsync(StateHasChanged);
+        }
+    });
+    }
+
+    public async Task SubscribeNoticationCount()
+    {
 
         var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
 
         NotificationSignalR.OnNotificationCount((Count, UserId) =>
         {
-            if (UserId.ToString() == CurrentUserId)
-            {
+            
                 if (TotalCount is not null)
                 {
                     TotalCount.NotificationCount = Count;
                     InvokeAsync(StateHasChanged);
                 }
-            }
+            
         });
 
-        isSubscribedNotificationCount = true;
+
     }
-
-
 
     public async ValueTask DisposeAsync()
     {
-        await NotificationSignalR.DisposeAsync();     
+        await NotificationSignalR.DisposeAsync();
     }
 
+    public async Task RefreshPublishedAsync()
+    {
+        PaginationPublished.PageNumber = 1; 
+        await LoadAdminPublishedPostsAsync();
+    }
     public async Task RefreshAsync() => await LoadPublishedPostsAsync();
-
-    public async Task RefreshPublishedAsync() => await LoadAdminPublishedPostsAsync();
 
     public async Task RefreshDraftAsync() => await LoadAdminDraftPostsAsync();
 

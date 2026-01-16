@@ -69,7 +69,9 @@ namespace Blog.Infrastructure.Respository
 
             if (filter != null)
             {
-                entity = entity.Where(filter);
+                entity = entity
+                    .Include(s=> s.Notifications)
+                    .Where(filter);
             }
       
             var postCount = await entity

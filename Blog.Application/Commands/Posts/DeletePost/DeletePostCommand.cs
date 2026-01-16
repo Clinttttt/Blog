@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Posts.DeletePost
 {
-    public record DeletePostCommand(int Id,Guid UserId) : IRequest<Result<bool>>;
+    public record DeletePostCommand(int? Id,Guid UserId) : IRequest<Result<bool>>;
   
 }

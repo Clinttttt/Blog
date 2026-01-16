@@ -137,7 +137,7 @@
     private PagedResult<PostDto>? recentPost { get; set; } = new PagedResult<PostDto>();
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
     private UnreadDto? TotalCount { get; set; } = new UnreadDto();
-
+    private bool _isSubscribedToSignalR = false;
     protected override async Task OnInitializedAsync()
     {
         var listFeatureTask = ListFeatured();
@@ -145,23 +145,44 @@
         var unreadNotificationTask = GetUnreadNotificationCount();
         var notificationHubTask = NotificationSignalR.NotificationInitializeAsync();
         var postHubTask = PostSignalR.PostInitializeAsync();
-        var notificationCountTask = NoticationCount();
+
 
         await Task.WhenAll(
             listFeatureTask,
             listPublishedTask,
             unreadNotificationTask,
             notificationHubTask,
-            postHubTask,
-            notificationCountTask
+            postHubTask
+
         );
 
-        OnViewCountUpdate();
+        if (!_isSubscribedToSignalR)
+        {
+            SubscribeOnViewCountUpdate();
+            await SubscribePendingAuthor();
+            await SubscribeNoticationCount();
+        }
+        _isSubscribedToSignalR = true;
     }
 
-    
+    public async Task SubscribePendingAuthor()
+    {
+        var CurrentUserId = await AuthStateProvider.GetUserIdAsync();
+        NotificationSignalR.OnPendingCountAuthor((Count, UserId) =>
+        {
 
-    public void OnViewCountUpdate()
+            if (CurrentUserId == UserId.ToString())
+            {
+                if (TotalCount is not null)
+                {
+                    TotalCount.PendingCount = Count;
+                    InvokeAsync(StateHasChanged);
+                }
+            }
+        });
+    }
+
+    public void SubscribeOnViewCountUpdate()
     {
         PostSignalR.OnViewCountUpdate((postId, viewCount) =>
         {
@@ -174,7 +195,7 @@
         });
     }
 
-    public async Task NoticationCount()
+    public async Task SubscribeNoticationCount()
     {
         if (isSubscribedNotificationCount) return;
 

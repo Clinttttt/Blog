@@ -10,8 +10,7 @@ namespace Blog.Client.Realtime
     public class NotificationHubClient(
         NavigationManager navigationManager,
         IConfiguration configuration,
-        ILogger<HubClientBase> logger,
-        ITokenService tokenService) : HubClientBase(navigationManager, configuration, tokenService, logger)
+        ITokenService tokenService) : HubClientBase(navigationManager, configuration, tokenService)
     {
         public Task NotificationInitializeAsync() => InitializeAsync("hubs/notifications");
 
@@ -20,5 +19,11 @@ namespace Blog.Client.Realtime
 
         public void OnNotificationCount(Action<int, Guid?> handler) =>
             Subscribe("ReceiveNewNotification", handler);
+
+        public void OnPendingCountAdmin(Action<int> handler) =>
+         Subscribe("ReceiveNewPendingAdmin", handler);
+
+        public void OnPendingCountAuthor(Action<int, Guid?> handler) =>
+         Subscribe("ReceiveNewPendingAuthor", handler);
     }
 }

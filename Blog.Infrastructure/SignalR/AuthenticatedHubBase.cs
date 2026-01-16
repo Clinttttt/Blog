@@ -14,6 +14,8 @@ namespace Blog.Infrastructure.SignalR
     public abstract class AuthenticatedHubBase : Hub
     {
         protected Guid? CurrentUserId { get; private set; }
+
+
         public override async Task OnConnectedAsync()
         {
             var user = Context.User;
@@ -31,6 +33,9 @@ namespace Blog.Infrastructure.SignalR
             }
             await base.OnConnectedAsync();
         }
+
+
+
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             if (CurrentUserId.HasValue)

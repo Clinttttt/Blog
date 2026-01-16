@@ -139,16 +139,11 @@ else if (list?.Any() == true)
 
     [Parameter]
     public EventCallback LoadMorePosts { get; set; }
-
+      
     [Parameter]
     public EventCallback<(int Id, int? PostId)> MarkAsRead { get; set; }
 
     [Parameter]
     public EventCallback<int> DeleteNotification { get; set; }
-
     
-
-   
-
-  
 }

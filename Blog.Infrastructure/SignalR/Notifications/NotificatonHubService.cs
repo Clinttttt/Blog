@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,18 @@ namespace Blog.Infrastructure.SignalR.Notifications
             await _hubContext.Clients.All.SendAsync("ReceiveNewNotification", Count, UserId);
 
         }
+
+        public async Task BroadcastPendingCountAuthor(int Count, Guid? authorUserId)
+        {
+            await _hubContext.Clients.All.SendAsync("ReceiveNewPendingAuthor", Count, authorUserId);
+        }
+        public async Task BroadcastPendingCountAdmin(int Count)
+        {
+           
+                await _hubContext.Clients.All
+                    .SendAsync("ReceiveNewPendingAdmin", Count);
+        }
+
         public async Task BroadcastNotification(NotificationDto request, Guid? recipientUserId)
         {
             if (recipientUserId.HasValue)
@@ -31,6 +44,7 @@ namespace Blog.Infrastructure.SignalR.Notifications
             else
                 await _hubContext.Clients.All.SendAsync("ReceiveNotification", request);
         }
+
 
     }
 }

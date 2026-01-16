@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Posts.Featured.DeleteFeatured
 {
-    public record DeleteFeaturedCommand(int PostId, Guid UserId) : IRequest<Result<bool>>;
+    public record DeleteFeaturedCommand(int? PostId, Guid UserId) : IRequest<Result<bool>>;
    
 }

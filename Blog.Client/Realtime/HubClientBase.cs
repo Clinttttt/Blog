@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Logging;
 using BlogApi.Client.Security;
 using BlogApi.Client.Common.Auth;
 
@@ -11,7 +10,6 @@ namespace Blog.Client.Realtime
         protected readonly NavigationManager _navigationManager;
         protected readonly string _apiBaseUrl;
         protected readonly ITokenService _tokenService;
-        protected readonly ILogger<HubClientBase> _logger;
 
         private HubConnection? _hubConnection;
         private readonly SemaphoreSlim _initLock = new(1, 1);
@@ -27,42 +25,24 @@ namespace Blog.Client.Realtime
         protected HubClientBase(
             NavigationManager navigationManager,
             IConfiguration configuration,
-            ITokenService tokenService,
-            ILogger<HubClientBase> logger)
+            ITokenService tokenService)
         {
             _navigationManager = navigationManager;
             _apiBaseUrl = configuration["ApiBaseUrl"] ?? "https://localhost:7096";
             _tokenService = tokenService;
-            _logger = logger;
         }
 
         protected async Task InitializeAsync(string hubRelativePath)
         {
-            // Check if disposed before acquiring lock
-            if (_disposed)
-            {
-                _logger?.LogWarning("Attempted to initialize already disposed hub");
-                return;
-            }
+            if (_disposed) return;
 
             await _initLock.WaitAsync();
             try
             {
-                // Double-check after acquiring lock
-                if (_disposed)
-                {
-                    _logger?.LogWarning("Hub was disposed while waiting for lock");
-                    return;
-                }
-
-                if (_hubConnection != null)
-                {
-                    _logger?.LogDebug("Hub already initialized");
-                    return;
-                }
+                if (_disposed) return;
+                if (_hubConnection != null) return;
 
                 var hubUrl = $"{_apiBaseUrl.TrimEnd('/')}/{hubRelativePath.TrimStart('/')}";
-                _logger?.LogInformation("Initializing SignalR hub: {HubUrl}", hubUrl);
 
                 _hubConnection = new HubConnectionBuilder()
                     .WithUrl(hubUrl, options =>
@@ -75,15 +55,13 @@ namespace Blog.Client.Realtime
                 RegisterEventHandlers();
 
                 await _hubConnection.StartAsync();
-                _logger?.LogInformation("SignalR hub connected successfully");
             }
             catch (ObjectDisposedException)
             {
-                _logger?.LogWarning("Hub connection was disposed during initialization");
+                // Hub connection was disposed during initialization
             }
-            catch (Exception ex)
+            catch
             {
-                _logger?.LogError(ex, "Failed to initialize SignalR hub");
                 throw;
             }
             finally
@@ -101,21 +79,18 @@ namespace Blog.Client.Realtime
 
             _hubConnection.Reconnecting += error =>
             {
-                _logger?.LogWarning(error, "SignalR reconnecting...");
                 OnReconnecting?.Invoke();
                 return Task.CompletedTask;
             };
 
             _hubConnection.Reconnected += connectionId =>
             {
-                _logger?.LogInformation("SignalR reconnected. ConnectionId: {ConnectionId}", connectionId);
                 OnReconnected?.Invoke(connectionId);
                 return Task.CompletedTask;
             };
 
             _hubConnection.Closed += error =>
             {
-                _logger?.LogWarning(error, "SignalR connection closed");
                 OnClosed?.Invoke(error);
                 return Task.CompletedTask;
             };
@@ -125,43 +100,36 @@ namespace Blog.Client.Realtime
         {
             EnsureConnected();
             _hubConnection!.On(method, handler);
-            _logger?.LogDebug("Subscribed to method: {Method}", method);
         }
 
         protected void Subscribe<T>(string method, Action<T> handler)
         {
             EnsureConnected();
             _hubConnection!.On(method, handler);
-            _logger?.LogDebug("Subscribed to method: {Method}", method);
         }
 
         protected void Subscribe<T1, T2>(string method, Action<T1, T2> handler)
         {
             EnsureConnected();
             _hubConnection!.On(method, handler);
-            _logger?.LogDebug("Subscribed to method: {Method}", method);
         }
 
         protected void Subscribe<T1, T2, T3>(string method, Action<T1, T2, T3> handler)
         {
             EnsureConnected();
             _hubConnection!.On(method, handler);
-            _logger?.LogDebug("Subscribed to method: {Method}", method);
         }
 
         protected async Task InvokeAsync(string method, params object?[] args)
         {
             EnsureConnected();
             await _hubConnection!.InvokeAsync(method, args);
-            _logger?.LogDebug("Invoked method: {Method}", method);
         }
 
         protected async Task<T> InvokeAsync<T>(string method, params object?[] args)
         {
             EnsureConnected();
-            var result = await _hubConnection!.InvokeAsync<T>(method, args);
-            _logger?.LogDebug("Invoked method: {Method}", method);
-            return result;
+            return await _hubConnection!.InvokeAsync<T>(method, args);
         }
 
         private void EnsureConnected()
@@ -179,8 +147,6 @@ namespace Blog.Client.Realtime
 
             _disposed = true;
 
-            _logger?.LogDebug("Disposing hub connection");
-
             OnReconnecting = null;
             OnReconnected = null;
             OnClosed = null;
@@ -191,9 +157,9 @@ namespace Blog.Client.Realtime
                 {
                     await _hubConnection.DisposeAsync();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    _logger?.LogWarning(ex, "Error disposing hub connection");
+                    // Ignore disposal errors
                 }
                 _hubConnection = null;
             }

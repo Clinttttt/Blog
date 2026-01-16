@@ -21,7 +21,7 @@ namespace Blog.Infrastructure.Configuration.NotifConfiguration
             builder.HasOne(s => s.Post)
                 .WithMany(s => s.Notifications)
                 .HasForeignKey(s => s.PostId)
-                .OnDelete(deleteBehavior: DeleteBehavior.NoAction)
+                .OnDelete(deleteBehavior: DeleteBehavior.Cascade)
                  .IsRequired(false);
         }
     }

@@ -25,8 +25,6 @@ namespace Blog.Infrastructure.SignalR.Posts
             await _hubContext.Clients.All.SendAsync("ReceiveViewCountUpdate", postId, viewCount);
         }   
 
-      
-
-      
+        
     }
 }

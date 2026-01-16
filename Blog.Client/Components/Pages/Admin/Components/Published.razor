@@ -2,9 +2,9 @@
 
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @if (ListForAdmin?.Items.Any() == true)
+    @if (allLoadedPosts.Any())
     {
-        foreach (var post in ListForAdmin.Items)
+        foreach (var post in allLoadedPosts)
         {
 
             <article class="bg-white rounded-2xl p-6 border border-gray-200 hover:-translate-y-1 hover:shadow-xl hover:border-indigo-600 transition-all cursor-pointer relative group">
@@ -14,8 +14,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
                     </button>
-                    <button class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button @onclick="() => DeletePost(post.Id)" class=" bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg">
+                        <svg class="w-4 h-4 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                     </button>
@@ -57,6 +57,46 @@
 
 </div>
 
+@if (HasMorePost)
+{
+    <div class="text-center mt-8">
+        <p class="text-sm text-slate-600 mb-4 font-medium">
+            Showing <span class="text-indigo-600 font-semibold">@allLoadedPosts.Count</span> of <span class="text-indigo-600 font-semibold">@(ListForAdmin?.TotalCount ?? 0)</span> posts
+        </p>
+        <button @onclick="LoadMorePost"
+                disabled="@IsloadingMore"
+                class="px-8 py-3 bg-white text-slate-700 rounded-xl font-medium hover:bg-slate-50 transition-all shadow-sm border border-slate-200 hover:shadow disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (IsloadingMore)
+            {
+                <span class="flex items-center gap-2">
+                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading...
+                </span>
+            }
+            else
+            {
+                <span>Load More Posts</span>
+            }
+        </button>
+    </div>
+}
+else if (allLoadedPosts.Any())
+{
+    <div class="text-center mt-8 py-6">
+        <div class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
+            <span class="text-2xl">✓</span>
+            <p class="text-slate-700 font-medium">
+                You're all caught up! All <span class="text-indigo-600 font-semibold">@(ListForAdmin?.TotalCount ?? 0)</span> posts loaded.
+            </p>
+        </div>
+    </div>
+}
+
+
+
 
 
 
@@ -70,10 +110,65 @@
     public PagedResult<PostDto>? ListForAdmin { get; set; } = new PagedResult<PostDto>();
 
     [Parameter]
+    public EventCallback OnLoadMore { get; set; }
+
+
+    public bool IsloadingMore = false;
+
+    [Parameter]
     public EventCallback<bool> Refresh { get; set; }
+
+    private List<PostDto> allLoadedPosts = new List<PostDto>();
+
+    private bool HasMorePost => ListForAdmin != null && Pagination.PageNumber < ListForAdmin.TotalPages;
+    private DeletePostRequest delete { get; set; } = new DeletePostRequest();
+
 
     protected override async Task OnInitializedAsync()
     {
         await Refresh.InvokeAsync();
     }
+
+    protected override void OnParametersSet()
+    {
+        LoadAll();
+
+    }
+
+    public void LoadAll()
+    {
+        if (ListForAdmin?.Items != null)
+        {
+            foreach (var post in ListForAdmin.Items)
+            {
+
+                if (!allLoadedPosts.Any(p => p.Id == post.Id))
+                {
+                    allLoadedPosts.Add(post);
+                }
+            }
+        }
+    }
+
+    public async Task DeletePost(int? PostId)
+    {
+        delete.PostId = PostId;
+        await PostClient.Delete(delete);
+        StateHasChanged();
+    }
+
+    public async Task LoadMorePost()
+    {
+        if (!HasMorePost || IsloadingMore) return;
+
+        IsloadingMore = true;
+        StateHasChanged();
+
+        Pagination.PageNumber++;
+        await OnLoadMore.InvokeAsync();
+
+        IsloadingMore = false;
+        StateHasChanged();
+    }
+
 }

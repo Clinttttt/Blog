@@ -122,7 +122,7 @@
                                     <button @onclick="() => Reject(pending.PostId)" class="bg-gray-100 cursor-pointer  px-4 py-2  text-indigo-500 text-sm font-medium rounded-lg hover:bg-indigo-500 hover:text-white transition-colors">
                                         Reject
                                     </button>
-                                    <button class="cursor-pointer  px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">
+                                    <button @onclick="() => PendingPreview(pending.PostId)" class="cursor-pointer  px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">
                                         Preview
                                     </button>
                                 </div>
@@ -136,10 +136,23 @@
     </div>
 </div>
 
+<PreviewPending PostId="PostId" />
+
 @code {
+    public GetPostRequest PostId { get; set; } = new GetPostRequest();
 
     private PagedResult<PendingRequestDto>? Pendings { get; set; } = new PagedResult<PendingRequestDto>();
     private ListPaginatedRequest PaginationPending { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 10 };
+
+    public async Task PendingPreview(int PostId)
+    {
+        this.PostId.PostId = PostId;
+        await JS.InvokeVoidAsync("eval", "document.getElementById('preview_pending').checked = true");
+        StateHasChanged();
+
+    }
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -162,11 +175,13 @@
     private async Task Approve(int PostId)
     {    
         await PostModerationClient.ApprovePost(PostId);
+        await ListByPending();
         StateHasChanged();
     }
     private async Task Reject(int PostId)
     {     
         await PostModerationClient.RejectPost(PostId);
+        await ListByPending();
         StateHasChanged();
     }
 }

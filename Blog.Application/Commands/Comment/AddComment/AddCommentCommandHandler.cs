@@ -67,6 +67,7 @@ namespace BlogApi.Application.Commands.Comment.AddComment
             await _context.SaveChangesAsync(cancellationToken);
             await _hubService.BroadcastSentComment(request.PostId, request.Content);
             await _cacheInvalidation.InvalidatePostCacheAsync(request.PostId);
+            await _cacheInvalidation.InvalidatePostListCachesAsync();
 
             return Result<int>.Success(comment.Id);
         }
