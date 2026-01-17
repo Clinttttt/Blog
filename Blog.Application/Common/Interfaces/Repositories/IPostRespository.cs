@@ -20,7 +20,7 @@ namespace Blog.Application.Common.Interfaces.Repositories
             CancellationToken cancellationToken = default);
 
         Task<Post?> GetAsync(
-           int postId,
+           int? postId,
            CancellationToken
            cancellationToken = default);
 

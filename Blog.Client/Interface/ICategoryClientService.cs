@@ -6,7 +6,7 @@ namespace BlogApi.Client.Interface
 {
     public interface ICategoryClientService
     {
-        Task<Result<bool>> Create(AddCategoryRequest CategoryName);
+        Task<Result<int>> Create(AddCategoryRequest CategoryName);
         Task<Result<List<CategoryDto>>> GetListing();
         Task<Result<List<CategoryDto>>> GetListPostCategory();
         Task<Result<bool>> Delete(int Id);

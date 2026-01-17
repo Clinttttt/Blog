@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Queries.Posts.GetPostWithComments
 {
-    public record GetQuery(int PostId, Guid? UserId) : IRequest<Result<PostDetailDto>>;
+    public record GetQuery(int? PostId, Guid? UserId) : IRequest<Result<PostDetailDto>>;
     
 }

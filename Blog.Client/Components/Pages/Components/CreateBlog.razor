@@ -1,7 +1,7 @@
 ﻿@page "/create-post"
 @using Blog.Client.Realtime
 
-<div class="h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-auto">
+<div class="h-screen  overflow-auto bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         @if (isLoading)
@@ -23,21 +23,25 @@
         }
         else
         {
-            <div class="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 border-indigo-100">
+            <!-- Header -->
+            <div class="mb-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100/50 p-8">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg border-2 border-white">
-                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
+                                <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </div>
-                            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">Create New Post</h1>
+                            <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
                         </div>
-                        <p class="text-gray-600 ml-13">Share your insights and stories with the community</p>
+                        <div>
+                            <h1 class="text-3xl font-bold bg-gradient-to-r from-gray-900 via-indigo-900 to-purple-900 bg-clip-text text-transparent">Create New Post</h1>
+                            <p class="text-gray-600 mt-1">Share your insights and stories with the community</p>
+                        </div>
                     </div>
-                    <button @onclick="NavigateBack" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all duration-200 border border-gray-300 hover:border-gray-400">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button @onclick="NavigateBack" class="group w-11 h-11 flex items-center justify-center rounded-xl hover:bg-gray-100 text-gray-400 hover:text-gray-900 transition-all duration-200 border border-gray-200 hover:border-gray-300 hover:shadow-md">
+                        <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
@@ -45,53 +49,60 @@
             </div>
 
             <EditForm Model="@Post" OnValidSubmit="HandlePublish" FormName="CreateBlog">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                    <div class="lg:col-span-2 space-y-6 flex flex-col">
+                
+                    <div class="lg:col-span-2 space-y-6 ">
 
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 border-indigo-100">
-                            <div class="flex items-center gap-2 mb-3">
-                                <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                                </svg>
-                                <label class="block text-sm font-semibold text-gray-900">Post Title</label>
-                                <span class="text-red-500">*</span>
+                       
+                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100/50 p-6 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                    </svg>
+                                </div>
+                                <label class="text-sm font-semibold text-gray-900">Post Title</label>
+                                <span class="text-red-500 text-lg">*</span>
                             </div>
                             <InputText @bind-Value="Post.Title"
                                        placeholder="Write a compelling title that captures attention..."
-                                       class="w-full px-4 py-3.5 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 focus:border-indigo-300" />
+                                       class="w-full px-4 py-3.5 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 bg-gray-50 hover:bg-white" />
                         </div>
 
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 border-indigo-100">
+                       
+                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100/50 p-6 hover:shadow-xl transition-all duration-300">
                             <div class="flex items-center gap-2 mb-4">
-                                <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <label class="block text-sm font-semibold text-gray-900">Featured Image</label>
+                                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <label class="text-sm font-semibold text-gray-900">Featured Image</label>
                             </div>
 
                             @if (string.IsNullOrEmpty(previewImageUrl))
                             {
-                                <div class="group border-2 border-dashed border-indigo-200 rounded-xl p-12 text-center hover:border-indigo-400 hover:bg-indigo-50/30 transition-all duration-200 cursor-pointer bg-indigo-50/20">
+                                <div class="group relative border-2 border-dashed border-indigo-200 rounded-2xl p-12 text-center hover:border-indigo-400 hover:bg-gradient-to-br hover:from-indigo-50/50 hover:to-purple-50/50 transition-all duration-300 cursor-pointer bg-gradient-to-br from-gray-50 to-indigo-50/30">
                                     <InputFile OnChange="HandleImageUpload" class="hidden" id="imageUpload" accept="image/*" />
                                     <label for="imageUpload" class="cursor-pointer block">
-                                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200 border-2 border-indigo-200">
-                                            <svg class="w-8 h-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                                            <svg class="w-10 h-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                             </svg>
                                         </div>
-                                        <p class="text-gray-900 font-medium mb-1">Click to upload or drag and drop</p>
+                                        <p class="text-gray-900 font-semibold mb-1">Click to upload or drag and drop</p>
                                         <p class="text-sm text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                     </label>
                                 </div>
                             }
                             else
                             {
-                                <div class="relative group">
-                                    <img src="@previewImageUrl" class="w-full h-72 object-cover rounded-xl ring-2 ring-indigo-100 border border-indigo-200" alt="Featured" />
-                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl flex items-center justify-center border-2 border-indigo-300">
+                                <div class="relative group overflow-hidden rounded-2xl">
+                                    <img src="@previewImageUrl" class="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105" alt="Featured" />
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                         <button type="button" @onclick="RemoveImage"
-                                                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2 shadow-lg border border-red-600">
+                                                class="bg-indigo-600 text-white px-5 py-3 rounded-xl hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-2xl font-semibold transform hover:scale-105 border border-indigo-700">
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
@@ -102,25 +113,28 @@
                             }
                         </div>
 
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 flex flex-col flex-1 border-indigo-100">
+                    
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 flex flex-col flex-1 border-indigo-100 z-10">
                             <div class="flex items-center gap-2 mb-4">
-                                <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                <label class="block text-sm font-semibold text-gray-900">Content</label>
-                                <span class="text-red-500">*</span>
+                                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <label class="text-sm font-semibold text-gray-900">Content</label>
+                                <span class="text-red-500 text-lg">*</span>
                             </div>
                             <div class="rounded-xl overflow-hidden shadow-sm flex-1 border border-indigo-100">
                                 @if (isEditorLoading)
                                 {
-                                    <div class="w-full h-96 bg-gray-50 animate-pulse rounded-xl p-4 space-y-3">
-                                        <div class="h-10 bg-gray-200 rounded"></div>
-                                        <div class="h-8 bg-gray-200 rounded w-3/4"></div>
-                                        <div class="h-6 bg-gray-200 rounded w-1/2"></div>
-                                        <div class="space-y-2 pt-4">
-                                            <div class="h-4 bg-gray-200 rounded"></div>
-                                            <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-                                            <div class="h-4 bg-gray-200 rounded w-4/5"></div>
+                                    <div class="w-full h-96 bg-gradient-to-br from-gray-50 to-indigo-50/30 animate-pulse p-6 space-y-4">
+                                        <div class="h-10 bg-gray-200/70 rounded-lg"></div>
+                                        <div class="h-8 bg-gray-200/70 rounded-lg w-3/4"></div>
+                                        <div class="h-6 bg-gray-200/70 rounded-lg w-1/2"></div>
+                                        <div class="space-y-3 pt-4">
+                                            <div class="h-4 bg-gray-200/70 rounded"></div>
+                                            <div class="h-4 bg-gray-200/70 rounded w-5/6"></div>
+                                            <div class="h-4 bg-gray-200/70 rounded w-4/5"></div>
                                         </div>
                                     </div>
                                 }
@@ -135,246 +149,308 @@
                         </div>
                     </div>
 
-                    <div class="lg:col-span-1 space-y-6 flex flex-col gap-6">
+                   
+                    <div class="lg:col-span-1 space-y-6">
 
-                        <div class="flex-1 space-y-6">
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 border-indigo-100">
-                                <div class="flex items-center gap-2 mb-5">
-                                    <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     
+                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100/50 p-6 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-center gap-2 mb-5">
+                                <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                                     </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900">Publish Settings</h3>
                                 </div>
-
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                        <AuthorizeView Roles="Admin">
-                                            <Authorized Context="authState">
-                                                <InputSelect @bind-Value="Post.Status"
-                                                             class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300">
-                                                    <option value="@EntityEnum.Status.Published">Published</option>
-                                                    <option value="@EntityEnum.Status.Draft"> Draft</option>
-                                                </InputSelect>
-                                            </Authorized>
-                                        </AuthorizeView>
-                                        <AuthorizeView Roles="Author">
-                                            <Authorized Context="authState">
-                                                <InputSelect @bind-Value="Post.Status"
-                                                             class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300">
-                                                    <option value="@EntityEnum.Status.Pending">Pending</option>
-                                                    <option value="@EntityEnum.Status.Published" disabled> Published</option>
-                                                    <option value="@EntityEnum.Status.Draft" disabled> Draft</option>
-                                                </InputSelect>
-                                            </Authorized>
-                                        </AuthorizeView>
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
-                                        <InputText @bind-Value="Post.Author"
-                                                   placeholder="Your name"
-                                                   class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300" />
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Publish Date</label>
-                                        <InputDate @bind-Value="PublishedDate"
-                                                   class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300" />
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Reading Time</label>
-                                        <InputSelect @bind-Value="Post.ReadingDuration"
-                                                     class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300">
-                                            <option value="@ReadingDuration.Minutes5"> 5 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes10"> 10 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes15"> 15 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes20"> 20 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes25"> 25 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes30"> 30 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes35"> 35 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes40"> 40 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes45"> 45 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes50"> 50 Minutes</option>
-                                            <option value="@ReadingDuration.Minutes55"> 55 Minutes</option>
-                                            <option value="@ReadingDuration.OneHour"> 1 Hour</option>
-                                            <option value="@ReadingDuration.OneHourPlus"> 1 Hour +</option>
-                                        </InputSelect>
-                                    </div>
-                                </div>
+                                <h3 class="text-lg font-bold text-gray-900">Publish Settings</h3>
                             </div>
 
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 border-indigo-100">
-                                <div class="flex items-center gap-2 mb-5">
-                                    <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900">Category</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                                    <AuthorizeView Roles="Admin">
+                                        <Authorized Context="authState">
+                                            <InputSelect @bind-Value="Post.Status"
+                                                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white font-medium">
+                                                <option value="@EntityEnum.Status.Published"> Published</option>
+                                                <option value="@EntityEnum.Status.Draft"> Draft</option>
+                                            </InputSelect>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                    <AuthorizeView Roles="Author">
+                                        <Authorized Context="authState">
+                                            <InputSelect @bind-Value="Post.Status"
+                                                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white font-medium">
+                                                <option value="@EntityEnum.Status.Pending"> Pending</option>
+                                                <option value="@EntityEnum.Status.Published" disabled> Published</option>
+                                                <option value="@EntityEnum.Status.Draft" disabled> Draft</option>
+                                            </InputSelect>
+                                        </Authorized>
+                                    </AuthorizeView>
                                 </div>
 
-                                @if (!showNewCategory)
-                                {
-                                    <div class="space-y-3">
-                                        <InputSelect @bind-Value="Post.CategoryId"
-                                                     class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300">
-                                            <option value="">Select a category</option>
-                                            @if (ListCategory?.IsSuccess == true && ListCategory.Value != null)
-                                            {
-                                                @foreach (var category in ListCategory.Value)
-                                                {
-                                                    <option value="@category.Id">@category.Name</option>
-                                                }
-                                            }
-                                        </InputSelect>
-                                        <button type="button" @onclick="() => showNewCategory = true"
-                                                class="w-full px-3 py-2.5 text-sm text-indigo-600 hover:text-indigo-700 font-medium hover:bg-indigo-50 rounded-lg transition-colors border border-indigo-200 hover:border-indigo-300">
-                                            + Create New Category
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Author</label>
+                                    <InputText @bind-Value="Post.Author"
+                                               placeholder="Your name"
+                                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Publish Date</label>
+                                    <InputDate @bind-Value="PublishedDate"
+                                               class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Reading Time</label>
+                                    <InputSelect @bind-Value="Post.ReadingDuration"
+                                                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white font-medium">
+                                        <option value="@ReadingDuration.Minutes5">⏱️ 5 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes10">⏱️ 10 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes15">⏱️ 15 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes20">⏱️ 20 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes25">⏱️ 25 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes30">⏱️ 30 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes35">⏱️ 35 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes40">⏱️ 40 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes45">⏱️ 45 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes50">⏱️ 50 Minutes</option>
+                                        <option value="@ReadingDuration.Minutes55">⏱️ 55 Minutes</option>
+                                        <option value="@ReadingDuration.OneHour">⏱️ 1 Hour</option>
+                                        <option value="@ReadingDuration.OneHourPlus">⏱️ 1 Hour +</option>
+                                    </InputSelect>
+                                </div>
+                            </div>
+                        </div>
+
+                      
+                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100/50 p-6 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-center gap-2 mb-5">
+                                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900">Category</h3>
+                            </div>
+
+                            @if (selectedCategoryId.HasValue)
+                            {
+                                <div class="mb-4 p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border-2 border-indigo-200">
+                                    <div class="flex items-center justify-between">
+                                        <span class="inline-flex items-center gap-2 text-indigo-900 font-semibold">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                            </svg>
+                                            @GetCategoryNameById(selectedCategoryId.Value)
+                                        </span>
+                                        <button type="button" @onclick="ClearCategory" class="text-indigo-600 hover:text-indigo-900 hover:bg-indigo-200 rounded-lg p-1.5 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
                                         </button>
                                     </div>
+                                </div>
+                            }
+
+                            <input type="text"
+                                   @bind="CategorySearchQuery"
+                                   @bind:event="oninput"
+                                   @onkeyup="HandlingCategoryQuery"
+                                   class="w-full px-4 py-3 mb-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white"
+                                   placeholder="🔍 Search categories..." />
+
+                            <div class="max-h-64 overflow-y-auto space-y-2 mb-4">
+                                @if (!showNewCategory)
+                                {
+                                    @if (FilteredCategory?.IsSuccess == true && FilteredCategory.Value != null)
+                                    {
+                                        @foreach (var category in FilteredCategory.Value.Where(c => c.Id != selectedCategoryId))
+                                        {
+                                            <button type="button" @onclick="() => SelectCategory(category.Id)"
+                                                    class="w-full px-4 py-3 text-left bg-gradient-to-r from-gray-50 to-indigo-50/50 hover:from-indigo-50 hover:to-purple-50 rounded-xl transition-all font-medium border-2 border-transparent hover:border-indigo-200 flex items-center gap-2 group">
+                                                <svg class="w-4 h-4 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                                </svg>
+                                                <span class="text-gray-700 group-hover:text-indigo-900">@category.Name</span>
+                                            </button>
+                                        }
+                                    }
+                                }
+                            </div>
+
+                            @if (!showNewCategory)
+                            {
+                                <button type="button" @onclick="() => showNewCategory = true"
+                                        class="w-full px-4 py-3 text-indigo-600 hover:text-indigo-700 font-semibold hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 rounded-xl transition-all border-2 border-indigo-200 hover:border-indigo-300 flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Create New Category
+                                </button>
+                            }
+                            else
+                            {
+                                <div class="space-y-3 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border-2 border-indigo-200">
+                                    <InputText @bind-Value="newCategory"
+                                               placeholder="Enter category name"
+                                               class="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white" />
+                                    @if (!string.IsNullOrEmpty(categoryError))
+                                    {
+                                        <p class="text-sm text-red-600 font-medium">⚠️ @categoryError</p>
+                                    }
+                                    <div class="flex gap-2">
+                                        <button type="button" @onclick="HandleCategory"
+                                                class="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg">
+                                            Add
+                                        </button>
+                                        <button type="button" @onclick="() => { showNewCategory = false; newCategory = string.Empty; categoryError = string.Empty; }"
+                                                class="flex-1 px-4 py-3 bg-white text-gray-700 rounded-xl font-semibold hover:bg-gray-100 transition-all border-2 border-gray-200">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                       
+                        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100/50 p-6 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-center gap-2 mb-5">
+                                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900">Tags</h3>
+                            </div>
+
+                            @if (selectedTags.Any())
+                            {
+                                <div class="flex flex-wrap gap-2 mb-4 p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border-2 border-indigo-200">
+                                    @foreach (var tagId in selectedTags)
+                                    {
+                                        var tagName = GetTagNameById(tagId);
+                                        <span class="inline-flex items-center gap-2 bg-white border-2 border-indigo-200 text-indigo-700 px-3 py-2 rounded-xl font-semibold shadow-sm hover:shadow-md transition-all hover:border-indigo-300">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                            </svg>
+                                            @tagName
+                                            <button type="button" @onclick="() => RemoveTag(tagId)" class="hover:text-indigo-900 hover:bg-indigo-100 rounded-full p-1 transition-colors">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    }
+                                </div>
+                            }
+
+                            <input type="text"
+                                   @bind="SearchQuery"
+                                   @bind:event="oninput"
+                                   @onkeyup="HandlingQuery"
+                                   class="w-full px-4 py-3 mb-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white"
+                                   placeholder="🔍 Search tags..." />
+
+                            <div class="max-h-64 overflow-y-auto space-y-2 mb-4">
+                                @if (!showNewTag)
+                                {
+                                    @if (FilteredTag?.IsSuccess == true && FilteredTag.Value != null)
+                                    {
+                                        @foreach (var tag in FilteredTag.Value.Where(t => !selectedTags.Contains(t.Id)))
+                                        {
+                                            <button type="button" @onclick="() => AddExistingTag(tag.Id)"
+                                                    class="w-full px-4 py-3 text-left bg-gradient-to-r from-gray-50 to-indigo-50/50 hover:from-indigo-50 hover:to-purple-50 rounded-xl transition-all font-medium border-2 border-transparent hover:border-indigo-200 flex items-center gap-2 group">
+                                                <svg class="w-4 h-4 text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                </svg>
+                                                <span class="text-gray-700 group-hover:text-indigo-900">@tag.Name</span>
+                                            </button>
+                                        }
+                                    }
+                                }
+                            </div>
+
+                            @if (!showNewTag)
+                            {
+                                <button type="button" @onclick="() => showNewTag = true"
+                                        class="w-full px-4 py-3 text-indigo-600 hover:text-indigo-700 font-semibold hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 rounded-xl transition-all border-2 border-indigo-200 hover:border-indigo-300 flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Create New Tag
+                                </button>
+                            }
+                            else
+                            {
+                                <div class="space-y-3 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border-2 border-indigo-200">
+                                    <InputText @bind-Value="newTag"
+                                               placeholder="Enter tag name"
+                                               class="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 bg-white" />
+
+                                    @if (!string.IsNullOrEmpty(tagError))
+                                    {
+                                        <p class="text-sm text-red-600 font-medium">⚠️ @tagError</p>
+                                    }
+
+                                    <div class="flex gap-2">
+                                        <button type="button" @onclick="AddNewTag"
+                                                class="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg">
+                                            Add
+                                        </button>
+                                        <button type="button" @onclick="() => { showNewTag = false; newTag = string.Empty; tagError = string.Empty; }"
+                                                class="flex-1 px-4 py-3 bg-white text-gray-700 rounded-xl font-semibold hover:bg-gray-100 transition-all border-2 border-gray-200">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                       
+                        <div class="space-y-3 sticky top-4">
+                            <button type="submit" disabled="@isSaving"
+                                    class="w-full px-6 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-xl font-bold hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                                @if (isSaving)
+                                {
+                                    <div class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                                    <span>Publishing...</span>
                                 }
                                 else
                                 {
-                                    <div class="space-y-3">
-                                        <InputText @bind-Value="newCategory"
-                                                   placeholder="Enter category name"
-                                                   class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300" />
-                                        @if (!string.IsNullOrEmpty(categoryError))
-                                        {
-                                            <p class="text-sm text-red-600">@categoryError</p>
-                                        }
-                                        <div class="flex gap-2">
-                                            <button type="button" @onclick="HandleCategory"
-                                                    class="flex-1 px-3 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm border border-indigo-700">
-                                                Add
-                                            </button>
-                                            <button type="button" @onclick="() => { showNewCategory = false; newCategory = string.Empty; categoryError = string.Empty; }"
-                                                    class="flex-1 px-3 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300">
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200 border-indigo-100">
-                                <div class="flex items-center gap-2 mb-5">
-                                    <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                    </svg>
-                                    <h3 class="text-lg font-semibold text-gray-900">Tags</h3>
-                                </div>
-
-                                <input type="text"
-                                       @bind="SearchQuery"
-                                       @bind:event="oninput"
-                                       @onkeyup="HandlingQuery"
-                                       class="w-full px-3 py-2.5 mb-4 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300"
-                                       placeholder="Search tags..." />
-
-                                @if (selectedTags.Any())
-                                {
-                                    <div class="flex flex-wrap gap-2 mb-4 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
-                                        @foreach (var tagId in selectedTags)
-                                        {
-                                            var tagName = GetTagNameById(tagId);
-                                            <span class="inline-flex items-center gap-1.5 bg-white border border-indigo-200 text-indigo-700 px-3 py-1.5 rounded-lg text-sm font-medium shadow-sm hover:shadow transition-shadow hover:border-indigo-300">
-                                                @tagName
-                                                <button type="button" @onclick="() => RemoveTag(tagId)" class="hover:text-indigo-900 hover:bg-indigo-100 rounded-full p-0.5 transition-colors">
-                                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </span>
-                                        }
-                                    </div>
-                                }
-
-                                <div class="max-h-64 overflow-y-auto space-y-2">
-                                    @if (!showNewTag)
-                                    {
-                                        @if (FilteredTag?.IsSuccess == true && FilteredTag.Value != null)
-                                        {
-                                            @foreach (var tag in FilteredTag.Value.Where(t => !selectedTags.Contains(t.Id)))
-                                            {
-                                                <button type="button" @onclick="() => AddExistingTag(tag.Id)"
-                                                        class="w-full px-3 py-2.5 text-left text-sm bg-gray-50 hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition-colors font-medium border border-transparent hover:border-indigo-200">
-                                                    @tag.Name
-                                                </button>
-                                            }
-                                        }
-                                        <button type="button" @onclick="() => showNewTag = true"
-                                                class="w-full px-3 py-2.5 text-sm text-indigo-600 hover:text-indigo-700 font-medium hover:bg-indigo-50 rounded-lg transition-colors border border-indigo-200 hover:border-indigo-300">
-                                            + Create New Tag
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <div class="space-y-3">
-                                            <InputText @bind-Value="newTag"
-                                                       placeholder="Enter tag name"
-                                                       class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 focus:border-indigo-300" />
-
-                                            @if (!string.IsNullOrEmpty(tagError))
-                                            {
-                                                <p class="text-sm text-red-600">@tagError</p>
-                                            }
-
-                                            <div class="flex gap-2">
-                                                <button type="button" @onclick="AddNewTag"
-                                                        class="flex-1 px-3 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm border border-indigo-700">
-                                                    Add
-                                                </button>
-                                                <button type="button" @onclick="() => { showNewTag = false; newTag = string.Empty; tagError = string.Empty; }"
-                                                        class="flex-1 px-3 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border border-gray-300">
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="space-y-3 sticky top-4">
-                                <button type="submit" disabled="@isSaving"
-                                        class="w-full px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 border border-indigo-700">
-                                    @if (isSaving)
-                                    {
-                                        <div class="inline-block animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                                        <span>Publishing...</span>
-                                    }
-                                    else
-                                    {
-                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <AuthorizeView Roles="Admin">
-                                            <Authorized Context="authState">
-                                                <span>Publish Post</span>
-                                            </Authorized>
-                                        </AuthorizeView>
-                                        <AuthorizeView Roles="Author">
-                                            <Authorized Context="authState">
-                                                <span>Submit Post</span>
-                                            </Authorized>
-                                        </AuthorizeView>
-                                    }
-                                </button>
-
-                                <button type="button" @onclick="SaveDraft" disabled="@isSaving"
-                                        class="w-full px-6 py-3.5 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow border border-gray-300">
-                                    Save as Draft
-                                </button>
-
-                                <label for="preview_post"
-                                       class="w-full px-6 py-3.5 border-2 border-indigo-100 text-gray-700 rounded-xl font-semibold hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow cursor-pointer h-14 block text-center">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    Preview Post
-                                </label>
-                            </div>
+                                    <AuthorizeView Roles="Admin">
+                                        <Authorized Context="authState">
+                                            <span>Publish Post</span>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                    <AuthorizeView Roles="Author">
+                                        <Authorized Context="authState">
+                                            <span>Submit Post</span>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                }
+                            </button>
+
+                            <button type="button" @onclick="SaveDraft" disabled="@isSaving"
+                                    class="w-full px-6 py-4 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl font-bold hover:from-gray-200 hover:to-gray-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg">
+                                <div class="flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                                    </svg>
+                                    Save as Draft
+                                </div>
+                            </button>
+
+                            <label for="preview_post"
+                                   class="w-full px-6 py-4 border-2 border-indigo-200 text-gray-700 rounded-xl font-bold hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:border-indigo-300 transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Preview Post
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -390,7 +466,9 @@
     private Result<List<TagDto>>? ListTag { get; set; }
     private Result<List<CategoryDto>>? ListCategory { get; set; }
     private Result<List<TagDto>>? FilteredTag { get; set; }
+    private Result<List<CategoryDto>>? FilteredCategory { get; set; }
     private List<int> selectedTags = new List<int>();
+    private int? selectedCategoryId = null;
 
     private CreatePostRequest Post { get; set; } = new CreatePostRequest
     {
@@ -410,6 +488,7 @@
     private string newCategory = string.Empty;
     private string newTag = string.Empty;
     private string SearchQuery = "";
+    private string CategorySearchQuery = "";
     private string previewImageUrl = string.Empty;
     private string tagError = string.Empty;
     private string categoryError = string.Empty;
@@ -456,6 +535,7 @@
         ListCategory = await CategoryClient.GetListing();
         ListTag = await TagClient.GetListing();
         FilteredTag = ListTag;
+        FilteredCategory = ListCategory;
 
         isLoading = false;
         StateHasChanged();
@@ -466,6 +546,30 @@
         StateHasChanged();
     }
 
+    private void SelectCategory(int categoryId)
+    {
+        selectedCategoryId = categoryId;
+        Post.CategoryId = categoryId;
+        CategorySearchQuery = string.Empty;
+        FilteredCategory = ListCategory;
+    }
+
+    private void ClearCategory()
+    {
+        selectedCategoryId = null;
+        Post.CategoryId = null;
+    }
+
+    private string GetCategoryNameById(int categoryId)
+    {
+        if (ListCategory?.IsSuccess == true && ListCategory.Value != null)
+        {
+            var category = ListCategory.Value.FirstOrDefault(c => c.Id == categoryId);
+            return category?.Name ?? string.Empty;
+        }
+        return string.Empty;
+    }
+
     private async Task HandleCategory()
     {
         if (string.IsNullOrWhiteSpace(newCategory)) return;
@@ -474,9 +578,11 @@
         AddCat.Name = newCategory;
         var result = await CategoryClient.Create(AddCat);
 
-        if (result?.IsSuccess == true)
+        if (result?.IsSuccess == true && result.Value > 0)
         {
             ListCategory = await CategoryClient.GetListing();
+            FilteredCategory = ListCategory;
+            SelectCategory(result.Value);
             showNewCategory = false;
             newCategory = string.Empty;
         }
@@ -530,6 +636,7 @@
         if (result?.IsSuccess == true && result.Value > 0)
         {
             ListTag = await TagClient.GetListing();
+            FilteredTag = ListTag;
             selectedTags.Add(result.Value);
             showNewTag = false;
             newTag = string.Empty;
@@ -607,6 +714,19 @@
         else
         {
             FilteredTag = ListTag;
+        }
+    }
+
+    private void HandlingCategoryQuery()
+    {
+        var query = CategorySearchQuery.ToLower();
+        if (!string.IsNullOrEmpty(query))
+        {
+            FilteredCategory = Result<List<CategoryDto>>.Success(ListCategory!.Value!.Where(s => s.Name!.ToLower().Contains(query)).ToList());
+        }
+        else
+        {
+            FilteredCategory = ListCategory;
         }
     }
 }

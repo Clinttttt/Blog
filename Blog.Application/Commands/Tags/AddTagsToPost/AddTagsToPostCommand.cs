@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Tags.AddTagsToPost
 {
-    public record AddTagsToPostCommand(int PostId, int TagId, Guid UserId) : IRequest<Result<bool>>
+    public record AddTagsToPostCommand(int? PostId, int TagId, Guid UserId) : IRequest<Result<bool>>
     {
 
     }

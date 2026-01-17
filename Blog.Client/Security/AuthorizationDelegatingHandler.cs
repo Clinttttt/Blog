@@ -17,9 +17,7 @@ namespace BlogApi.Client.Security
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected override Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,CancellationToken cancellationToken)
         {
             try
             {

@@ -1,4 +1,5 @@
-﻿using BlogApi.Domain.Common;
+﻿using Blog.Application.Common.Interfaces.Utilities;
+using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Category.LinkCategory
 {
-    public class LinkCategoryCommandHandler(IAppDbContext context) : IRequestHandler<LinkCategoryCommand, Result<bool>>
+    public class LinkCategoryCommandHandler(IAppDbContext context, ICacheInvalidationService cacheInvalidation) : IRequestHandler<LinkCategoryCommand, Result<bool>>
     {
         public async Task<Result<bool>> Handle(LinkCategoryCommand request, CancellationToken cancellationToken)
         {          
@@ -19,7 +20,9 @@ namespace BlogApi.Application.Commands.Category.LinkCategory
                 return Result<bool>.NotFound();
             post.CategoryId = request.CategoryId;
             await context.SaveChangesAsync();
+            await cacheInvalidation.InvalidatePostListCachesAsync();
             return Result<bool>.Success(true);
+
         }
     }
 }

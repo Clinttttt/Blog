@@ -1,6 +1,8 @@
-﻿using BlogApi.Domain.Common;
+﻿using Blog.Application.Common.Interfaces.Utilities;
+using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using BlogApi.Domain.Interfaces;
+using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Tags.AddTagsToPost
 {
-    public class AddTagsToPostCommandHandler(IAppDbContext context) : IRequestHandler<AddTagsToPostCommand, Result<bool>>
+    public class AddTagsToPostCommandHandler(IAppDbContext context, ICacheInvalidationService cacheInvalidation) : IRequestHandler<AddTagsToPostCommand, Result<bool>>
     {
         public async Task<Result<bool>> Handle(AddTagsToPostCommand request, CancellationToken cancellationToken)
         { 
@@ -34,6 +36,7 @@ namespace BlogApi.Application.Commands.Tags.AddTagsToPost
             };
             context.PostTags.Add(link);
             await context.SaveChangesAsync();
+            await cacheInvalidation.InvalidatePostListCachesAsync();
             return Result<bool>.Success(true);
         }
     }

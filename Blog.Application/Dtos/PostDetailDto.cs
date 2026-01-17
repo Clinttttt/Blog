@@ -15,6 +15,7 @@ namespace BlogApi.Application.Dtos
         public string? Content { get; set; }
         public DateTime PostCreatedAt { get; set; }  
         public string? CategoryName { get; set; }
+        public int? CategoryId { get; set; }
         public List<CommentDto> Comments { get; set; } = new();
         public List<TagDto>? Tags { get; set; } 
         public byte[]? Photo { get; set; }

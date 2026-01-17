@@ -58,6 +58,7 @@ namespace BlogApi.Infrastructure.Respository
                     PostLike = p.PostLikes.Count(),
                     IsBookMark = userId != null && p.BookMarks.Any(b => b.UserId == userId),
                     CategoryName = p.Category.Name,
+                    CategoryId = p.CategoryId,
                     Author = p.User.UserInfo != null && !string.IsNullOrEmpty(p.User.UserInfo.FullName)
                         ? p.User.UserInfo.FullName
                         : p.User.UserName,
@@ -131,7 +132,7 @@ namespace BlogApi.Infrastructure.Respository
 
             return items;
         }
-        public async Task<Post?> GetAsync(int postId, CancellationToken cancellationToken = default)
+        public async Task<Post?> GetAsync(int? postId, CancellationToken cancellationToken = default)
         {
             return await context.Posts
                    .AsNoTracking()

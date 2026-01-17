@@ -9,7 +9,7 @@ namespace BlogApi.Application.Request.Tag
 {
     public class AddTagsToPostRequest
     {
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
         public int Tagid { get; set; }
         public AddTagsToPostCommand AddTagToPostCommand(Guid UserId)
             => new(PostId, Tagid, UserId);

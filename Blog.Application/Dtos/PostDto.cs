@@ -16,6 +16,7 @@ namespace BlogApi.Application.Dtos
         public string? Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? CategoryName { get; set; }
+        public int? CategoryId { get; set; }
         public ReadingDuration readingDuration { get; set; }
         public List<TagDto>? Tags { get; set; }
         public bool IsBookMark { get; set; }

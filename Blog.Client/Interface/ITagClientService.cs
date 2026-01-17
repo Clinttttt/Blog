@@ -1,4 +1,5 @@
-﻿using BlogApi.Application.Dtos;
+﻿using Blog.Application.Request.Tag;
+using BlogApi.Application.Dtos;
 using BlogApi.Application.Request.Tag;
 using BlogApi.Domain.Common;
 
@@ -11,5 +12,6 @@ namespace BlogApi.Client.Interface
         Task<Result<List<TagDto>>> GetListing();
         Task<Result<bool>> AddTagsToPost(AddTagsToPostRequest dto);
         Task<Result<List<TagDto>>> GetListingPostTag();
+        Task<Result<bool>> DeleteTagToPost(DeleteTagToPostRequest dto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using BlogApi.Application.Commands.Category.AddCategory;
+﻿using BlogApi.Application.Commands.Category;
+using BlogApi.Application.Commands.Category.AddCategory;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;
 using MediatR;
@@ -11,30 +12,54 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Category
 {
-    public class AddCategoyCommandHandler(IAppDbContext context) : IRequestHandler<AddCategoyCommand, Result<bool>>
+    public class AddCategoryCommandHandler(IAppDbContext context) : IRequestHandler<AddCategoyCommand, Result<int>>
     {
-        public async Task<Result<bool>> Handle(AddCategoyCommand request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(AddCategoyCommand request, CancellationToken cancellationToken)
         {
-           var category = await context.Categories.AnyAsync(s=> s.Name == request.Name);
-            if (category)
+
+            if (string.IsNullOrWhiteSpace(request.Name))
             {
-                return Result<bool>.Conflict();
+                return Result<int>.Failure("Category name is required");
             }
-            if (!string.IsNullOrEmpty(request.Name))
+
+
+            var normalizedName = request.Name.Trim();
+
+
+            var existingCategory = await context.Categories
+                .FirstOrDefaultAsync(s => s.Name!.ToLower() == normalizedName.ToLower(), cancellationToken);
+
+            if (existingCategory != null)
             {
-                var slughelper = SlugHelper.Generate(request.Name);
-                var categ = new BlogApi.Domain.Entities.Category
-                {
-                    Name = request.Name,
-                    Slug = slughelper,
-                    UserId = request.UserId,
-                    CreatedAt = DateTime.UtcNow.AddHours(8)
-                };
-                context.Categories.Add(categ);
+                return Result<int>.Conflict();
             }
-                 
-            await context.SaveChangesAsync();
-            return Result<bool>.Success(true);
+
+
+            var slug = SlugHelper.Generate(normalizedName);
+
+         
+            var slugExists = await context.Categories
+                .AnyAsync(s => s.Slug == slug, cancellationToken);
+
+            if (slugExists)
+            {
+               
+                slug = $"{slug}-{Guid.NewGuid().ToString().Substring(0, 8)}";
+            }
+
+
+            var category = new BlogApi.Domain.Entities.Category
+            {
+                Name = normalizedName,
+                Slug = slug,
+                UserId = request.UserId,
+                CreatedAt = DateTime.UtcNow.AddHours(8)
+            };
+
+            context.Categories.Add(category);
+            await context.SaveChangesAsync(cancellationToken);
+      
+            return Result<int>.Success(category.Id);
         }
     }
 }

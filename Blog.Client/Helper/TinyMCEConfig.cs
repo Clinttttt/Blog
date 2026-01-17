@@ -20,6 +20,10 @@
                 // TOOLBAR - Enhanced with font size, more formatting options
                 { "toolbar", "undo redo | styles fontsize | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table horizontalrule | codesample blockquote | searchreplace charmap anchor | fullscreen | removeformat code" },
 
+                // Prevent toolbar wrapping and use sliding drawer for overflow
+                { "toolbar_drawer", "sliding" },
+                { "toolbar_mode", "sliding" },
+
                 // FONT SIZE OPTIONS
                 { "fontsize_formats", "8pt 10pt 12pt 14pt 16pt 18pt 20pt 24pt 28pt 32pt 36pt 48pt 64pt" },
                 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Commands.Category.AddCategory
 {
-    public record AddCategoyCommand(string? Name, Guid UserId) : IRequest<Result<bool>>
+    public record AddCategoyCommand(string? Name, Guid UserId) : IRequest<Result<int>>
     {
     }
 }

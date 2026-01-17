@@ -14,7 +14,7 @@ namespace BlogApi.Client.Services
 {
     public class CategoryClientService(HttpClient httpClient) : HandleResponse(httpClient), ICategoryClientService
     {
-        public async Task<Result<bool>> Create(AddCategoryRequest dto) => await PostAsync<AddCategoryRequest, bool>("api/Category/CreateCategory", dto);
+        public async Task<Result<int>> Create(AddCategoryRequest dto) => await PostAsync<AddCategoryRequest, int>("api/Category/CreateCategory", dto);
         public async Task<Result<List<CategoryDto>>> GetListing() => await GetAsync<List<CategoryDto>>("api/Category/GetListing");
         public async Task<Result<List<CategoryDto>>> GetListPostCategory() => await GetAsync<List<CategoryDto>>("api/Category/GetListPostCategory");
         public async Task<Result<bool>> Delete(int Id) => await DeleteAsync<bool>($"api/Category/DeleteCategory/{Id}");

@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApi.Application.Commands.Category.LinkCategory
+namespace Blog.Application.Commands.Tags.DeleteTagToPost
 {
-    public record LinkCategoryCommand(int? PostId, int CategoryId, Guid UserId) : IRequest<Result<bool>>;
+    public record DeleteTagToPostCommand(int? PostId,int? TagId, Guid UserId) : IRequest<Result<bool>>;
     
 }

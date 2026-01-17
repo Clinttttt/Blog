@@ -48,6 +48,7 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
                 CommentCount = result.Comments.Count(),
                 PostCreatedAt = result.CreatedAt,
                 CategoryName = result.Category.Name,
+                CategoryId = result.CategoryId,
                 Photo = result.Photo,
                 ViewCount = result.ViewCount,
                 PhotoContent = result.PhotoContent,

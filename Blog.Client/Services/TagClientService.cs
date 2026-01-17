@@ -1,5 +1,6 @@
 ﻿
 
+using Blog.Application.Request.Tag;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Request.Tag;
 using BlogApi.Client.Helper;
@@ -17,5 +18,6 @@ namespace BlogApi.Client.Services
         public async Task<Result<List<TagDto>>> GetListing() => await GetAsync<List<TagDto>>("api/Tag/GetListing");
         public async Task<Result<List<TagDto>>> GetListingPostTag() => await GetAsync<List<TagDto>>("api/Tag/GetListingPostTag");
         public async Task<Result<bool>> AddTagsToPost(AddTagsToPostRequest dto) => await PostAsync<AddTagsToPostRequest, bool>("api/Tag/AddTagTopost", dto);
+        public async Task<Result<bool>> DeleteTagToPost(DeleteTagToPostRequest dto) => await DeleteAsync<DeleteTagToPostRequest, bool>("api/Tag/DeleteTagToPost", dto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using BlogApi.Api.Shared;
+﻿using Blog.Application.Request.Tag;
+using BlogApi.Api.Shared;
 using BlogApi.Application.Commands.Tags.DeleteTag;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Queries.Tags.GetAllTags;
@@ -59,6 +60,15 @@ namespace BlogApi.Api.Controllers
         public async Task<ActionResult<bool>> AddTagsToPost([FromBody] AddTagsToPostRequest request)
         {
             var command = request.AddTagToPostCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin,Author")]
+        [HttpDelete("DeleteTagToPost")]
+        public async Task<ActionResult<bool>> DeleteTagToPost([FromBody] DeleteTagToPostRequest request)
+        {
+            var command = request.DeleteTagToPostCommand(UserId);
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
