@@ -26,13 +26,13 @@ namespace BlogApi.Client.Services
         public async Task<Result<bool>> Delete(DeletePostRequest request)
             => await DeleteAsync<bool>($"api/Posts/Delete?PostId={request.PostId}");
 
-        public async Task<Result<PagedResult<PostDto>>> ListPublishedForAdmin(ListPaginatedRequest request)
+        public async Task<Result<PagedResult<PostDto>>> ListPublishedByUser(ListPaginatedRequest request)
            => await GetAsync<PagedResult<PostDto>>(
-               $"api/Posts/ListPublishedForAdmin?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+               $"api/Posts/ListPublishedByUser?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-        public async Task<Result<PagedResult<PostDto>>> ListDraftForAdmin(ListPaginatedRequest request)
+        public async Task<Result<PagedResult<PostDto>>> ListDraftByUser(ListPaginatedRequest request)
            => await GetAsync<PagedResult<PostDto>>(
-               $"api/Posts/ListDraftForAdmin?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+               $"api/Posts/ListDraftByUser?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
         public async Task<Result<PagedResult<PostDto>>> ListPublished(ListPaginatedRequest request)
             => await GetAsync<PagedResult<PostDto>>(
@@ -46,9 +46,8 @@ namespace BlogApi.Client.Services
             => await GetAsync<PagedResult<PostDto>>(
                 $"api/Posts/ListByCategory/{categoryId}?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
 
-
-        public async Task<Result<PagedResult<PendingRequestDto>>> GetListAuthorRequest(ListPaginatedRequest request)
+        public async Task<Result<PagedResult<PendingRequestDto>>> ListAuthorRequest(ListPaginatedRequest request)
             => await GetAsync<PagedResult<PendingRequestDto>>(
-                $"api/Posts/GetListAuthorRequest?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+                $"api/Posts/ListAuthorRequest?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
     }
 }

@@ -85,7 +85,7 @@
         else if (PostViewState.AuthorPageView == PostViewState.AuthorPostState.drafts)
         {
 
-            <Drafts />
+            <Blog.Client.Components.Pages.Components.ManagePosts ListPostFilterByUser="ListDraftByUser" Pagination="PaginationDraft" Refresh="RefreshDraftAsync" OnLoadMore="LoadDraftPostByUserAsync" />
 
         }
         else if (PostViewState.AuthorPageView == PostViewState.AuthorPostState.pending)
@@ -97,7 +97,7 @@
         else if (PostViewState.AuthorPageView == PostViewState.AuthorPostState.published)
         {
 
-            <Blog.Client.Components.Pages.Author.Components.Published />
+            <Blog.Client.Components.Pages.Components.ManagePosts ListPostFilterByUser="ListPublishedByUser" Pagination="PaginationPublished" Refresh="RefreshPublishedAsync" OnLoadMore="LoadPublishedPostByUserAsync" />
 
         }
         else if (PostViewState.AuthorPageView == PostViewState.AuthorPostState.bookmarks)
@@ -128,8 +128,6 @@
 
 </style>
 
-
-
 @code {
     private bool isSubscribedNotificationCount = false;
 
@@ -138,6 +136,40 @@
     private ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
     private UnreadDto? TotalCount { get; set; } = new UnreadDto();
     private bool _isSubscribedToSignalR = false;
+
+
+    
+    private PagedResult<PostDto>? ListDraftByUser { get; set; } = new PagedResult<PostDto>();
+    private PagedResult<PostDto>? ListPublishedByUser { get; set; } = new PagedResult<PostDto>();
+    private ListPaginatedRequest PaginationPublished { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 9 };
+    private ListPaginatedRequest PaginationDraft { get; set; } = new ListPaginatedRequest { PageNumber = 1, PageSize = 9 };
+
+    public async Task RefreshPublishedAsync()
+    {
+        PaginationPublished.PageNumber = 1;
+        await LoadPublishedPostByUserAsync();
+    }
+
+    public async Task LoadPublishedPostByUserAsync()
+    {
+        var request = await PostClient.ListPublishedByUser(PaginationPublished);
+        ListPublishedByUser = request.Value;
+        StateHasChanged();
+    }
+
+    public async Task RefreshDraftAsync()
+    {
+        PaginationPublished.PageNumber = 1;
+        await LoadPublishedPostByUserAsync();
+    }
+
+    public async Task LoadDraftPostByUserAsync()
+    {
+        var request = await PostClient.ListDraftByUser(PaginationPublished);
+        ListDraftByUser = request.Value;
+        StateHasChanged();
+    }
+
     protected override async Task OnInitializedAsync()
     {
         var listFeatureTask = ListFeatured();
@@ -145,15 +177,17 @@
         var unreadNotificationTask = GetUnreadNotificationCount();
         var notificationHubTask = NotificationSignalR.NotificationInitializeAsync();
         var postHubTask = PostSignalR.PostInitializeAsync();
-
+        var loadPublishedPostByUserAsync = LoadPublishedPostByUserAsync();
+        var loadDraftPostByUserAsync = LoadDraftPostByUserAsync();
 
         await Task.WhenAll(
             listFeatureTask,
             listPublishedTask,
             unreadNotificationTask,
             notificationHubTask,
-            postHubTask
-
+            postHubTask,
+            loadPublishedPostByUserAsync,
+            loadDraftPostByUserAsync
         );
 
         if (!_isSubscribedToSignalR)

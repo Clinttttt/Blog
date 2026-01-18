@@ -268,7 +268,7 @@
             isLoading = true;
             StateHasChanged();
 
-            var response = await PostClient.GetListAuthorRequest(PaginationPending);
+            var response = await PostClient.ListAuthorRequest(PaginationPending);
 
             if (response?.Value is not null)
             {

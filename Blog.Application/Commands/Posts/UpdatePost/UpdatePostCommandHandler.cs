@@ -29,6 +29,7 @@ namespace BlogApi.Application.Commands.Posts.UpdatePost
             post.Author = request.Author;
             post.CategoryId = request.CategoryId;
             post.readingDuration = request.readingDuration;
+            post.Status = request.Status;
 
             await context.SaveChangesAsync(cancellationToken);
             await Task.WhenAll(

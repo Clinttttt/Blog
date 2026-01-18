@@ -14,11 +14,11 @@ namespace BlogApi.Client.Interface
         Task<Result<int>> Update(UpdatePostRequest dto);
         Task<Result<bool>> Delete(DeletePostRequest request);
         Task<Result<bool>> Archive(ArchivePostRequest request);
-        Task<Result<PagedResult<PostDto>>> ListPublishedForAdmin(ListPaginatedRequest request);
-        Task<Result<PagedResult<PostDto>>> ListDraftForAdmin(ListPaginatedRequest request);
+        Task<Result<PagedResult<PostDto>>> ListPublishedByUser(ListPaginatedRequest request);
+        Task<Result<PagedResult<PostDto>>> ListDraftByUser(ListPaginatedRequest request);
         Task<Result<PagedResult<PostDto>>> ListPublished(ListPaginatedRequest request);
         Task<Result<PagedResult<PostDto>>> ListByTag(int tagId, ListPaginatedRequest request);
         Task<Result<PagedResult<PostDto>>> ListByCategory(int Id, ListPaginatedRequest request);
-        Task<Result<PagedResult<PendingRequestDto>>> GetListAuthorRequest(ListPaginatedRequest request);
+        Task<Result<PagedResult<PendingRequestDto>>> ListAuthorRequest(ListPaginatedRequest request);
     }
 }

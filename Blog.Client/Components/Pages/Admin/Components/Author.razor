@@ -1,6 +1,229 @@
-﻿@using Blog.Client.Realtime
-<h3>Author</h3>
+﻿<div class="container mx-auto p-6 border-t border-gray-200">
+    <div class="flex items-center justify-between mb-6">
+        <h3 class="text-2xl text-gray-700 font-bold">Authors</h3>
+
+        <div class="flex items-center gap-2">
+         
+            <button class="text-indigo-500">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+            </button>
+
+ 
+            <div class="relative">
+                <input type="text"
+                       placeholder="Search authors..."
+                       class="input input-bordered w-64 pr-10 " />
+                <svg class="w-5 h-5 absolute right-3 top-1/2 transform -translate-y-1/2 opacity-50 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid gap-4">
+
+        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow border border-base-300">
+            <div class="card-body p-5">
+                <div class="flex items-center gap-4">
+
+                    <div class="avatar">
+                        <div class="w-13 h-13 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src="/img/icon-proff.png" alt="Profile" />
+                        </div>
+                    </div>
+
+
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-700 text-lg">John Michael Santos</h4>
+
+                    </div>
+
+
+                    <div class="text-right">
+                        <div class="stat-value text-secondary text-2xl">24</div>
+                        <div class="stat-desc">Posts</div>
+                    </div>
+                </div>
+
+
+                <div class="flex items-center gap-4 mt-3 pt-4 border-t border-base-300">
+                    <div class="flex items-center gap-2 text-sm opacity-70">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Joined Jan 15, 2024</span>
+                    </div>
+                    <div class="badge bg-indigo-500 text-white badge-sm">Active</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow border border-base-300">
+            <div class="card-body p-5">
+                <div class="flex items-center gap-4">
+                    <div class="avatar">
+                        <div class="w-13 h-13 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src="/img/icon-proff.png" alt="Profile" />
+                        </div>
+                    </div>
+
+
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-700 text-lg">Maria Clara Rodriguez</h4>
+
+                    </div>
+
+                    <div class="text-right">
+                        <div class="stat-value text-secondary text-2xl">18</div>
+                        <div class="stat-desc">Posts</div>
+                    </div>
+                </div>
+
+
+
+                <div class="flex items-center gap-4 mt-3 pt-4 border-t border-base-300">
+                    <div class="flex items-center gap-2 text-sm opacity-70">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Joined Mar 22, 2024</span>
+                    </div>
+                    <div class="badge bg-indigo-500 text-white badge-sm">Active</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow border border-base-300">
+            <div class="card-body p-5">
+                <div class="flex items-center gap-4">
+                    <div class="avatar">
+                        <div class="w-13 h-13 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src="/img/icon-proff.png" alt="Profile" />
+                        </div>
+                    </div>
+
+
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-700 text-lg">Alexander Chen</h4>
+
+                    </div>
+
+                    <div class="text-right">
+                        <div class="stat-value text-secondary text-2xl">31</div>
+                        <div class="stat-desc">Posts</div>
+                    </div>
+                </div>
+
+
+
+                <div class="flex items-center gap-4 mt-3 pt-4 border-t border-base-300">
+                    <div class="flex items-center gap-2 text-sm opacity-70">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Joined Nov 08, 2023</span>
+                    </div>
+                    <div class="badge bg-indigo-500 text-white badge-sm">Active</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow border border-base-300">
+            <div class="card-body p-5">
+                <div class="flex items-center gap-4">
+                    <div class="avatar">
+                        <div class="w-13 h-13 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src="/img/icon-proff.png" alt="Profile" />
+                        </div>
+                    </div>
+
+
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-700 text-lg">Sophie Anderson</h4>
+
+                    </div>
+
+                    <div class="text-right">
+                        <div class="stat-value text-secondary text-2xl">12</div>
+                        <div class="stat-desc">Posts</div>
+                    </div>
+                </div>
+
+
+
+                <div class="flex items-center gap-4 mt-3 pt-4 border-t border-base-300">
+                    <div class="flex items-center gap-2 text-sm opacity-70">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Joined May 30, 2024</span>
+                    </div>
+                    <div class="badge bg-indigo-500 text-white badge-sm">Active</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow border border-base-300">
+            <div class="card-body p-5">
+                <div class="flex items-center gap-4">
+                    <div class="avatar">
+                        <div class="w-13 h-13 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            <img src="/img/icon-proff.png" alt="Profile" />
+                        </div>
+                    </div>
+
+
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-700 text-lg">David Park</h4>
+
+                    </div>
+
+                    <div class="text-right">
+                        <div class="stat-value text-secondary text-2xl">27</div>
+                        <div class="stat-desc">Posts</div>
+                    </div>
+                </div>
+
+
+
+                <div class="flex items-center gap-4 mt-3 pt-4 border-t border-base-300">
+                    <div class="flex items-center gap-2 text-sm opacity-70">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>Joined Feb 14, 2024</span>
+                    </div>
+                    <div class="badge bg-indigo-500 text-white badge-sm">Active</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
 
+    public class Authorss
+    {
+        public string FullName { get; set; }
+        public string Username { get; set; }
+        public string ProfilePicture { get; set; }
+        public int PostCount { get; set; }
+        public string JoinDate { get; set; }
+        public string Badge { get; set; }
+    }
+
+    private List<Authorss> authors = new List<Authorss>
+    {
+        new Authorss { FullName = "John Michael Santos", Username = "@johnmichael", ProfilePicture = "/img/icon-proff.png", PostCount = 24, JoinDate = "Jan 15, 2024", Badge = "Active" },
+        new Authorss { FullName = "Maria Clara Rodriguez", Username = "@mariaclara", ProfilePicture = "/img/icon-proff.png", PostCount = 18, JoinDate = "Mar 22, 2024", Badge = "Top Contributor" },
+        new Authorss { FullName = "Alexander Chen", Username = "@alexchen", ProfilePicture = "/img/icon-proff.png", PostCount = 31, JoinDate = "Nov 08, 2023", Badge = "Featured" },
+        new Authorss { FullName = "Sophie Anderson", Username = "@sophieanderson", ProfilePicture = "/img/icon-proff.png", PostCount = 12, JoinDate = "May 30, 2024", Badge = "Active" },
+        new Authorss { FullName = "David Park", Username = "@davidpark", ProfilePicture = "/img/icon-proff.png", PostCount = 27, JoinDate = "Feb 14, 2024", Badge = "Regular" }
+    };
 }

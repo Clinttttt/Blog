@@ -40,6 +40,7 @@ namespace BlogApi.Application.Queries.Posts.GetPostWithComments
             {
                 PostId = result.Id,
                 UserId = result.UserId,
+                Status = result.Status,
                 IsBookMark = result.BookMarks.Any(s => s.UserId == request.UserId),
                 PostLike = result.PostLikes.Count(),
                 Title = result.Title,

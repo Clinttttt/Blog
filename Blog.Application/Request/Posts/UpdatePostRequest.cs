@@ -19,9 +19,10 @@ namespace BlogApi.Application.Request.Posts
         public string? PhotoContent { get; set; }
         public string? Author { get; set; }
         public ReadingDuration readingDuration { get; set; }
-
+        public Status Status { get; set; }
         public UpdatePostCommand ToCommand(Guid userId)
-           => new(userId,
+           => new(
+               userId,
                PostId = PostId,
                CategoryId = CategoryId,
                Title = Title,
@@ -29,7 +30,8 @@ namespace BlogApi.Application.Request.Posts
                Photo = Photo,
                PhotoContent = PhotoContent,
                Author = Author,
-               readingDuration);
+               readingDuration,
+               Status);
           
     }
 }

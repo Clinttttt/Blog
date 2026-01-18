@@ -1,14 +1,17 @@
 ﻿using Blog.Application.Common.Interfaces.Services;
+using Blog.Application.Queries.User.FilterBy.GetTop5;
+using Blog.Application.Queries.User.GetListAuthor;
 using BlogApi.Api.Shared;
 using BlogApi.Application.Commands.Newsletter.SendNewsletter;
 using BlogApi.Application.Commands.Newsletter.SubscribeToNewsletter;
 using BlogApi.Application.Commands.Newsletter.UnSubscribeToNewsletter;
 using BlogApi.Application.Dtos;
-
+using BlogApi.Application.Models;
 using BlogApi.Application.Queries.User.CurrentUser;
 using BlogApi.Application.Queries.User.GetListAuthor;
 using BlogApi.Application.Queries.User.GetUserInfo;
 using BlogApi.Application.Request.Newsletter;
+using BlogApi.Application.Request.Posts;
 using BlogApi.Application.Request.User;
 using BlogApi.Domain.Common;
 using MediatR;
@@ -66,16 +69,23 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-        [Authorize(Roles = "Admin,Author")]
-        [HttpGet("GetListAuthor")]
-        public async Task<ActionResult<List<AuthorDto>>> GetListAuthor()
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetTopAuthors")]
+        public async Task<ActionResult<List<AuthorDto>>> GetTopAuthors()
         {
-            var command = new GetListAuthorQuery();
+            var command = new GetTop5Query();
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
 
-
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetListing")]
+        public async Task<ActionResult<PagedResult<AuthorStatDto>>> GetListing([FromQuery] ListPaginatedRequest request)
+        {
+            var command = new GetListAuthorQuery {PageNumber = request.PageNumber, PageSize = request.PageSize };
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
 
         [AllowAnonymous]
         [HttpPost("SubscribeToNewsletter")]
@@ -84,6 +94,7 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }
+
         [AllowAnonymous]
         [HttpGet("unsubscribe/{token}")]
         public async Task<ActionResult<bool>> UnSubscribeToNewsletter([FromRoute] string token)

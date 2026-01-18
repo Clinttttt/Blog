@@ -1,5 +1,7 @@
 ﻿using Blog.Application.Common.Interfaces.Repositories;
+using Blog.Application.Queries.User.GetListAuthor;
 using BlogApi.Application.Dtos;
+using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
 using MediatR;
 using System;
@@ -10,23 +12,11 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Queries.User.GetListAuthor
 {
-    public class GetListAuthorQueryHandler(IUserRespository  respository) : IRequestHandler<GetListAuthorQuery, Result<List<AuthorDto>>>
+    public class GetListAuthorQueryHandler(IUserRespository  respository) : IRequestHandler<GetListAuthorQuery, Result<PagedResult<AuthorStatDto>>>
     {
-        public async Task<Result<List<AuthorDto>>> Handle(GetListAuthorQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<AuthorStatDto>>> Handle(GetListAuthorQuery request, CancellationToken cancellationToken)
         {
-            var user = await respository.GetListing(
-                filter: s => s.Role == "Author" && s.Posts != null, cancellationToken);
-
-            if (!user.Any())
-                return Result<List<AuthorDto>>.NoContent();
-
-            var filter = user.Select(s => new AuthorDto
-            {
-                Name = s.UserName,
-                UserId = s.Id,
-            }).ToList();
-
-            return Result<List<AuthorDto>>.Success(filter);
+            return await respository.GetListing(request.pageNumber,request.pageSize, cancellationToken);     
         }
     }
 }

@@ -63,9 +63,9 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("ListPublishedForAdmin")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByPublishedForAdmin([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        [Authorize(Roles = "Admin, Author")]
+        [HttpGet("ListPublishedByUser")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListPublishedByUser([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
             {
@@ -94,8 +94,8 @@ namespace BlogApi.Api.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("ListDraftForAdmin")]
-        public async Task<ActionResult<PagedResult<PostDto>>> ListByDraftForAdmin([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        [HttpGet("ListDraftByUser")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListDraftByUser([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
             var query = new GetPagedPostsQuery
             {
@@ -143,8 +143,8 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpGet("Author")]
-        [HttpGet("GetListAuthorRequest")]
-        public async Task<ActionResult<PagedResult<PendingRequestDto>>> GetListAuthorRequest([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        [HttpGet("ListAuthorRequest")]
+        public async Task<ActionResult<PagedResult<PendingRequestDto>>> ListAuthorRequest([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
         {
             var query = new GetListPendingRequestQuery
             {

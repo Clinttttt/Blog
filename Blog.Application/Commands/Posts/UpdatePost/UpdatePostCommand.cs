@@ -19,7 +19,8 @@ namespace BlogApi.Application.Commands.Posts.UpdatePost
      byte[]? Photo,
      string? PhotoContent,
      string? Author,
-     ReadingDuration readingDuration
+     ReadingDuration readingDuration,
+     Status Status
  ) : IRequest<Result<int>>;
 
 }

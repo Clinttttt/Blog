@@ -2,9 +2,9 @@
 
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @if (ListDraftForAdmin?.Items.Any() == true)
+    @if (ListDraftByUser?.Items.Any() == true)
     {
-        foreach (var post in ListDraftForAdmin.Items)
+        foreach (var post in ListDraftByUser.Items)
         {
 
             <article class="bg-white rounded-2xl p-6 border border-gray-200 hover:-translate-y-1 hover:shadow-xl hover:border-indigo-600 transition-all cursor-pointer relative group">
@@ -61,11 +61,15 @@
 @code {
 
     [Parameter]
-    public PagedResult<PostDto>? ListDraftForAdmin { get; set; } = new PagedResult<PostDto>();
+    public PagedResult<PostDto>? ListDraftByUser { get; set; } = new PagedResult<PostDto>();
+  
     [Parameter]
     public ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
     [Parameter]
     public EventCallback<bool> Refresh { get; set; }
+
+    [Parameter]
+    public EventCallback OnLoadMore { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

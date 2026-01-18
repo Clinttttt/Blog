@@ -1,6 +1,4 @@
-﻿@using Blog.Client.Realtime
-
-
+﻿
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @if (allLoadedPosts.Any())
     {
@@ -67,7 +65,7 @@
 {
     <div class="text-center mt-8">
         <p class="text-sm text-slate-600 mb-4 font-medium">
-            Showing <span class="text-indigo-600 font-semibold">@allLoadedPosts.Count</span> of <span class="text-indigo-600 font-semibold">@(ListForAdmin?.TotalCount ?? 0)</span> posts
+            Showing <span class="text-indigo-600 font-semibold">@allLoadedPosts.Count</span> of <span class="text-indigo-600 font-semibold">@(ListPostFilterByUser?.TotalCount ?? 0)</span> posts
         </p>
         <button @onclick="LoadMorePost"
                 disabled="@IsloadingMore"
@@ -95,7 +93,7 @@ else if (allLoadedPosts.Any())
         <div class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
             <span class="text-2xl">✓</span>
             <p class="text-slate-700 font-medium">
-                You're all caught up! All <span class="text-indigo-600 font-semibold">@(ListForAdmin?.TotalCount ?? 0)</span> posts loaded.
+                You're all caught up! All <span class="text-indigo-600 font-semibold">@(ListPostFilterByUser?.TotalCount ?? 0)</span> posts loaded.
             </p>
         </div>
     </div>
@@ -103,7 +101,7 @@ else if (allLoadedPosts.Any())
 
 
 
-<UpdatePost PostId="PostId" CategoryId="CategoryId" Tags="Tags" />
+<UpdatePost PostId="PostId" CategoryId="CategoryId" Tags="Tags" Refresh="ManageRefreshPost" />
 
 
 @code {
@@ -115,12 +113,12 @@ else if (allLoadedPosts.Any())
     public ListPaginatedRequest Pagination { get; set; } = new ListPaginatedRequest();
 
     [Parameter]
-    public PagedResult<PostDto>? ListForAdmin { get; set; } = new PagedResult<PostDto>();
+    public PagedResult<PostDto>? ListPostFilterByUser { get; set; } = new PagedResult<PostDto>();
 
     [Parameter]
     public EventCallback OnLoadMore { get; set; }
 
-    private bool HasMorePost => ListForAdmin != null && Pagination.PageNumber < ListForAdmin.TotalPages;
+    private bool HasMorePost => ListPostFilterByUser != null && Pagination.PageNumber < ListPostFilterByUser.TotalPages;
     public bool IsloadingMore = false;
 
     private List<PostDto> allLoadedPosts = new List<PostDto>();
@@ -136,9 +134,9 @@ else if (allLoadedPosts.Any())
 
     public void LoadAll()
     {
-        if (ListForAdmin?.Items != null)
+        if (ListPostFilterByUser?.Items != null)
         {
-            foreach (var post in ListForAdmin.Items)
+            foreach (var post in ListPostFilterByUser.Items)
             {
 
                 if (!allLoadedPosts.Any(p => p.Id == post.Id))
@@ -167,6 +165,15 @@ else if (allLoadedPosts.Any())
         {
             allLoadedPosts.Remove(del);
         }
+        StateHasChanged();
+    }
+
+    public async Task ManageRefreshPost()
+    {      
+       
+         await Refresh.InvokeAsync();
+         allLoadedPosts.Clear();
+         await Refresh.InvokeAsync();
         StateHasChanged();
     }
 

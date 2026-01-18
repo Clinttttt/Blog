@@ -135,10 +135,10 @@
         addBookMarkRequest.PostId = PostId;
         await PostInteractionsClient.AddBookMark(addBookMarkRequest);
 
-       
-        var request = await PostClient.ListByCategory(TagId, Pagination);
+
+        var request = await PostClient.ListByTag(TagId, Pagination);
         PostDtos = request.Value;
-        StateHasChanged();
+ 
     }
 }
 

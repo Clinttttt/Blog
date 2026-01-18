@@ -1,6 +1,9 @@
 ﻿using Azure;
+using Blog.Application.Queries.User.GetListAuthor;
 using BlogApi.Application.Commands.Newsletter.UnSubscribeToNewsletter;
 using BlogApi.Application.Dtos;
+using BlogApi.Application.Models;
+using BlogApi.Application.Request.Posts;
 using BlogApi.Application.Request.User;
 using BlogApi.Client.Helper;
 using BlogApi.Client.Interface;
@@ -18,6 +21,8 @@ namespace BlogApi.Client.Services
         public async Task<Result<bool>> UnSubscribeToNewsletter(string command) => await GetAsync<bool>($"api/User/unsubscribe/{command}");
         public async Task<Result<bool>> AddUserInfo(UserInfoRequest dto) => await PostAsync<UserInfoRequest, bool>("api/User/AddUserInfo", dto);
         public async Task<Result<bool>> UpdateUserInfo(UserInfoRequest dto) =>  await UpdateAsync<UserInfoRequest, bool>("api/User/UpdateUserInfo", dto);
-        public async Task<Result<UserInfoDto>> GetUserInfo() => await GetAsync<UserInfoDto>("api/User/GetUserInfo");  
+        public async Task<Result<UserInfoDto>> GetUserInfo() => await GetAsync<UserInfoDto>("api/User/GetUserInfo");
+        public async Task<Result<List<AuthorDto>>> GetTopAuthors() => await GetAsync<List<AuthorDto>>("api/User/GetTopAuthors");
+        public async Task<Result<PagedResult<AuthorStatDto>>> GetListing(ListPaginatedRequest request) => await GetAsync<PagedResult<AuthorStatDto>>($"api/User/GetListing?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
     }
 }
