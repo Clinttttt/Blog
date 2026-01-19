@@ -16,7 +16,7 @@ namespace BlogApi.Application.Queries.User.GetListAuthor
     {
         public async Task<Result<PagedResult<AuthorStatDto>>> Handle(GetListAuthorQuery request, CancellationToken cancellationToken)
         {
-            return await respository.GetListing(request.pageNumber,request.pageSize, cancellationToken);     
+            return await respository.GetListing(request.PageNumber,request.PageSize, cancellationToken);     
         }
     }
 }

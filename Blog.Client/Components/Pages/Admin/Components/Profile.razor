@@ -340,7 +340,7 @@
 
     private async Task HandleUpdate()
     {
-        await UserClient.UpdateUserInfo(UpdateInfo);
+        await UserClient.Update(UpdateInfo);
         var userinfo = await UserClient.GetUserInfo();
         if (userinfo.Value is not null)
             UserInfo = userinfo.Value;

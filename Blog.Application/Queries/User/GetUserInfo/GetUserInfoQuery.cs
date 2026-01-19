@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Application.Queries.User.GetUserInfo
 {
-    public record GetUserInfoQuery(Guid UserId) : IRequest<Result<UserInfoDto>>;
+    public record GetUserInfoQuery(Guid? UserId) : IRequest<Result<UserInfoDto>>;
    
 }

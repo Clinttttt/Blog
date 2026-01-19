@@ -11,5 +11,6 @@ namespace BlogApi.Application.Dtos
         public string? Name { get; set; }
         public Guid UserId { get; set; }
         public int PostCount { get; set; }
+        public string? ProfilePhoto { get; set; }
     }
 }

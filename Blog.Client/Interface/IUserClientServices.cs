@@ -1,4 +1,5 @@
-﻿using Blog.Application.Queries.User.GetListAuthor;
+﻿using Blog.Application.Queries.User.Get;
+using Blog.Application.Queries.User.GetListAuthor;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Application.Request.Posts;
@@ -11,8 +12,9 @@ namespace BlogApi.Client.Interface
     {
         Task<Result<UserProfileDto>> GetCurrentUser();
         Task<Result<bool>> UnSubscribeToNewsletter(string command);
-        Task<Result<bool>> AddUserInfo(UserInfoRequest dto);
-        Task<Result<bool>> UpdateUserInfo(UserInfoRequest dto);
+        Task<Result<bool>> Add(UserInfoRequest dto);
+        Task<Result<bool>> Update(UserInfoRequest dto);
+        Task<Result<UserDashboardDto>> Get(Guid UserId);
         Task<Result<UserInfoDto>> GetUserInfo();
         Task<Result<List<AuthorDto>>> GetTopAuthors();
         Task<Result<PagedResult<AuthorStatDto>>> GetListing(ListPaginatedRequest request);

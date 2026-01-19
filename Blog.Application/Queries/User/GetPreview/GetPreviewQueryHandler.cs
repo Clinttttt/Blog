@@ -23,32 +23,13 @@ namespace BlogApi.Application.Queries.User.GetCurrentUser
             GetPreviewQuery request,
             CancellationToken cancellationToken)
         {
-         
-          
-                      
-            var user = await repository.Get(filter: s => s.Id == request.UserId, cancellationToken);
+                                  
+            var user = await repository.GetUserProfileAsync(request.UserId, cancellationToken);
 
             if (user is null)
-            {
-                var noContent = Result<UserProfileDto>.NotFound();
-              
-                return noContent;
-            }
-         
-            var dto = new UserProfileDto
-            {
-                PhotoUrl = user.UserInfo?.Photo != null && user.UserInfo.Photo.Length > 0
-                    ? $"data:{user.UserInfo.PhotoContentType};base64,{Convert.ToBase64String(user.UserInfo.Photo)}"
-                    : user.ExternalLogins
-                        .FirstOrDefault(el => el.Provider == "Google" && el.ProfilePhotoBytes != null) != null
-                        ? $"data:image/jpeg;base64,{Convert.ToBase64String(user.ExternalLogins.First(el => el.Provider == "Google").ProfilePhotoBytes!)}"
-                        : string.Empty,
-                Name = user.UserInfo?.FullName ?? user.UserName,
-                UserId = request.UserId,
-            };
-
-            var result = Result<UserProfileDto>.Success(dto);     
-
+                return Result<UserProfileDto>.NotFound();              
+               
+            var result = Result<UserProfileDto>.Success(user);     
             return result;
         }
     }

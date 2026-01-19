@@ -1,4 +1,5 @@
-﻿using Blog.Application.Queries.User.GetListAuthor;
+﻿using Blog.Application.Queries.User.Get;
+using Blog.Application.Queries.User.GetListAuthor;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
 using BlogApi.Domain.Common;
@@ -18,8 +19,8 @@ namespace Blog.Application.Common.Interfaces.Repositories
             int pageSize = 10,
             CancellationToken cancellationToken = default);
 
-        Task<User> Get(Expression<Func<User, bool>> filter,
-            CancellationToken cancellationToken = default);
+        Task<UserProfileDto> GetUserProfileAsync(Guid? UserId, CancellationToken cancellationToken = default);
         Task<List<AuthorDto>> Top5(CancellationToken cancellationToken = default);
+        Task<Result<UserDashboardDto>> Get(Guid UserId, CancellationToken cancellationToken = default);
     }
 }

@@ -55,7 +55,7 @@ namespace BlogApi.Infrastructure.Respository
                     CreatedAt = p.CreatedAt,
                     Status = p.Status,
                     CommentCount = p.Comments.Count(),
-                    PostLike = p.PostLikes.Count(),
+                    PostLikeCount = p.PostLikes.Count(),
                     IsBookMark = userId != null && p.BookMarks.Any(b => b.UserId == userId),
                     CategoryName = p.Category.Name,
                     CategoryId = p.CategoryId,

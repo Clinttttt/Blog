@@ -29,7 +29,7 @@ namespace BlogApi.Application
                     TagCount = pt.tag.PostTags.Count()
                 })))
                 .ForMember(d => d.IsBookMark, opt => opt.MapFrom(s => s.BookMarks.Any()))
-                .ForMember(d => d.PostLike, opt => opt.MapFrom(s => s.PostLikes.Count()))
+                .ForMember(d => d.PostLikeCount, opt => opt.MapFrom(s => s.PostLikes.Count()))
                 .ForMember(d => d.PhotoIsliked, opt => opt.Ignore())
                 .ForMember(d => d.Preview, opt => opt.Ignore());
               

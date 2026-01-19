@@ -130,11 +130,17 @@
                             @foreach (var author in ListAuthors)
                             {
                                 <li class="px-2">
-                                    <a class="flex items-center gap-3 py-2.5 rounded-md hover:bg-base-200 transition-colors group">
+                                    <NavLink href="@($"view/{author.UserId}")" class="flex items-center gap-3 py-2.5 rounded-md hover:bg-base-200 transition-colors group">
                                   
                                         <div class="avatar placeholder">
                                             <div class="bg-neutral text-neutral-content rounded-full w-8 h-8">
-                                                 <img src="/img/icon-proff.png" class="w-full h-full bg-contain"  />
+                                                @if (!string.IsNullOrEmpty(author.ProfilePhoto))
+                                                {
+                                                    <img src="@author.ProfilePhoto" class="w-full h-full bg-contain" />
+                                                }else
+                                                {
+                                                     <img src="/img/icon-proff.png" class="w-full h-full bg-contain"  />
+                                                }
                                             </div>
                                         </div>
 
@@ -145,9 +151,9 @@
 
                                     
                                         <span class="badge badge-ghost badge-sm opacity-60 group-hover:opacity-100">
-                                            @(new Random().Next(3, 25))
+                                          @author.PostCount
                                         </span>
-                                    </a>
+                                    </NavLink>
                                 </li>
                             }
                         }

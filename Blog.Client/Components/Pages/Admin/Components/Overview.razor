@@ -1,6 +1,346 @@
-﻿@using Blog.Client.Realtime
-<h3>Overview</h3>
+﻿
+
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50 p-5 border-t-1 border-indigo-100">
+    <div class="max-w-7xl mx-auto ">
+        <h3 class="text-3xl font-bold text-slate-800 mb-8   ">Overview</h3>
+
+    
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium">Total Posts</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">@totalPosts</p>
+                    </div>
+                    <div class="bg-indigo-100 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-green-600 text-sm mt-2 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                    +12% this month
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium">Total Views</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">@totalViews</p>
+                    </div>
+                    <div class="bg-indigo-100 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-green-600 text-sm mt-2 flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                    +28% this month
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium">Published</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">@publishedPosts</p>
+                    </div>
+                    <div class="bg-indigo-100 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-slate-500 text-sm mt-2">Live articles</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium">Drafts</p>
+                        <p class="text-3xl font-bold text-slate-800 mt-1">@draftPosts</p>
+                    </div>
+                    <div class="bg-indigo-100 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-slate-500 text-sm mt-2">Work in progress</p>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Views Chart -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h4 class="text-lg font-semibold text-slate-800 mb-6">Views Over Time</h4>
+                <div class="h-64 relative">
+                    <!-- Y-axis labels -->
+                    <div class="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-slate-500 pr-2">
+                        <span>600</span>
+                        <span>450</span>
+                        <span>300</span>
+                        <span>150</span>
+                        <span>0</span>
+                    </div>
+
+                    <!-- Chart area -->
+                    <div class="ml-8 h-full relative">
+                        <!-- Grid lines -->
+                        <div class="absolute inset-0 flex flex-col justify-between">
+                            <div class="border-t border-slate-200"></div>
+                            <div class="border-t border-slate-200"></div>
+                            <div class="border-t border-slate-200"></div>
+                            <div class="border-t border-slate-200"></div>
+                            <div class="border-t border-slate-200"></div>
+                        </div>
+
+                        <!-- Line chart -->
+                        <svg class="w-full h-full" viewBox="0 0 300 200" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Area fill -->
+                            <path d="M 0 160 L 0 160 L 50 130 L 100 100 L 150 70 L 200 40 L 250 10 L 250 200 L 0 200 Z"
+                                  fill="url(#gradient)" />
+
+                            <!-- Line -->
+                            <polyline points="0,160 50,130 100,100 150,70 200,40 250,10"
+                                      fill="none"
+                                      stroke="#6366f1"
+                                      stroke-width="3" />
+
+                            <!-- Data points -->
+                            @for (int i = 0; i < viewsData.Count; i++)
+                            {
+                                var x = i * 50;
+                                var y = 200 - (viewsData[i].Views * 200 / 600);
+                                <circle cx="@x" cy="@y" r="4" fill="#6366f1" class="hover:r-6 transition-all" />
+                            }
+                        </svg>
+                    </div>
+
+                    <!-- X-axis labels -->
+                    <div class="ml-8 flex justify-between text-xs text-slate-500 mt-2">
+                        @foreach (var month in viewsData)
+                        {
+                            <span>@month.Month</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Chart -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h4 class="text-lg font-semibold text-slate-800 mb-4">Posts Published This Week</h4>
+                <div class="h-64 flex items-end justify-around gap-2">
+                    @foreach (var day in weeklyPosts)
+                    {
+                        <div class="flex-1 flex flex-col items-center">
+                            <div class="w-full bg-indigo-500 rounded-t-lg hover:bg-indigo-600 transition-colors cursor-pointer relative group"
+                                 style="height: @(day.Posts * 30)px; min-height: 20px;">
+                                <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                    @day.Posts posts
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-2">@day.Day</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <div class="flex items-center justify-between mb-6">
+                <h4 class="text-lg font-semibold text-slate-800">Categories</h4>
+                <span class="text-sm text-slate-500">@categories.Count total</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach (var category in categories)
+                {
+                    <div class="group relative bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border border-indigo-100 hover:shadow-lg transition-all duration-200">
+                        <button @onclick="() => DeleteCategory(category.Id)"
+                                class="absolute top-2 right-2 bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50"
+                                title="Delete category">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                                 style="background-color: @(category.Color)20;">
+                                <svg class="w-5 h-5" style="color: @category.Color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-800">@category.Name</h5>
+                                <p class="text-sm text-slate-500">
+                                    @category.Count @(category.Count == 1 ? "post" : "posts")
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!categories.Any())
+            {
+                <div class="text-center py-12 text-slate-400">
+                    <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                    </svg>
+                    <p>No categories available</p>
+                </div>
+            }
+        </div>
+
+        <!-- Tags Section -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h4 class="text-lg font-semibold text-slate-800">Tags</h4>
+                <span class="text-sm text-slate-500">@tags.Count total</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach (var tag in tags)
+                {
+                    <div class="group relative bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-100 hover:shadow-lg transition-all duration-200">
+                        <button @onclick="() => DeleteTag(tag.Id)"
+                                class="absolute top-2 right-2 bg-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-50"
+                                title="Delete tag">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                                 style="background-color: @(tag.Color)20;">
+                                <svg class="w-5 h-5" style="color: @tag.Color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-slate-800">@tag.Name</h5>
+                                <p class="text-sm text-slate-500">
+                                    @tag.Count @(tag.Count == 1 ? "post" : "posts")
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (!tags.Any())
+            {
+                <div class="text-center py-12 text-slate-400">
+                    <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    </svg>
+                    <p>No tags available</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
+    private int totalPosts = 24;
+    private string totalViews = "1.9K";
+    private int publishedPosts = 18;
+    private int draftPosts = 6;
 
+    private List<ViewsData> viewsData = new List<ViewsData>
+    {
+        new ViewsData { Month = "Aug", Views = 120 },
+        new ViewsData { Month = "Sep", Views = 180 },
+        new ViewsData { Month = "Oct", Views = 250 },
+        new ViewsData { Month = "Nov", Views = 320 },
+        new ViewsData { Month = "Dec", Views = 450 },
+        new ViewsData { Month = "Jan", Views = 580 }
+    };
+
+    private List<Category> categories = new List<Category>
+    {
+        new Category { Id = 1, Name = "News", Count = 2, Color = "#818cf8" },
+        new Category { Id = 2, Name = "CQRS", Count = 1, Color = "#6366f1" },
+        new Category { Id = 3, Name = "Kotlin", Count = 1, Color = "#4f46e5" },
+        new Category { Id = 4, Name = "Learning Courses", Count = 1, Color = "#4338ca" },
+        new Category { Id = 5, Name = "Education", Count = 1, Color = "#3730a3" }
+    };
+
+    private List<Tag> tags = new List<Tag>
+    {
+        new Tag { Id = 1, Name = ".NET", Count = 8, Color = "#3b82f6" },
+        new Tag { Id = 2, Name = "Blazor", Count = 5, Color = "#6366f1" },
+        new Tag { Id = 3, Name = "C#", Count = 12, Color = "#8b5cf6" },
+        new Tag { Id = 4, Name = "Web Development", Count = 6, Color = "#6366f1" },
+        new Tag { Id = 5, Name = "Architecture", Count = 4, Color = "#4f46e5" }
+    };
+
+    private List<WeeklyPost> weeklyPosts = new List<WeeklyPost>
+    {
+        new WeeklyPost { Day = "Mon", Posts = 3 },
+        new WeeklyPost { Day = "Tue", Posts = 5 },
+        new WeeklyPost { Day = "Wed", Posts = 2 },
+        new WeeklyPost { Day = "Thu", Posts = 7 },
+        new WeeklyPost { Day = "Fri", Posts = 4 },
+        new WeeklyPost { Day = "Sat", Posts = 1 },
+        new WeeklyPost { Day = "Sun", Posts = 2 }
+    };
+
+    private void DeleteCategory(int id)
+    {
+        categories.RemoveAll(c => c.Id == id);
+    }
+
+    private void DeleteTag(int id)
+    {
+        tags.RemoveAll(t => t.Id == id);
+    }
+
+    public class ViewsData
+    {
+        public string Month { get; set; }
+        public int Views { get; set; }
+    }
+
+    public class Category
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Count { get; set; }
+        public string Color { get; set; }
+    }
+
+    public class Tag
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Count { get; set; }
+        public string Color { get; set; }
+    }
+
+    public class WeeklyPost
+    {
+        public string Day { get; set; }
+        public int Posts { get; set; }
+    }
 }

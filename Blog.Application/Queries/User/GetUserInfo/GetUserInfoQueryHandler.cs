@@ -4,6 +4,7 @@ using BlogApi.Application.Dtos;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
@@ -12,47 +13,51 @@ using System.Threading.Tasks;
 namespace BlogApi.Application.Queries.User.GetUserInfo
 {
     public class GetUserInfoQueryHandler(
-        IUserRespository repository
+        IAppDbContext context
    ) 
         : IRequestHandler<GetUserInfoQuery, Result<UserInfoDto>>
     {
-        private static readonly TimeSpan DefaultCacheDuration = TimeSpan.FromMinutes(10);
-
         public async Task<Result<UserInfoDto>> Handle(
-            GetUserInfoQuery request,
-            CancellationToken cancellationToken)
+         GetUserInfoQuery request,
+         CancellationToken cancellationToken)
         {
-            
-           
-           
-            var user = await repository.Get(
-                filter: s => s.Id == request.UserId,
-                cancellationToken: cancellationToken);
+     
+            var userData = await context.Users
+                .AsNoTracking()
+                .Where(u => u.Id == request.UserId)
+                .Select(u => new
+                {
+                    u.UserName,
+                    FullName = u.UserInfo != null ? u.UserInfo.FullName : null,
+                    Photo = u.UserInfo != null ? u.UserInfo.Photo : null,
+                    PhotoContentType = u.UserInfo != null ? u.UserInfo.PhotoContentType : null,
+                    Bio = u.UserInfo != null ? u.UserInfo.Bio : null,
+                    ProfilePhotoUrlFromExternal = u.ExternalLogins
+                        .Where(el => !string.IsNullOrEmpty(el.ProfilePhotoUrl))
+                        .Select(el => el.ProfilePhotoUrl)
+                        .FirstOrDefault(),
+                    LinkedAt = u.ExternalLogins
+                        .Select(el => el.LinkedAt)
+                        .FirstOrDefault()
+                })
+                .FirstOrDefaultAsync(cancellationToken);
 
-            if (user is null)
-            {
-                var noContent = Result<UserInfoDto>.NoContent();
-             
-                return noContent;
-            }
-
+          
+            if (userData is null)
+                return Result<UserInfoDto>.NoContent();
           
             var dto = new UserInfoDto
             {
-                FullName = user.UserInfo?.FullName ?? user.UserName,
-                ProfilePhoto = user.UserInfo?.Photo != null && user.UserInfo.Photo.Length > 0
-                    ? $"data:{user.UserInfo.PhotoContentType};base64,{Convert.ToBase64String(user.UserInfo.Photo)}"
-                    : user.ExternalLogins.Select(x => x.ProfilePhotoUrl).FirstOrDefault(),
-                Bio = user.UserInfo?.Bio ?? "Add a short bio",
-                CreatedAt = user.ExternalLogins.Select(s => s.LinkedAt).FirstOrDefault(),
+                FullName = userData.FullName ?? userData.UserName,
+                ProfilePhoto = userData.Photo != null && userData.Photo.Length > 0
+                    ? $"data:{userData.PhotoContentType};base64,{Convert.ToBase64String(userData.Photo)}"
+                    : userData.ProfilePhotoUrlFromExternal ?? string.Empty,
+                Bio = userData.Bio ?? "Add a short bio",
+                CreatedAt = userData.LinkedAt
             };
 
-            var result = Result<UserInfoDto>.Success(dto);
-
-         
-           
-
-            return result;
+            return Result<UserInfoDto>.Success(dto);
         }
+
     }
 }

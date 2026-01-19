@@ -1,5 +1,6 @@
 ﻿using Blog.Application.Common.Interfaces.Services;
 using Blog.Application.Queries.User.FilterBy.GetTop5;
+using Blog.Application.Queries.User.Get;
 using Blog.Application.Queries.User.GetListAuthor;
 using BlogApi.Api.Shared;
 using BlogApi.Application.Commands.Newsletter.SendNewsletter;
@@ -34,8 +35,8 @@ namespace BlogApi.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,Author")]
-        [HttpPost("AddUserInfo")]
-        public async Task<ActionResult<bool>> AddUserInfo(UserInfoRequest request)
+        [HttpPost("Add")]
+        public async Task<ActionResult<bool>> Add(UserInfoRequest request)
         {
             var command = request.AddUserInfoCommand(UserId);
             var result = await Sender.Send(command);
@@ -43,10 +44,19 @@ namespace BlogApi.Api.Controllers
         }
 
         [Authorize(Roles = "Admin,Author")]
-        [HttpPatch("UpdateUserInfo")]
-        public async Task<ActionResult<bool>> UpdateUserInfo(UserInfoRequest request)
+        [HttpPatch("Update")]
+        public async Task<ActionResult<bool>> Update(UserInfoRequest request)
         {
             var command = request.UpdateUserInfoCommand(UserId);
+            var result = await Sender.Send(command);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("Get/{UserId}")]
+        public async Task<ActionResult<UserDashboardDto>> Get([FromRoute] Guid UserId)
+        {
+            var command = new GetQuery(UserId);
             var result = await Sender.Send(command);
             return HandleResponse(result);
         }

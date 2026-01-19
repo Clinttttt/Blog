@@ -27,7 +27,8 @@ namespace BlogApi.Application.Dtos
         public bool PhotoIsliked { get; set; }
         public int CommentCount { get; set; }
         public int? ViewCount { get; set; }
-        public int PostLike { get; set; }
+        public int PostLikeCount { get; set; }
+        public int? BookMarkCount { get; set; }
         public string? Preview { get; set; }
     }
 
