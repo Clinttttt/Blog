@@ -78,6 +78,51 @@ namespace BlogApi.Api.Controllers
             return HandleResponse(result);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("ListByMostViewed")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByMostViewed([FromQuery] Guid UserId, [FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        {
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserId,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.MostViewed
+            };
+            var result = await Sender.Send(query, cancellationToken);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("ListByMostLiked")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByMostLiked( [FromQuery] Guid UserId, [FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        {
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserId,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.MostLiked
+            };
+            var result = await Sender.Send(query, cancellationToken);
+            return HandleResponse(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("ListByMostRecent")]
+        public async Task<ActionResult<PagedResult<PostDto>>> ListByMostRecent([FromQuery] Guid UserId, [FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
+        {
+            var query = new GetPagedPostsQuery
+            {
+                UserId = UserId,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                FilterType = PostFilterType.MostRecent
+            };
+            var result = await Sender.Send(query, cancellationToken);
+            return HandleResponse(result);
+        }
+
         [AllowAnonymous]
         [HttpGet("ListPublished")]
         public async Task<ActionResult<PagedResult<PostDto>>> ListByPublished([FromQuery] ListPaginatedRequest request, CancellationToken cancellationToken)
@@ -155,5 +200,9 @@ namespace BlogApi.Api.Controllers
             var result = await Sender.Send(query, cancellationToken);
             return HandleResponse(result);
         }
+
+
+
+
     }
 }

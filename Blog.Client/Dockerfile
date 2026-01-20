@@ -2,11 +2,10 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-
+USER $APP_UID
 WORKDIR /app
-# Listen on port 80 for cloud platforms
-ENV ASPNETCORE_URLS=http://+:80
-EXPOSE 80
+EXPOSE 8080
+EXPOSE 8081
 
 
 # This stage is used to build the service project

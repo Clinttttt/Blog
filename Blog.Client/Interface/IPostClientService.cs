@@ -20,5 +20,8 @@ namespace BlogApi.Client.Interface
         Task<Result<PagedResult<PostDto>>> ListByTag(int tagId, ListPaginatedRequest request);
         Task<Result<PagedResult<PostDto>>> ListByCategory(int Id, ListPaginatedRequest request);
         Task<Result<PagedResult<PendingRequestDto>>> ListAuthorRequest(ListPaginatedRequest request);
+        Task<Result<PagedResult<PostDto>>> ListByMostLiked(Guid UserId, ListPaginatedRequest request);
+        Task<Result<PagedResult<PostDto>>> ListByMostViewed(Guid UserId, ListPaginatedRequest request);
+        Task<Result<PagedResult<PostDto>>> ListByMostRecent(Guid UserId, ListPaginatedRequest request);
     }
 }

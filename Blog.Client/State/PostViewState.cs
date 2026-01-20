@@ -1,4 +1,5 @@
 ﻿using Blog.Client.Components.Pages.Public;
+using Microsoft.Identity.Client;
 
 namespace Blog.Client.State
 {
@@ -8,6 +9,14 @@ namespace Blog.Client.State
 
         public AuthorPostState AuthorPageView { get; set; } = AuthorPostState.all_post;
         public AdminPostState AdminPageView { get; set; } = AdminPostState.home;
+        public AuthorDashboard Authordashboard { get; set; } = AuthorDashboard.most_recent;
+
+        public enum AuthorDashboard
+        {
+            most_recent,
+            most_viewed,
+            most_liked
+        }
         public enum AuthorPostState
         {
             all_post,
@@ -35,6 +44,11 @@ namespace Blog.Client.State
             AdminPageView = view;
             Onchange?.Invoke();
         }
-    
+        public void AuthorDashBoard(AuthorDashboard view)
+        {
+            Authordashboard = view;
+            Onchange?.Invoke();
+        }
+
     }
 }

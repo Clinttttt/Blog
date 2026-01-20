@@ -30,6 +30,10 @@ namespace BlogApi.Application.Queries.Posts
         DraftsByUser,          // Drafts by specific user          
         PendingByUser,         // Pending by specific user
         ByCategory,            // Filter by category
-        ByTag                  // Filter by tag
+        ByTag,                  // Filter by tag
+        MostViewed,
+        MostLiked,
+        MostRecent,
+
     }
 }

@@ -19,7 +19,7 @@ namespace Blog.Application.Queries.User.Get
         public int? TotalLikes { get; set; }
         public int? TotalBookMarks { get; set; }
 
-        public List<PostDto> Posts { get; set; } = new List<PostDto>();
+   
 
 
     }

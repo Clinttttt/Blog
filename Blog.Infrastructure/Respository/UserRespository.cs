@@ -8,8 +8,12 @@ using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using BlogApi.Domain.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,28 +111,7 @@ namespace BlogApi.Infrastructure.Respository
                 TotalViews = s.Posts.Sum(s => s.PostViews.Count()),
                 TotalLikes = s.Posts.Sum(s => s.PostLikes.Count()),
                 TotalBookMarks = s.Posts.Sum(s => s.BookMarks.Count()),
-
-                Posts = s.Posts.Select(s => new PostDto
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    Content = s.Content,
-                    CreatedAt = s.CreatedAt,
-                    Tags = s.PostTags.Select(s => new TagDto
-                    {
-                        Id = s.TagId,
-                        Name = s.tag!.Name,
-                        PostId = s.PostId,
-                        TagCount = s.tag.PostTags.Count()
-                    }).ToList(),
-                    IsBookMark = s.BookMarks.Any(s => s.UserId == UserId),
-                    Author = s.Author,
-                    PhotoIsliked = s.PostLikes.Any(s => s.UserId == UserId),
-                    BookMarkCount = s.BookMarks != null ? s.BookMarks.Count() : 0,
-                    PostLikeCount = s.PostLikes != null ? s.PostLikes.Count() : 0,
-                    ViewCount = s.ViewCount != null ? s.ViewCount : 0
-
-                }).ToList()
+               
             }).FirstOrDefaultAsync();
 
             if (get is null)
@@ -149,11 +132,10 @@ namespace BlogApi.Infrastructure.Respository
                 TotalBookMarks = get?.TotalBookMarks,
                 TotalLikes = get?.TotalLikes,
 
-                Posts = get?.Posts != null ? get.Posts : new List<PostDto>()
             };
+
             return Result<UserDashboardDto>.Success(dto);
         }
-
 
         public async Task<UserProfileDto> GetUserProfileAsync(Guid? UserId, CancellationToken cancellationToken = default)
         {
