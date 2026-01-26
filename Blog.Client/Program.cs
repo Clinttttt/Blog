@@ -9,6 +9,17 @@ using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+<<<<<<< HEAD
+=======
+/*var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+*/
+
+
+>>>>>>> c94bbccddaa70554ebd8ebe96938642f015d8e60
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 

@@ -29,8 +29,10 @@ public class GetPagedPostsQueryHandler(IPostRespository repository,IFilterBuilde
             async () =>
             {
                 var filter = builder.PostBuildFilter(request);
+
                 var postPage = await repository.GetPaginatedPostDtoAsync(
                     request.UserId,
+                    request.FilterType,
                     request.PageNumber,
                     request.PageSize,
                     filter: filter,

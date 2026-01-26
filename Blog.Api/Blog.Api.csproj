@@ -4,9 +4,14 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+<<<<<<< HEAD
     <UserSecretsId>062fa57e-6707-4a79-93ec-0186d4677a44</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+=======
+    <UserSecretsId>088a38c0-53b2-424b-9030-94376b6fd92f</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+>>>>>>> c94bbccddaa70554ebd8ebe96938642f015d8e60
   </PropertyGroup>
 
   <ItemGroup>

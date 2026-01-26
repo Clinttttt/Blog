@@ -2,11 +2,18 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+<<<<<<< HEAD
 
 # Create DP keys directory and fix ownership
 
 WORKDIR /app
 
+=======
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+>>>>>>> c94bbccddaa70554ebd8ebe96938642f015d8e60
 
 
 # This stage is used to build the service project

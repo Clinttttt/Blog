@@ -45,9 +45,32 @@ namespace Blog.Application.Abstractions
                 PostFilterType.BookMark =>
                    p => p.BookMarks.Any(s => s.UserId == request.UserId),
 
+                PostFilterType.MostViewed => p => p.UserId == request.UserId && p.Status == Status.Published,
+
+                PostFilterType.MostLiked => p => p.UserId == request.UserId && p.Status == Status.Published,
+
+                PostFilterType.MostRecent => p => p.UserId == request.UserId && p.Status == Status.Published,
+
                 _ => null
             };
+            }
+
+        public static IQueryable<Post> ApplyingFilter( IQueryable<Post> query, PostFilterType type)
+        {
+            return type switch
+            {
+                PostFilterType.MostViewed => query.OrderByDescending(s => s.ViewCount),
+
+                PostFilterType.MostLiked => query.OrderByDescending(s => s.PostLikes.Count()),
+
+                PostFilterType.Published or PostFilterType.PublishedByUser or PostFilterType.DraftsByUser
+                or PostFilterType.Drafts or PostFilterType.BookMark or PostFilterType.ByCategory
+                or PostFilterType.ByTag or PostFilterType.PendingByUser => query.OrderByDescending(s=> s.CreatedAt),
+
+                _ => query
+            };
         }
+       
 
         public Expression<Func<Notification, bool>>? NotificationBuilderFilter(GetListNotificationQuery request)
         {

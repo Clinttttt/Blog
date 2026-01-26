@@ -3363,6 +3363,12 @@
   .flex-shrink-0 {
     flex-shrink: 0;
   }
+<<<<<<< HEAD
+=======
+  .border-collapse {
+    border-collapse: collapse;
+  }
+>>>>>>> c94bbccddaa70554ebd8ebe96938642f015d8e60
   .-translate-x-1\/2 {
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -3913,9 +3919,12 @@
     --tw-gradient-position: to top in oklab;
     background-image: linear-gradient(var(--tw-gradient-stops));
   }
+<<<<<<< HEAD
   .bg-none {
     background-image: none;
   }
+=======
+>>>>>>> c94bbccddaa70554ebd8ebe96938642f015d8e60
   .from-black\/60 {
     --tw-gradient-from: color-mix(in srgb, #000 60%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -5307,6 +5316,11 @@
   .disabled\:opacity-50 {
     &:disabled {
       opacity: 50%;
+    }
+  }
+  .disabled\:opacity-60 {
+    &:disabled {
+      opacity: 60%;
     }
   }
   .sm\:flex {

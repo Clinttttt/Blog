@@ -1,8 +1,10 @@
 ﻿using Blog.Application.Queries.Posts.GetAdminRequest;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
+using BlogApi.Application.Queries.Posts;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +27,11 @@ namespace Blog.Application.Common.Interfaces.Repositories
            cancellationToken = default);
 
         Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(
-            Guid? UserIds, 
+            Guid? UserIds,
+            PostFilterType FilterType,
             int PageNumber = 1,
             int PageSize = 10,
-            Expression<Func<Post, bool>>? filter = null,
+            Expression<Func<Post, bool>>? filter = null,      
             CancellationToken cancellationToken = default
             );
 

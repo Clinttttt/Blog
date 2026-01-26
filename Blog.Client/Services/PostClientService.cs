@@ -49,5 +49,17 @@ namespace BlogApi.Client.Services
         public async Task<Result<PagedResult<PendingRequestDto>>> ListAuthorRequest(ListPaginatedRequest request)
             => await GetAsync<PagedResult<PendingRequestDto>>(
                 $"api/Posts/ListAuthorRequest?PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+
+        public async Task<Result<PagedResult<PostDto>>> ListByMostLiked(Guid UserId, ListPaginatedRequest request)
+            => await GetAsync<PagedResult<PostDto>>(
+               $"api/Posts/ListByMostLiked?UserId={UserId}&PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+
+        public async Task<Result<PagedResult<PostDto>>> ListByMostViewed(Guid UserId,ListPaginatedRequest request)
+           => await GetAsync<PagedResult<PostDto>>(
+              $"api/Posts/ListByMostViewed?UserId={UserId}&PageNumber={request.PageNumber}&PageSize={request.PageSize}");
+        public async Task<Result<PagedResult<PostDto>>> ListByMostRecent(Guid UserId, ListPaginatedRequest request)
+        => await GetAsync<PagedResult<PostDto>>(
+           $"api/Posts/ListByMostRecent?UserId={UserId}&PageNumber={request.PageNumber}&PageSize={request.PageSize}");
     }
 }
+

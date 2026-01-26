@@ -1,10 +1,17 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+<<<<<<< HEAD
 
+=======
+using Azure;
+using Azure.Core;
+using Blog.Application.Abstractions;
+>>>>>>> c94bbccddaa70554ebd8ebe96938642f015d8e60
 using Blog.Application.Common.Interfaces.Repositories;
 using Blog.Application.Queries.Posts.GetAdminRequest;
 using BlogApi.Application.Dtos;
 using BlogApi.Application.Models;
+using BlogApi.Application.Queries.Posts;
 using BlogApi.Domain.Common;
 using BlogApi.Domain.Entities;
 using BlogApi.Domain.Enums;
@@ -31,7 +38,7 @@ namespace BlogApi.Infrastructure.Respository
     public class PostRespository(IAppDbContext context, IMapper mapper) : IPostRespository
     {
 
-        public async Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? userId, int pageNumber = 1, int pageSize = 10, Expression<Func<Post, bool>>? filter = null, CancellationToken cancellationToken = default)
+        public async Task<Result<PagedResult<PostDto>>> GetPaginatedPostDtoAsync(Guid? userId, PostFilterType FilterType, int pageNumber = 1, int pageSize = 10, Expression<Func<Post, bool>>? filter = null, CancellationToken cancellationToken = default)
         {
             IQueryable<Post> query = context.Posts.AsNoTracking();
 
@@ -39,12 +46,14 @@ namespace BlogApi.Infrastructure.Respository
             {
                 query = query.Where(filter);
             }
+            query = FilterBuilder.ApplyingFilter(query, FilterType);
 
             var totalCount = await query.CountAsync(cancellationToken);
-            var items = await query
-                .OrderByDescending(s => s.CreatedAt)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+
+            query.Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
+        
+            var items = await query             
                 .Select(p => new PostDto
                 {
                     Id = p.Id,
@@ -54,8 +63,6 @@ namespace BlogApi.Infrastructure.Respository
                     Content = p.Content,
                     CreatedAt = p.CreatedAt,
                     Status = p.Status,
-                    CommentCount = p.Comments.Count(),
-                    PostLikeCount = p.PostLikes.Count(),
                     IsBookMark = userId != null && p.BookMarks.Any(b => b.UserId == userId),
                     CategoryName = p.Category.Name,
                     CategoryId = p.CategoryId,
@@ -70,7 +77,10 @@ namespace BlogApi.Infrastructure.Respository
                         PostId = pt.PostId,
                         TagCount = pt.tag.PostTags.Count()
                     }).ToList(),
-
+                    BookMarkCount = p.BookMarks != null ? p.BookMarks.Count() : 0,
+                    PostLikeCount = p.PostLikes != null ? p.PostLikes.Count() : 0,
+                    ViewCount = p.ViewCount != null ? p.ViewCount : 0,
+                    CommentCount = p.Comments.Count(),
                     Photo = p.Photo,
                     PhotoContent = p.PhotoContent,
                     PhotoIsliked = false
